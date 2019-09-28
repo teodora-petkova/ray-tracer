@@ -51,6 +51,9 @@
     <ClInclude Include="Source\vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\intersectioninfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
@@ -81,6 +84,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\intersectioninfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

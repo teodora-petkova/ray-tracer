@@ -12,7 +12,8 @@ Sphere::Sphere()
 	sphereRadiusSquared = 1.0;
 	sphereRadiusInverse = 1.0;
 }
-int Sphere::Intersect(Ray &ray, float &distance)
+
+IntersectionInfo Sphere::Intersect(Ray &ray)
 {
 	Vector3 originMinusSphereCenter = ray.GetOrigin() - sphereCenter;
 	float a = Dot(ray.GetDirection(), ray.GetDirection());
@@ -20,39 +21,47 @@ int Sphere::Intersect(Ray &ray, float &distance)
 	float c = Dot(originMinusSphereCenter, originMinusSphereCenter) - sphereRadius * sphereRadius;
 
 	float discriminant = b * b - 4 * a * c;
-
-	int return_value = 0;
+	bool isHit = false;
+	float distance = INFINITY;
 	// If the discriminant is less than 0, then we totally miss the sphere.
 	// This happens most of the time.
 	if (discriminant > 0)
 	{
 		float d = sqrt(discriminant);
-		double _2a = 2.0 * a;
-		float root2 = (-b + d) / _2a;
+		float _2a = 2.0 * a;
 		float root1 = (-b - d) / _2a;
+		float root2 = (-b + d) / _2a;
 
+		isHit = false;
 		// If root2 < 0 and root1 < 0, so they are both misses.
-		if (root2 > 0)
+		if (root1 > 0 && root2 > 0)
 		{
-			// If root2 > 0 and root1 < 0, we are inside the sphere.
-			if (root1 < 0)
-			{
-				if (root2 < distance)
-				{
-					distance = root2;
-					return_value = -1;
-				}
-			}
 			// If root2 > 0 and root1 > 0, we hit the sphere.
+			if (root1 < root2)
+			{
+				distance = root1;
+			}
 			else
 			{
-				if (root1 < distance)
-				{
-					distance = root1;
-					return_value = 1;
-				}
+				distance = root2;
 			}
+			isHit = true;
+		}
+		// If root2 > 0 and root1 < 0, we are inside the sphere.
+		else if (root1 < 0 && root2 > 0)
+		{
+			distance = root2;
+			//isHit = true;
+		}
+		else if (root1 > 0 && root2 < 0)
+		{
+			distance = root1;
+			//isHit = true;
 		}
 	}
-	return return_value;
+	Vector3 intersectionPoint = ray.GetOrigin() + ray.GetDirection() * distance;
+	Vector3 normal = (intersectionPoint - sphereCenter)*distance;
+	normal.Normalize();
+
+	return IntersectionInfo(isHit, distance, normal);
 }

@@ -72,6 +72,16 @@ namespace readfiles
 						}
 					}
 
+					if (cmd == "point")
+					{
+						validinput = readvals(s, 6, values); // 6 values light position x y z, light color r g b
+						if (validinput)
+						{
+							lightPosition = Vector3(values[0], values[1], values[2]);
+							lightColour = Vector3(values[3], values[4], values[5]);
+						}
+					}
+
 					if (cmd == "vertex")
 					{
 						validinput = readvals(s, 3, values); // 3 values x y z

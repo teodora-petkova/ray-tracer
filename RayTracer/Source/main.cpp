@@ -10,10 +10,13 @@
 #include "FreeImage.h"
 
 #define MAINPROGRAM 
+#define _USE_MATH_DEFINES
+
 #include "variables.h"
 #include "readfile.h"
 #include "scene.h"
 #include "ctime"
+#include <math.h>
 
 using namespace std;
 using namespace readfiles;
@@ -37,26 +40,53 @@ void saveScreenshot(string fname, int w, int h, BYTE *pixels)
 //------------------------------------------------------------
 Color rayTrace(Ray &ray, Scene &scene)
 {
-	float minDistance = 1000000.0;
-	float currentDistance = 1000000.0;
-	Object *object = 0, *testObject;
+	float minDistance = INFINITY;
 
+	Object *object = NULL;
+	Vector3 intersectionPoint = NULL;
+	Vector3 normal = NULL;
 	Color color = 0.0;
 
 	for (int i = 0; i < scene.GetNumberOfObjects(); i++)
 	{
-		currentDistance = 1000000.0;
-		testObject = scene.GetObject(i);
-		if (testObject->Intersect(ray, currentDistance))
+		Object* testObject = scene.GetObject(i);
+		IntersectionInfo intersection = testObject->Intersect(ray);
+		if (intersection.IsHit() && testObject && intersection.getDistance() < minDistance)
 		{
 			object = testObject;
-		}
-		if (object && currentDistance < minDistance)
-		{
-			color = object->GetMaterial()->GetColor();
-			minDistance = currentDistance;
+			minDistance = intersection.getDistance();
+			intersectionPoint = ray.GetOrigin() + ray.GetDirection() * intersection.getDistance();
+			normal = intersection.getNormal();
 		}
 	}
+
+	Vector3 rayFromIntersectionToLight = lightPosition - intersectionPoint;
+	if (object != NULL)
+	{
+		Ray rayToLightSource = Ray(intersectionPoint + normal * 0.001, rayFromIntersectionToLight);
+		bool isInShadow = false;
+		for (int i = 0; i < scene.GetNumberOfObjects(); i++)
+		{
+			Object* testObject = scene.GetObject(i);
+			IntersectionInfo intersection = testObject->Intersect(rayToLightSource);
+			if (intersection.IsHit())
+			{
+				isInShadow = true;
+				break;
+			}
+
+		}
+		if (isInShadow)
+		{
+			color = object->GetMaterial()->GetColor() *(fmax(0.0, Dot(normal, -rayFromIntersectionToLight)));// *M_PI;
+		}
+		else
+		{
+			color = object->GetMaterial()->GetColor() *(fmax(0.0, Dot(normal, -rayFromIntersectionToLight)));// *M_PI;
+			//	color = Vector3(1.0, 1.0, 1.0);
+		}
+	}
+
 	return color;
 }
 
@@ -96,8 +126,9 @@ int main(int argc, char *argv[])
 	{
 		for (int j = 0; j < height; j++)
 		{
-			Ray rays = Ray(camera.GetOrigin(), camera.GetDirectionRayForPixel(j, i));
-			Color color = rayTrace(rays, scene);
+			Ray rayFromCamera = Ray(camera.GetOrigin(), camera.GetDirectionRayForPixel(j, i));
+
+			Color color = rayTrace(rayFromCamera, scene);
 
 			updatePixels(i, j, pixels, color);
 		}
@@ -108,7 +139,7 @@ int main(int argc, char *argv[])
 	delete pixels;
 
 	clock_t end = clock();
-	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
 	cout << elapsed_secs << '\n';
 
 	return 0;

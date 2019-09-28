@@ -57,11 +57,35 @@ Vector3 Camera::GetDirectionRayForPixel(float x, float y)
 	// beta = -------------------------------
 	//				      height/2
 
+
 	Vector3 direction = Vector3();
 	float alpha = tan(this->fovx / 2)*(y - this->width / 2) / (this->width / 2);
 	float beta = tan(this->fovy / 2)*(this->height / 2 - x) / (this->height / 2);
 	direction = this->w + this->u * alpha + this->v * beta;
 	direction.Normalize();
+
+	/*
+	Vector3 direction = Vector3();
+
+	// 1. Raster space
+	// add 0.5 to centralize in the middle of the pixel
+	float xRasterCentralized = x + 0.5f;
+	float yRasterCentralized = y + 0.5f;
+
+	// 2. NDC space (Normalized device coordinates) - range [0:1]
+	float xNDC = xRasterCentralized / (this->width);
+	float yNDC = yRasterCentralized / (this->height);
+
+	// 3. Screen space (from range [0:1] to range [-1:1]
+	float aspectRatio = (float)width / (float)height;
+	float xScreen = (2 * xNDC - 1)* tan(this->fovx / 2) *aspectRatio;
+	float yScreen = (-2 * yNDC + 1)* tan(this->fovy / 2) *aspectRatio;
+
+	direction = this->w + this->u * xScreen + this->v * yScreen;
+
+	direction.Normalize();
+	*/
+
 	return direction;
 }
 

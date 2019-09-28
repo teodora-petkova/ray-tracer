@@ -5,8 +5,7 @@
 
 using namespace std;
 
-
-bool SameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
+static bool SameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 {
 	Vector3 vector1 = Cross(b - a, p - a);
 	Vector3 vector2 = Cross(b - a, c - a);
@@ -21,8 +20,7 @@ bool SameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 	}
 
 }
-
-bool PointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
+static bool PointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 {
 	//If the point was on the same side of AB as C and
 	//is also on the same side of BC as A and
@@ -44,8 +42,9 @@ Triangle::Triangle()
 	pointC = Vector3(0.0, 1.0, 0.0);
 }
 
-int Triangle::Intersect(Ray &ray, float &distance)
+IntersectionInfo Triangle::Intersect(Ray &ray)
 {
+	IntersectionInfo info = IntersectionInfo();
 	float epsilon = 0.0000001f;
 
 	Vector3    u, v, n;
@@ -62,7 +61,7 @@ int Triangle::Intersect(Ray &ray, float &distance)
 	//triangle is degenerate(a segment or a point)
 	if (n == Vector3(0, 0, 0))
 	{
-		return false;
+		return info;
 	}
 
 	// ray: P = Po + P1.t
@@ -78,12 +77,12 @@ int Triangle::Intersect(Ray &ray, float &distance)
 		//the ray lies in the triangle plane
 		if (a == 0)
 		{
-			return false;
+			return info;
 		}
 		//ray - disjoint from plane
 		else
 		{
-			return false;
+			return info;
 		}
 	}
 
@@ -92,7 +91,7 @@ int Triangle::Intersect(Ray &ray, float &distance)
 	// ray goes away from triangle => no intersect
 	if (t < 0.0)
 	{
-		return false;
+		return info;
 	}
 
 	// for a segment, also test if (t > 1.0) => no intersect
@@ -125,10 +124,9 @@ int Triangle::Intersect(Ray &ray, float &distance)
 	// Check if point is in triangle
 	if ((uu >= 0.0f) && (vv >= 0.0f) && (uu + vv < 1.0f))
 	{
-		distance = t;
-		return true;
+		return IntersectionInfo(true, t, n);
 	}
 
-	return false;
+	return info;
 }
 

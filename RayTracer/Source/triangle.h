@@ -33,7 +33,7 @@ public:
 		normal.Normalize();
 		return normal;
 	}
-	int Intersect(Ray &ray, float &root);
+	IntersectionInfo Intersect(Ray &ray);
 
 private:
 	Vector3 pointA;

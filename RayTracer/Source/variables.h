@@ -18,6 +18,8 @@
 Vector3 lookfrom(0.0, 0.0, 5.0); // Initial eye position, also for resets
 Vector3 lookat(0.0, 1.0, 0.0); // Initial up position, also for resets
 Vector3 up(0.0, 0.0, 0.0); // Center look at point 
+Vector3 lightPosition(0.0, 0.0, 0.0);
+Vector3 lightColour(0.0, 0.0, 0.0);
 int width = 600, height = 400; // width and height 
 float fovy = 90.0; // For field of view
 std::vector<Vector3> vertices = std::vector<Vector3>();
@@ -27,6 +29,8 @@ std::vector<Sphere> spheres = std::vector<Sphere>();
 EXTERN Vector3 lookfrom;
 EXTERN Vector3 lookat;
 EXTERN Vector3 up;
+EXTERN Vector3 lightPosition;
+EXTERN Vector3 lightColour;
 EXTERN int width, height;
 EXTERN float fovy;
 EXTERN std::vector<Vector3> vertices;

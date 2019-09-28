@@ -47,7 +47,7 @@ public:
 		return (position - sphereCenter)*sphereRadiusInverse;
 	}
 
-	int Intersect(Ray &ray, float &root);
+	IntersectionInfo Intersect(Ray &ray);
 
 private:
 	Vector3 sphereCenter;

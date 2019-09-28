@@ -151,25 +151,26 @@ Vector3 Cross(Vector3 Vector1, Vector3 Vector2)
 
 	return v;
 }
+
 void Vector3::Normalize()
 {
-	float magnitude;
-	magnitude = Magnitude();
+	float magnitude = Magnitude();
 	if (magnitude < 0.0000001f)
 	{
 		magnitude = 1.0f;
 	}
-	x = x / magnitude;
-	y = y / magnitude;
-	z = z / magnitude;
+	float invertedMagnitude = 1 / magnitude;
+	x = x * invertedMagnitude;
+	y = y * invertedMagnitude;
+	z = z * invertedMagnitude;
 }
+
 void Vector3::DivideVectorByScaler(Vector3 Vector1, float f)
 {
 	x = Vector1.x / f;
 	y = Vector1.y / f;
 	z = Vector1.z / f;
 }
-
 
 bool Vector3::operator ==(Vector3 Vect)
 {

@@ -7,6 +7,7 @@
 #include "vector3.h"
 #include "ray.h"
 #include "material.h"
+#include "intersectioninfo.h"
 
 class Object
 {
@@ -35,7 +36,7 @@ public:
 
 	virtual int GetType() = 0;
 
-	virtual int Intersect(Ray &ray, float &distance) = 0;
+	virtual IntersectionInfo Intersect(Ray &ray) = 0;
 
 	virtual Vector3 GetNormal(Vector3& pos) = 0;
 
