@@ -3,18 +3,17 @@
 
 #pragma once
 
-// Readfile definitions 
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
-#include "variables.h"
+#include "scenedata.h"
 
 using namespace std;
 
-namespace readfiles
+namespace ReadScene
 {
-	bool readvals(stringstream &s, const int numvals, float * values);
-	void readfile(const char * filename);
+	bool ReadValues(stringstream &s, const int numvals, float * values);
+	SceneData ReadSceneFile(const char* filename);
 }
 #endif

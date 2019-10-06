@@ -12,14 +12,14 @@
 #define MAINPROGRAM 
 #define _USE_MATH_DEFINES
 
-#include "variables.h"
 #include "readfile.h"
+#include "scenedata.h"
 #include "scene.h"
 #include "ctime"
 #include <math.h>
 
 using namespace std;
-using namespace readfiles;
+using namespace ReadScene;
 
 //------------------------------------------------------------
 // Free Image
@@ -38,7 +38,7 @@ void saveScreenshot(string fname, int w, int h, BYTE *pixels)
 //------------------------------------------------------------
 // Main Ray Tracing Function
 //------------------------------------------------------------
-Color rayTrace(Ray &ray, Scene &scene)
+Color rayTrace(Ray &ray, Scene &scene, Vector3 lightPosition)
 {
 	float minDistance = INFINITY;
 
@@ -51,12 +51,12 @@ Color rayTrace(Ray &ray, Scene &scene)
 	{
 		Object* testObject = scene.GetObject(i);
 		IntersectionInfo intersection = testObject->Intersect(ray);
-		if (intersection.IsHit() && testObject && intersection.getDistance() < minDistance)
+		if (intersection.IsHit() && testObject && intersection.GetDistance() < minDistance)
 		{
 			object = testObject;
-			minDistance = intersection.getDistance();
-			intersectionPoint = ray.GetOrigin() + ray.GetDirection() * intersection.getDistance();
-			normal = intersection.getNormal();
+			minDistance = intersection.GetDistance();
+			intersectionPoint = ray.GetOrigin() + ray.GetDirection() * intersection.GetDistance();
+			normal = intersection.GetNormal();
 		}
 	}
 
@@ -90,7 +90,7 @@ Color rayTrace(Ray &ray, Scene &scene)
 	return color;
 }
 
-void updatePixels(int i, int j, BYTE* pixels, Color& color)
+void updatePixels(int i, int j, BYTE* pixels, Color& color, int width)
 {
 	int b = (int)(color.z * 255);
 	int g = (int)(color.y * 255);
@@ -112,29 +112,29 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 
-	readfile(argv[1]);
+	SceneData sceneData = ReadSceneFile(argv[1]);
 
-	Camera camera = Camera(lookfrom, lookat, up, fovy, width, height);
+	Camera camera = Camera(sceneData.LookFrom, sceneData.LookAt, sceneData.Up, sceneData.FovY, sceneData.ImageWidth, sceneData.ImageHeight);
 
 	Scene scene = Scene();
-	scene.InitializeScene();
+	scene.InitializeScene(sceneData.Triangles, sceneData.Spheres);
 
-	int pixelsSize = width * height;
+	int pixelsSize = sceneData.ImageWidth * sceneData.ImageHeight;
 	BYTE *pixels = new BYTE[pixelsSize * 3];
 
-	for (int i = 0; i < width; i++)
+	for (int i = 0; i < sceneData.ImageWidth; i++)
 	{
-		for (int j = 0; j < height; j++)
+		for (int j = 0; j < sceneData.ImageHeight; j++)
 		{
 			Ray rayFromCamera = Ray(camera.GetOrigin(), camera.GetDirectionRayForPixel(j, i));
 
-			Color color = rayTrace(rayFromCamera, scene);
+			Color color = rayTrace(rayFromCamera, scene, sceneData.LightPosition);
 
-			updatePixels(i, j, pixels, color);
+			updatePixels(i, j, pixels, color, sceneData.ImageWidth);
 		}
 	}
 
-	saveScreenshot(argv[2], width, height, pixels);
+	saveScreenshot(argv[2], sceneData.ImageWidth, sceneData.ImageHeight, pixels);
 
 	delete pixels;
 

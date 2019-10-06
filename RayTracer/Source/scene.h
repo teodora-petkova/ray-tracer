@@ -1,38 +1,38 @@
 //------------------------------------------------------------
 // Cscene.h Header
 //------------------------------------------------------------
-#ifndef CSCENE_H
-#define CSCENE_H
+#ifndef SCENE_H
+#define SCENE_H
 
-#include "vector3.h"
+#include "object.h"
+#include <vector>
 #include "sphere.h"
 #include "triangle.h"
-#include "ray.h"
-#include "object.h"
-#include "variables.h"
+
+using namespace std;
 
 class Scene
 {
 public:
-	Scene() : objectsNumber(0), pvt_object(0) {};
+	Scene() : objectsCount(0), objects(0) {};
 
 	~Scene();
 
-	void InitializeScene();
+	void InitializeScene(vector<Triangle> triangles, vector<Sphere> spheres);
 
 	int GetNumberOfObjects()
 	{
-		return objectsNumber;
+		return objectsCount;
 	}
 
-	Object *GetObject(int index)
+	Object* GetObject(int index)
 	{
-		return pvt_object[index];
+		return objects[index];
 	}
 
 private:
-	int objectsNumber;
-	Object **pvt_object;
+	int objectsCount;
+	Object** objects;
 };
 
 #endif

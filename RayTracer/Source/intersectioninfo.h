@@ -16,11 +16,11 @@ public:
 	{
 		return isHit;
 	}
-	float getDistance()
+	float GetDistance()
 	{
 		return distance;
 	}
-	Vector3 getNormal()
+	Vector3 GetNormal()
 	{
 		return normal;
 	}

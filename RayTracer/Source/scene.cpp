@@ -1,31 +1,33 @@
 //------------------------------------------------------------
-// Cscene.cpp
+// scene.cpp
 //------------------------------------------------------------
 
 #include "scene.h"
 
+using namespace std;
+
 Scene::~Scene()
 {
-	objectsNumber = 0;
-	delete pvt_object;
+	objectsCount = 0;
+	delete objects;
 }
-void Scene::InitializeScene()
+void Scene::InitializeScene(vector<Triangle> triangles, vector<Sphere> spheres)
 {
 	int trianglesNumber = triangles.size();
 	int spheresNumber = spheres.size();
-	objectsNumber = trianglesNumber + spheresNumber;
+	objectsCount = trianglesNumber + spheresNumber;
 
-	pvt_object = new Object*[objectsNumber];
+	objects = new Object*[objectsCount];
 
 	int i = 0;
 	for (; i < trianglesNumber; i++)
 	{
-		pvt_object[i] = &triangles[i];
-		pvt_object[i]->SetName("Triangle" + i);
+		objects[i] = new Triangle(triangles[i]);
+		objects[i]->SetName("Triangle" + i);
 	}
 	for (int j = 0; j < spheresNumber; j++, i++)
 	{
-		pvt_object[i] = &spheres[j];
-		pvt_object[i]->SetName("Sphere" + j);
+		objects[i] = new Sphere(spheres[j]);
+		objects[i]->SetName("Sphere" + j);
 	}
 }
