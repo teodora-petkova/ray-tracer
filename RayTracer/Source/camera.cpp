@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------
 #include "camera.h"
 
-Camera::Camera(Vector3 lookFromPoint, Vector3 lookAtPoint, Vector3 viewUpVector, float fieldOfViewAngleY, float width, float height)
+Camera::Camera(Vector3 lookFromPoint, Vector3 lookAtPoint, Vector3 viewUpVector, float fieldOfViewAngleY, int width, int height)
 {
 	//1. The origin of each ray, O, is precisely LF.
 	this->origin = lookFromPoint;
@@ -46,7 +46,7 @@ Camera::Camera(Vector3 lookFromPoint, Vector3 lookAtPoint, Vector3 viewUpVector,
 	this->height = height;
 }
 
-Vector3 Camera::GetDirectionRayForPixel(float x, float y)
+Vector3 Camera::GetDirectionRayForPixel(int x, int y)
 {
 	Vector3 direction = Vector3();
 

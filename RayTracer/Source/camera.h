@@ -15,9 +15,9 @@ class Camera
 {
 public:
 	Camera();
-	Camera(Vector3 lookFromPoint, Vector3 lookAtPoint, Vector3 viewUpVector, float fieldOfViewAngleY, float width, float height);
-	Vector3 GetDirectionRayForPixel(float x, float y);
-	Vector3 Camera::GetOrigin();
+	Camera(Vector3 lookFromPoint, Vector3 lookAtPoint, Vector3 viewUpVector, float fieldOfViewAngleY, int width, int height);
+	Vector3 GetDirectionRayForPixel(int x, int y);
+	Vector3 GetOrigin();
 private:
 	Vector3 origin;
 	Vector3 w;
@@ -25,7 +25,7 @@ private:
 	Vector3 v;
 	float fovx;
 	float fovy;
-	float width;
-	float height;
+	int width;
+	int height;
 };
 #endif

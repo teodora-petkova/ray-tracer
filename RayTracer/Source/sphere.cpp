@@ -28,7 +28,7 @@ IntersectionInfo Sphere::Intersect(Ray &ray)
 	if (discriminant > 0)
 	{
 		float d = sqrt(discriminant);
-		float _2a = 2.0 * a;
+		float _2a = 2.0f * a;
 		float root1 = (-b - d) / _2a;
 		float root2 = (-b + d) / _2a;
 

@@ -63,7 +63,7 @@ Color rayTrace(Ray &ray, Scene &scene, Vector3 lightPosition)
 	Vector3 rayFromIntersectionToLight = lightPosition - intersectionPoint;
 	if (object != NULL)
 	{
-		Ray rayToLightSource = Ray(intersectionPoint + normal * 0.001, rayFromIntersectionToLight);
+		Ray rayToLightSource = Ray(intersectionPoint + normal * 0.001f, rayFromIntersectionToLight);
 		bool isInShadow = false;
 		for (int i = 0; i < scene.GetNumberOfObjects(); i++)
 		{
@@ -78,11 +78,11 @@ Color rayTrace(Ray &ray, Scene &scene, Vector3 lightPosition)
 		}
 		if (isInShadow)
 		{
-			color = object->GetMaterial()->GetColor() *(fmax(0.0, Dot(normal, -rayFromIntersectionToLight)));// *M_PI;
+			color = object->GetMaterial()->GetColor() *(fmax(0.0f, Dot(normal, -rayFromIntersectionToLight)));// *M_PI;
 		}
 		else
 		{
-			color = object->GetMaterial()->GetColor() *(fmax(0.0, Dot(normal, -rayFromIntersectionToLight)));// *M_PI;
+			color = object->GetMaterial()->GetColor() *(fmax(0.0f, Dot(normal, -rayFromIntersectionToLight)));// *M_PI;
 			//	color = Vector3(1.0, 1.0, 1.0);
 		}
 	}
