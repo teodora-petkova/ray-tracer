@@ -126,11 +126,12 @@ int main(int argc, char *argv[])
 	{
 		for (int j = 0; j < sceneData.ImageHeight; j++)
 		{
-			Ray rayFromCamera = Ray(camera.GetOrigin(), camera.GetDirectionRayForPixel(j, i));
+			Ray rayFromCamera = Ray(camera.GetOrigin(), camera.GetDirectionRayForPixel(i, j));
 
 			Color color = rayTrace(rayFromCamera, scene, sceneData.LightPosition);
 
-			updatePixels(i, j, pixels, color, sceneData.ImageWidth);
+			// the (0,0) point is at bottom-left!
+			updatePixels(i, sceneData.ImageHeight - 1 - j, pixels, color, sceneData.ImageWidth);
 		}
 	}
 
