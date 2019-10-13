@@ -1,13 +1,12 @@
 //------------------------------------------------------------
-// RayTracing Test Program
+// RayTracer.cpp
 //------------------------------------------------------------
-#include <iostream>
 
+#include "raytracer.h"
 #include "ray.h"
 #include "sphere.h"
 #include "material.h"
 #include "camera.h"
-#include "FreeImage.h"
 
 #define MAINPROGRAM 
 #define _USE_MATH_DEFINES
@@ -15,25 +14,11 @@
 #include "readfile.h"
 #include "scenedata.h"
 #include "scene.h"
-#include "ctime"
 #include <math.h>
 
-using namespace std;
+#include "FreeImage.h"
+
 using namespace ReadScene;
-
-//------------------------------------------------------------
-// Free Image
-//------------------------------------------------------------
-void saveScreenshot(string fname, int w, int h, BYTE *pixels)
-{
-	FreeImage_Initialise();
-
-	FIBITMAP *img = FreeImage_ConvertFromRawBits(pixels, w, h, w * 3, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
-
-	FreeImage_Save(FIF_PNG, img, fname.c_str(), 0);
-
-	FreeImage_DeInitialise();
-}
 
 //------------------------------------------------------------
 // Main Ray Tracing Function
@@ -106,13 +91,25 @@ void updatePixels(int i, int j, BYTE* pixels, Color& color, int width)
 }
 
 //------------------------------------------------------------
+// Free Image
+//------------------------------------------------------------
+void saveScreenshot(std::string fname, int w, int h, BYTE* pixels)
+{
+	FreeImage_Initialise();
+
+	FIBITMAP *img = FreeImage_ConvertFromRawBits(pixels, w, h, w * 3, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
+
+	FreeImage_Save(FIF_PNG, img, fname.c_str(), 0);
+
+	FreeImage_DeInitialise();
+}
+
+//------------------------------------------------------------
 //  Main Function
 //------------------------------------------------------------
-int main(int argc, char *argv[])
+void RayTracer::Execute(std::string sceneFileName, std::string outputImageFileName)
 {
-	clock_t begin = clock();
-
-	SceneData sceneData = ReadSceneFile(argv[1]);
+	SceneData sceneData = ReadSceneFile(sceneFileName);
 
 	Camera camera = Camera(sceneData.LookFrom, sceneData.LookAt, sceneData.Up, sceneData.FovY, sceneData.ImageWidth, sceneData.ImageHeight);
 
@@ -122,9 +119,9 @@ int main(int argc, char *argv[])
 	int pixelsSize = sceneData.ImageWidth * sceneData.ImageHeight;
 	BYTE *pixels = new BYTE[pixelsSize * 3];
 
-	for (int i = 0; i < sceneData.ImageWidth; i++)
+	for (int j = 0; j < sceneData.ImageHeight; j++)
 	{
-		for (int j = 0; j < sceneData.ImageHeight; j++)
+		for (int i = 0; i < sceneData.ImageWidth; i++)
 		{
 			Ray rayFromCamera = Ray(camera.GetOrigin(), camera.GetDirectionRayForPixel(i, j));
 
@@ -135,13 +132,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	saveScreenshot(argv[2], sceneData.ImageWidth, sceneData.ImageHeight, pixels);
+	saveScreenshot(outputImageFileName, sceneData.ImageWidth, sceneData.ImageHeight, pixels);
 
 	delete pixels;
-
-	clock_t end = clock();
-	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
-	cout << elapsed_secs << '\n';
-
-	return 0;
 }

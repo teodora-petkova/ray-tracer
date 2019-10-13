@@ -3,7 +3,7 @@
 
 namespace ReadScene
 {
-	SceneData ReadSceneFile(const char* filename)
+	SceneData ReadSceneFile(string filename)
 	{
 		SceneData sceneData = SceneData();
 

@@ -54,12 +54,12 @@
     <ClInclude Include="Source\scenedata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\raytracer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\material.cpp">
@@ -90,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\scenedata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\raytracer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

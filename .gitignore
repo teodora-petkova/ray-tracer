@@ -3,3 +3,6 @@
 *.suo
 Debug/*
 RayTracer/Debug/*
+RayTracer.Tester/Debug/*
+RayTracer.UnitTests/Debug/*
+packages/*

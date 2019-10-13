@@ -14,6 +14,6 @@ using namespace std;
 namespace ReadScene
 {
 	bool ReadValues(stringstream &s, const int numvals, float * values);
-	SceneData ReadSceneFile(const char* filename);
+	SceneData ReadSceneFile(string filename);
 }
 #endif

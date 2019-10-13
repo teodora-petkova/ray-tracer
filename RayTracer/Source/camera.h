@@ -11,7 +11,7 @@
 
 typedef Vector3 Color;
 
-class Camera
+class __declspec(dllexport) Camera
 {
 public:
 	Camera();

@@ -9,7 +9,7 @@
 #include <math.h>
 #define MAX(a,b) a < b ? b : a
 
-class Vector3
+class __declspec(dllexport) Vector3
 {
 public:
 	Vector3();
@@ -35,7 +35,7 @@ public:
 	Vector3 operator -=(float f);
 	Vector3 operator *=(float f);
 	Vector3 operator /=(float f);
-	bool operator ==(Vector3 Vect);
+	bool operator==(const Vector3& v2) const;
 	float Magnitude();
 	friend float Dot(Vector3 Vect1, Vector3 Vect2);
 	void Normalize();

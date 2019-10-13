@@ -16,6 +16,7 @@
     <ClInclude Include="Source\material.h" />
     <ClInclude Include="Source\object.h" />
     <ClInclude Include="Source\ray.h" />
+    <ClInclude Include="Source\raytracer.h" />
     <ClInclude Include="Source\readfile.h" />
     <ClInclude Include="Source\scene.h" />
     <ClInclude Include="Source\scenedata.h" />
@@ -27,7 +28,7 @@
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
     <ClCompile Include="Source\intersectioninfo.cpp" />
-    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\raytracer.cpp" />
     <ClCompile Include="Source\material.cpp" />
     <ClCompile Include="Source\ray.cpp" />
     <ClCompile Include="Source\readfile.cpp" />
@@ -56,7 +57,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfAtl>false</UseOfAtl>

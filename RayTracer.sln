@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RayTracer", "RayTracer\RayTracer.vcxproj", "{1426BF5B-BE0B-4553-8756-71EA348D52A2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RayTracer.UnitTests", "RayTracer.UnitTests\RayTracer.UnitTests.vcxproj", "{4AE7989C-A034-4DFA-BBCE-178FE7DA7157}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RayTracer.Tester", "RayTracer.Tester\RayTracer.Tester.vcxproj", "{C429209A-1EFD-46B6-B89E-BDFA3CB6A7A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +23,22 @@ Global
 		{1426BF5B-BE0B-4553-8756-71EA348D52A2}.Release|Win32.ActiveCfg = Release|Win32
 		{1426BF5B-BE0B-4553-8756-71EA348D52A2}.Release|Win32.Build.0 = Release|Win32
 		{1426BF5B-BE0B-4553-8756-71EA348D52A2}.Release|x64.ActiveCfg = Release|Win32
+		{4AE7989C-A034-4DFA-BBCE-178FE7DA7157}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4AE7989C-A034-4DFA-BBCE-178FE7DA7157}.Debug|Win32.Build.0 = Debug|Win32
+		{4AE7989C-A034-4DFA-BBCE-178FE7DA7157}.Debug|x64.ActiveCfg = Debug|x64
+		{4AE7989C-A034-4DFA-BBCE-178FE7DA7157}.Debug|x64.Build.0 = Debug|x64
+		{4AE7989C-A034-4DFA-BBCE-178FE7DA7157}.Release|Win32.ActiveCfg = Release|Win32
+		{4AE7989C-A034-4DFA-BBCE-178FE7DA7157}.Release|Win32.Build.0 = Release|Win32
+		{4AE7989C-A034-4DFA-BBCE-178FE7DA7157}.Release|x64.ActiveCfg = Release|x64
+		{4AE7989C-A034-4DFA-BBCE-178FE7DA7157}.Release|x64.Build.0 = Release|x64
+		{C429209A-1EFD-46B6-B89E-BDFA3CB6A7A6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C429209A-1EFD-46B6-B89E-BDFA3CB6A7A6}.Debug|Win32.Build.0 = Debug|Win32
+		{C429209A-1EFD-46B6-B89E-BDFA3CB6A7A6}.Debug|x64.ActiveCfg = Debug|x64
+		{C429209A-1EFD-46B6-B89E-BDFA3CB6A7A6}.Debug|x64.Build.0 = Debug|x64
+		{C429209A-1EFD-46B6-B89E-BDFA3CB6A7A6}.Release|Win32.ActiveCfg = Release|Win32
+		{C429209A-1EFD-46B6-B89E-BDFA3CB6A7A6}.Release|Win32.Build.0 = Release|Win32
+		{C429209A-1EFD-46B6-B89E-BDFA3CB6A7A6}.Release|x64.ActiveCfg = Release|x64
+		{C429209A-1EFD-46B6-B89E-BDFA3CB6A7A6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

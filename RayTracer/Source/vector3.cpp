@@ -128,6 +128,7 @@ Vector3 Vector3::operator /=(float f)
 	recip = 1.0f / f;
 	return Vector3(x*recip, y*recip, z*recip);
 }
+
 //------------------------------------------------------------------------
 // Magnitude(), Dot(), Cross(), and Normalize() Functions
 //------------------------------------------------------------------------
@@ -172,7 +173,7 @@ void Vector3::DivideVectorByScaler(Vector3 Vector1, float f)
 	z = Vector1.z / f;
 }
 
-bool Vector3::operator ==(Vector3 Vect)
+bool Vector3::operator==(const Vector3& v2) const
 {
-	return x == Vect.x && y == Vect.y && z == Vect.z;
+	return x == v2.x && y == v2.y &&  z == v2.z;
 }
