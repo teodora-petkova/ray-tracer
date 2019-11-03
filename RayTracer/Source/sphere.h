@@ -22,32 +22,32 @@ public:
 		sphereRadiusSquared(radius*radius),
 		sphereRadiusInverse(1.0f / radius) {};
 
-	int GetType()
+	int getType()
 	{
 		return SPHERE;
 	}
 
-	Vector3 &GetCenter()
+	Vector3 getCenter()
 	{
 		return sphereCenter;
 	}
 
-	float GetRadius()
+	float getRadius()
 	{
 		return sphereRadius;
 	}
 
-	float GetRadiusSq()
+	float getRadiusSq()
 	{
 		return sphereRadiusSquared;
 	}
 
-	Vector3 GetNormal(Vector3 &position)
+	Vector3 getNormal(Vector3 &position)
 	{
 		return (position - sphereCenter)*sphereRadiusInverse;
 	}
 
-	IntersectionInfo Intersect(Ray &ray);
+	IntersectionInfo intersect(Ray &ray);
 
 private:
 	Vector3 sphereCenter;

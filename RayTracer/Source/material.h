@@ -13,19 +13,19 @@ class Material
 public:
 	Material();
 
-	void SetColor(Color &color)
+	void setColor(Color &color)
 	{
 		materialColor = color;
 	}
 
-	void SetColor(float r, float g, float b)
+	void setColor(float r, float g, float b)
 	{
 		materialColor.x = r;
 		materialColor.y = g;
 		materialColor.z = b;
 	}
 
-	Color GetColor()
+	Color getColor()
 	{
 		return materialColor;
 	}

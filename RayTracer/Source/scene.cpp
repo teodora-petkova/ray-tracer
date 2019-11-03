@@ -11,7 +11,7 @@ Scene::~Scene()
 	objectsCount = 0;
 	delete objects;
 }
-void Scene::InitializeScene(vector<Triangle> triangles, vector<Sphere> spheres)
+void Scene::initializeScene(vector<Triangle> triangles, vector<Sphere> spheres, vector<Light> lights)
 {
 	int trianglesNumber = triangles.size();
 	int spheresNumber = spheres.size();
@@ -23,11 +23,13 @@ void Scene::InitializeScene(vector<Triangle> triangles, vector<Sphere> spheres)
 	for (; i < trianglesNumber; i++)
 	{
 		objects[i] = new Triangle(triangles[i]);
-		objects[i]->SetName("Triangle" + i);
+		objects[i]->setName("Triangle" + i);
 	}
 	for (int j = 0; j < spheresNumber; j++, i++)
 	{
 		objects[i] = new Sphere(spheres[j]);
-		objects[i]->SetName("Sphere" + j);
+		objects[i]->setName("Sphere" + j);
 	}
+
+	this->lights = lights;
 }

@@ -22,18 +22,18 @@ public:
 		pointC(point3)
 	{};
 
-	int GetType()
+	int getType()
 	{
 		return TRIANGLE;
 	}
 
-	Vector3 GetNormal(Vector3& pos)
+	Vector3 getNormal(Vector3& pos)
 	{
-		Vector3 normal = Cross((pointB - pointA), (pointC - pointA));
-		normal.Normalize();
+		Vector3 normal = cross((pointB - pointA), (pointC - pointA));
+		normal.normalize();
 		return normal;
 	}
-	IntersectionInfo Intersect(Ray &ray);
+	IntersectionInfo intersect(Ray &ray);
 
 private:
 	Vector3 pointA;

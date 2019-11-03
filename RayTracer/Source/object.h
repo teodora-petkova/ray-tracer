@@ -14,31 +14,31 @@ class Object
 public:
 	Object() : objectName(0) {};
 
-	void  SetName(const char *name)
+	void  setName(const char *name)
 	{
 		objectName = (char*)name;
 	}
 
-	char *GetName()
+	char *getName()
 	{
 		return objectName;
 	}
 
-	void  SetMaterial(Material &material)
+	void  setMaterial(Material &material)
 	{
 		objectMaterial = material;
 	}
 
-	Material *GetMaterial()
+	Material *getMaterial()
 	{
 		return &objectMaterial;
 	}
 
-	virtual int GetType() = 0;
+	virtual int getType() = 0;
 
-	virtual IntersectionInfo Intersect(Ray &ray) = 0;
+	virtual IntersectionInfo intersect(Ray &ray) = 0;
 
-	virtual Vector3 GetNormal(Vector3& pos) = 0;
+	virtual Vector3 getNormal(Vector3& pos) = 0;
 
 protected:
 	char * objectName;

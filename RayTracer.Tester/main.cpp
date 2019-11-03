@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	clock_t begin = clock();
 
 	RayTracer r = RayTracer();
-	r.Execute(argv[1], argv[2]);
+	r.execute(argv[1], argv[2]);
 	clock_t end = clock();
 	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
 	cout << elapsed_secs << '\n';

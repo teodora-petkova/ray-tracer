@@ -36,11 +36,11 @@ public:
 	Vector3 operator *=(float f);
 	Vector3 operator /=(float f);
 	bool operator==(const Vector3& v2) const;
-	float Magnitude();
-	friend float Dot(Vector3 Vect1, Vector3 Vect2);
-	void Normalize();
-	friend Vector3 Cross(Vector3 Vect1, Vector3 Vect2);
-	void DivideVectorByScaler(Vector3 Vector1, float f);
+	float magnitude();
+	friend float dot(Vector3 Vect1, Vector3 Vect2);
+	void normalize();
+	friend Vector3 cross(Vector3 Vect1, Vector3 Vect2);
+	void divideVectorByScaler(Vector3 Vector1, float f);
 
 	float x, y, z;
 };

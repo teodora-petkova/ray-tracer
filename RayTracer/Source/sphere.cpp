@@ -13,12 +13,12 @@ Sphere::Sphere()
 	sphereRadiusInverse = 1.0;
 }
 
-IntersectionInfo Sphere::Intersect(Ray &ray)
+IntersectionInfo Sphere::intersect(Ray &ray)
 {
-	Vector3 originMinusSphereCenter = ray.GetOrigin() - sphereCenter;
-	float a = Dot(ray.GetDirection(), ray.GetDirection());
-	float b = 2 * Dot(ray.GetDirection(), originMinusSphereCenter);
-	float c = Dot(originMinusSphereCenter, originMinusSphereCenter) - sphereRadius * sphereRadius;
+	Vector3 originMinusSphereCenter = ray.getOrigin() - sphereCenter;
+	float a = dot(ray.getDirection(), ray.getDirection());
+	float b = 2 * dot(ray.getDirection(), originMinusSphereCenter);
+	float c = dot(originMinusSphereCenter, originMinusSphereCenter) - sphereRadius * sphereRadius;
 
 	float discriminant = b * b - 4 * a * c;
 	bool isHit = false;
@@ -59,9 +59,9 @@ IntersectionInfo Sphere::Intersect(Ray &ray)
 			//isHit = true;
 		}
 	}
-	Vector3 intersectionPoint = ray.GetOrigin() + ray.GetDirection() * distance;
+	Vector3 intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
 	Vector3 normal = (intersectionPoint - sphereCenter)*distance;
-	normal.Normalize();
+	normal.normalize();
 
 	return IntersectionInfo(isHit, distance, normal);
 }

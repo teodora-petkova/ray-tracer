@@ -13,22 +13,22 @@ public:
 
 	Ray(const Vector3 &origin, Vector3 &direction);
 
-	void SetOrigin(Vector3 &origin)
+	void setOrigin(Vector3 &origin)
 	{
 		rayOrigin = origin;
 	}
 
-	void SetDirection(Vector3 &direction)
+	void setDirection(Vector3 &direction)
 	{
 		rayDirection = direction;
 	}
 
-	Vector3 &GetOrigin()
+	Vector3 &getOrigin()
 	{
 		return rayOrigin;
 	}
 
-	Vector3 &GetDirection()
+	Vector3 &getDirection()
 	{
 		return rayDirection;
 	}

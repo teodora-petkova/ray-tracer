@@ -16,8 +16,8 @@ class __declspec(dllexport) Camera
 public:
 	Camera();
 	Camera(Vector3 lookFromPoint, Vector3 lookAtPoint, Vector3 viewUpVector, float fieldOfViewAngleY, int width, int height);
-	Vector3 GetDirectionRayForPixel(int x, int y);
-	Vector3 GetOrigin();
+	Vector3 getDirectionRayForPixel(int x, int y);
+	Vector3 getOrigin();
 private:
 	Vector3 origin;
 	Vector3 w;

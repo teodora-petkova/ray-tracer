@@ -6,6 +6,7 @@
 
 #include "object.h"
 #include <vector>
+#include "light.h"
 #include "sphere.h"
 #include "triangle.h"
 
@@ -18,21 +19,26 @@ public:
 
 	~Scene();
 
-	void InitializeScene(vector<Triangle> triangles, vector<Sphere> spheres);
+	void initializeScene(vector<Triangle> triangles, vector<Sphere> spheres, vector<Light> lights);
 
-	int GetNumberOfObjects()
+	int getNumberOfObjects()
 	{
 		return objectsCount;
 	}
 
-	Object* GetObject(int index)
+	Object* getObject(int index)
 	{
 		return objects[index];
 	}
 
+	vector<Light> getLights()
+	{
+		return this->lights;
+	}
 private:
 	int objectsCount;
 	Object** objects;
+	vector<Light> lights;
 };
 
 #endif

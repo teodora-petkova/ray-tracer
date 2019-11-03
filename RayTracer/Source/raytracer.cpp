@@ -23,7 +23,7 @@ using namespace ReadScene;
 //------------------------------------------------------------
 // Main Ray Tracing Function
 //------------------------------------------------------------
-Color rayTrace(Ray &ray, Scene &scene, Vector3 lightPosition)
+Color rayTrace(Ray &ray, Scene &scene)
 {
 	float minDistance = INFINITY;
 
@@ -32,46 +32,48 @@ Color rayTrace(Ray &ray, Scene &scene, Vector3 lightPosition)
 	Vector3 normal = NULL;
 	Color color = 0.0;
 
-	for (int i = 0; i < scene.GetNumberOfObjects(); i++)
+	for (int i = 0; i < scene.getNumberOfObjects(); i++)
 	{
-		Object* testObject = scene.GetObject(i);
-		IntersectionInfo intersection = testObject->Intersect(ray);
-		if (intersection.IsHit() && testObject && intersection.GetDistance() < minDistance)
+		Object* testObject = scene.getObject(i);
+		IntersectionInfo intersection = testObject->intersect(ray);
+		if (intersection.isHit() && testObject && intersection.getDistance() < minDistance)
 		{
 			object = testObject;
-			minDistance = intersection.GetDistance();
-			intersectionPoint = ray.GetOrigin() + ray.GetDirection() * intersection.GetDistance();
-			normal = intersection.GetNormal();
+			minDistance = intersection.getDistance();
+			intersectionPoint = ray.getOrigin() + ray.getDirection() * intersection.getDistance();
+			normal = intersection.getNormal();
 		}
 	}
 
-	Vector3 rayFromIntersectionToLight = lightPosition - intersectionPoint;
-	if (object != NULL)
+	for (Light light : scene.getLights())
 	{
-		Ray rayToLightSource = Ray(intersectionPoint + normal * 0.001f, rayFromIntersectionToLight);
-		bool isInShadow = false;
-		for (int i = 0; i < scene.GetNumberOfObjects(); i++)
+		Vector3 rayFromIntersectionToLight = light.Position - intersectionPoint;
+		if (object != NULL)
 		{
-			Object* testObject = scene.GetObject(i);
-			IntersectionInfo intersection = testObject->Intersect(rayToLightSource);
-			if (intersection.IsHit())
+			Ray rayToLightSource = Ray(intersectionPoint + normal * 0.001f, rayFromIntersectionToLight);
+			bool isInShadow = false;
+			for (int i = 0; i < scene.getNumberOfObjects(); i++)
 			{
-				isInShadow = true;
-				break;
-			}
+				Object* testObject = scene.getObject(i);
+				IntersectionInfo intersection = testObject->intersect(rayToLightSource);
+				if (intersection.isHit())
+				{
+					isInShadow = true;
+					break;
+				}
 
-		}
-		if (isInShadow)
-		{
-			color = object->GetMaterial()->GetColor() *(fmax(0.0f, Dot(normal, -rayFromIntersectionToLight)));// *M_PI;
-		}
-		else
-		{
-			color = object->GetMaterial()->GetColor() *(fmax(0.0f, Dot(normal, -rayFromIntersectionToLight)));// *M_PI;
-			//	color = Vector3(1.0, 1.0, 1.0);
+			}
+			if (isInShadow)
+			{
+				color = object->getMaterial()->getColor() *(fmax(0.0f, dot(normal, -rayFromIntersectionToLight)));// *M_PI;
+			}
+			else
+			{
+				color = object->getMaterial()->getColor() *(fmax(0.0f, dot(normal, -rayFromIntersectionToLight)));// *M_PI;
+				//	color = Vector3(1.0, 1.0, 1.0);
+			}
 		}
 	}
-
 	return color;
 }
 
@@ -107,14 +109,14 @@ void saveScreenshot(std::string fname, int w, int h, BYTE* pixels)
 //------------------------------------------------------------
 //  Main Function
 //------------------------------------------------------------
-void RayTracer::Execute(std::string sceneFileName, std::string outputImageFileName)
+void RayTracer::execute(std::string sceneFileName, std::string outputImageFileName)
 {
-	SceneData sceneData = ReadSceneFile(sceneFileName);
+	SceneData sceneData = readSceneFile(sceneFileName);
 
 	Camera camera = Camera(sceneData.LookFrom, sceneData.LookAt, sceneData.Up, sceneData.FovY, sceneData.ImageWidth, sceneData.ImageHeight);
 
 	Scene scene = Scene();
-	scene.InitializeScene(sceneData.Triangles, sceneData.Spheres);
+	scene.initializeScene(sceneData.Triangles, sceneData.Spheres, sceneData.Lights);
 
 	int pixelsSize = sceneData.ImageWidth * sceneData.ImageHeight;
 	BYTE *pixels = new BYTE[pixelsSize * 3];
@@ -123,9 +125,9 @@ void RayTracer::Execute(std::string sceneFileName, std::string outputImageFileNa
 	{
 		for (int i = 0; i < sceneData.ImageWidth; i++)
 		{
-			Ray rayFromCamera = Ray(camera.GetOrigin(), camera.GetDirectionRayForPixel(i, j));
+			Ray rayFromCamera = Ray(camera.getOrigin(), camera.getDirectionRayForPixel(i, j));
 
-			Color color = rayTrace(rayFromCamera, scene, sceneData.LightPosition);
+			Color color = rayTrace(rayFromCamera, scene);
 
 			// the (0,0) point is at bottom-left!
 			updatePixels(i, sceneData.ImageHeight - 1 - j, pixels, color, sceneData.ImageWidth);

@@ -12,21 +12,21 @@ public:
 	IntersectionInfo();
 	IntersectionInfo(bool isHit, float distance, Vector3 normal);
 
-	bool IsHit()
+	bool isHit()
 	{
-		return isHit;
+		return isObjectHit;
 	}
-	float GetDistance()
+	float getDistance()
 	{
 		return distance;
 	}
-	Vector3 GetNormal()
+	Vector3 getNormal()
 	{
 		return normal;
 	}
 
 private:
-	bool isHit;
+	bool isObjectHit;
 	float distance;
 	Vector3 normal;
 };

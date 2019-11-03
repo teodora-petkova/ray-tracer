@@ -23,30 +23,30 @@ Camera::Camera(Vector3 lookFromPoint, Vector3 lookAtPoint, Vector3 viewUpVector,
 	//         || LA-LF ||
 
 	this->w = lookAtPoint - lookFromPoint;
-	this->w.Normalize();
+	this->w.normalize();
 
 	//3.2. U corresponds to the "X" axis
 	//            W x UP
 	//     U = -------------
 	//         || W x UP ||
 
-	viewUpVector.Normalize();
-	this->u = Cross(w, viewUpVector);
-	this->u.Normalize();
+	viewUpVector.normalize();
+	this->u = cross(w, viewUpVector);
+	this->u.normalize();
 
 	//2.3. V is the "Up" vector
 	//          W x U
 	//    V = -----------
 	//       || W x U ||
 
-	this->v = Cross(u, w);
-	this->v.Normalize();
+	this->v = cross(u, w);
+	this->v.normalize();
 
 	this->width = width;
 	this->height = height;
 }
 
-Vector3 Camera::GetDirectionRayForPixel(int x, int y)
+Vector3 Camera::getDirectionRayForPixel(int x, int y)
 {
 	Vector3 direction = Vector3();
 
@@ -64,12 +64,12 @@ Vector3 Camera::GetDirectionRayForPixel(int x, int y)
 	float yScreen = (-2 * yNDC + 1) * tan(this->fovy / 2);
 
 	direction = this->u * xScreen + this->v * yScreen + this->w;
-	direction.Normalize();
+	direction.normalize();
 
 	return direction;
 }
 
-Vector3 Camera::GetOrigin()
+Vector3 Camera::getOrigin()
 {
 	return this->origin;
 }

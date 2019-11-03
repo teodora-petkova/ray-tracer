@@ -5,12 +5,12 @@
 
 using namespace std;
 
-static bool SameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
+static bool isOnSameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 {
-	Vector3 vector1 = Cross(b - a, p - a);
-	Vector3 vector2 = Cross(b - a, c - a);
+	Vector3 vector1 = cross(b - a, p - a);
+	Vector3 vector2 = cross(b - a, c - a);
 	// in one direction
-	if (Dot(vector1, vector2) >= 0)
+	if (dot(vector1, vector2) >= 0)
 	{
 		return true;
 	}
@@ -20,12 +20,12 @@ static bool SameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 	}
 
 }
-static bool PointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
+static bool isPointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 {
 	//If the point was on the same side of AB as C and
 	//is also on the same side of BC as A and
 	//on the same side of CA as B, then it is in the triangle.
-	if (SameSide(p, a, b, c) && SameSide(p, b, a, c) && SameSide(p, c, a, b))
+	if (isOnSameSide(p, a, b, c) && isOnSameSide(p, b, a, c) && isOnSameSide(p, c, a, b))
 	{
 		return true;
 	}
@@ -42,7 +42,7 @@ Triangle::Triangle()
 	pointC = Vector3(0.0, 1.0, 0.0);
 }
 
-IntersectionInfo Triangle::Intersect(Ray &ray)
+IntersectionInfo Triangle::intersect(Ray &ray)
 {
 	IntersectionInfo info = IntersectionInfo();
 	float epsilon = 0.0000001f;
@@ -55,8 +55,8 @@ IntersectionInfo Triangle::Intersect(Ray &ray)
 	u = pointB - pointA; //AB = u
 	v = pointC - pointA; //AC = v
 
-	n = Cross(u, v);
-	n.Normalize();
+	n = cross(u, v);
+	n.normalize();
 
 	//triangle is degenerate(a segment or a point)
 	if (n == Vector3(0, 0, 0))
@@ -68,8 +68,8 @@ IntersectionInfo Triangle::Intersect(Ray &ray)
 	// plane: P.n - A.n = 0;
 	// t = (A.n - Po.n)/(P1.n);
 
-	a = Dot((pointA - ray.GetOrigin()), n);
-	b = Dot(ray.GetDirection(), n);
+	a = dot((pointA - ray.getOrigin()), n);
+	b = dot(ray.getDirection(), n);
 
 	// ray is  parallel to triangle plane
 	if (fabs(b) < epsilon)
@@ -96,7 +96,7 @@ IntersectionInfo Triangle::Intersect(Ray &ray)
 
 	// for a segment, also test if (t > 1.0) => no intersect
 	// find the intersection point of the ray and the plane
-	Vector3 pointP = ray.GetOrigin() + ray.GetDirection() * t;
+	Vector3 pointP = ray.getOrigin() + ray.getDirection() * t;
 
 	/*if(PointInTriangle(pointP, pointA, pointB, pointC))
 	{
@@ -110,11 +110,11 @@ IntersectionInfo Triangle::Intersect(Ray &ray)
 	Vector3 v2 = pointP - pointA;
 
 	// Compute dot products
-	float dot00 = Dot(v0, v0);
-	float dot01 = Dot(v0, v1);
-	float dot02 = Dot(v0, v2);
-	float dot11 = Dot(v1, v1);
-	float dot12 = Dot(v1, v2);
+	float dot00 = dot(v0, v0);
+	float dot01 = dot(v0, v1);
+	float dot02 = dot(v0, v2);
+	float dot11 = dot(v1, v1);
+	float dot12 = dot(v1, v2);
 
 	// Compute barycentric coordinates
 	float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);

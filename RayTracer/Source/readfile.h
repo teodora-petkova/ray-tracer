@@ -13,7 +13,7 @@ using namespace std;
 
 namespace ReadScene
 {
-	bool ReadValues(stringstream &s, const int numvals, float * values);
-	SceneData ReadSceneFile(string filename);
+	bool readValues(stringstream &s, const int numvals, float * values);
+	SceneData readSceneFile(string filename);
 }
 #endif
