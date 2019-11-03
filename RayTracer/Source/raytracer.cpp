@@ -47,10 +47,12 @@ Color rayTrace(Ray &ray, Scene &scene)
 
 	for (Light light : scene.getLights())
 	{
-		Vector3 rayFromIntersectionToLight = light.Position - intersectionPoint;
+		Vector3 rayFromLightToIntersection = intersectionPoint - light.Position; // P - Lp = lightDirection
+		Vector3 rayFromIntersectionToLight = -rayFromLightToIntersection;
 		if (object != NULL)
 		{
-			Ray rayToLightSource = Ray(intersectionPoint + normal * 0.001f, rayFromIntersectionToLight);
+			float bias = 0.001f;
+			Ray rayToLightSource = Ray(intersectionPoint + normal * bias, rayFromIntersectionToLight);
 			bool isInShadow = false;
 			for (int i = 0; i < scene.getNumberOfObjects(); i++)
 			{
@@ -61,19 +63,21 @@ Color rayTrace(Ray &ray, Scene &scene)
 					isInShadow = true;
 					break;
 				}
-
 			}
+
+			float defaultObjectAlbedo = 0.18;
+			Color ambientColor = object->getMaterial()->getColor() * defaultObjectAlbedo;
 			if (isInShadow)
 			{
-				color = object->getMaterial()->getColor() *(fmax(0.0f, dot(normal, -rayFromIntersectionToLight)));// *M_PI;
+				color = Color(0, 0, 0);
 			}
 			else
 			{
-				color = object->getMaterial()->getColor() *(fmax(0.0f, dot(normal, -rayFromIntersectionToLight)));// *M_PI;
-				//	color = Vector3(1.0, 1.0, 1.0);
+				color = ambientColor * (fabs(fmax(0.0f, dot(normal, rayFromIntersectionToLight)))) * light.Colour * light.Intensity / M_PI;
 			}
 		}
 	}
+
 	return color;
 }
 

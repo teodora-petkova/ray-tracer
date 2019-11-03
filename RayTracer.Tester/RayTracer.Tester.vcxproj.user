@@ -4,7 +4,7 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>"$(ProjectDir)..\scenes\debugscene\scene2.test" "$(ProjectDir)..\scenes\debugscene\scene2.jpg"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>"$(ProjectDir)..\scenes\debugscene\scene3.test" "$(ProjectDir)..\scenes\debugscene\scene3.jpg"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

@@ -22,10 +22,14 @@ static bool isOnSameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 }
 static bool isPointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 {
-	//If the point was on the same side of AB as C and
-	//is also on the same side of BC as A and
-	//on the same side of CA as B, then it is in the triangle.
-	if (isOnSameSide(p, a, b, c) && isOnSameSide(p, b, a, c) && isOnSameSide(p, c, a, b))
+	//IF the point P is:
+	//	- on the same side of AB as C AND
+	//  - on the same side of BC as A AND
+	//  - on the same side of CA as B, 
+	// THEN it is in the triangle.
+	if (isOnSameSide(p, a, b, c) &&
+		isOnSameSide(p, b, a, c) &&
+		isOnSameSide(p, c, a, b))
 	{
 		return true;
 	}
@@ -47,15 +51,11 @@ IntersectionInfo Triangle::intersect(Ray &ray)
 	IntersectionInfo info = IntersectionInfo();
 	float epsilon = 0.0000001f;
 
-	Vector3    u, v, n;
-	Vector3    w;
-	float      t, a, b;
-
 	// get triangle edge vectors and plane normal
-	u = pointB - pointA; //AB = u
-	v = pointC - pointA; //AC = v
+	Vector3 u = pointB - pointA; //AB = u
+	Vector3 v = pointC - pointA; //AC = v
 
-	n = cross(u, v);
+	Vector3 n = cross(v, u);
 	n.normalize();
 
 	//triangle is degenerate(a segment or a point)
@@ -68,8 +68,8 @@ IntersectionInfo Triangle::intersect(Ray &ray)
 	// plane: P.n - A.n = 0;
 	// t = (A.n - Po.n)/(P1.n);
 
-	a = dot((pointA - ray.getOrigin()), n);
-	b = dot(ray.getDirection(), n);
+	float a = dot((pointA - ray.getOrigin()), n);
+	float b = dot(ray.getDirection(), n);
 
 	// ray is  parallel to triangle plane
 	if (fabs(b) < epsilon)
@@ -87,7 +87,7 @@ IntersectionInfo Triangle::intersect(Ray &ray)
 	}
 
 	// get intersection point of ray with triangle plane
-	t = a / b;
+	float t = a / b;
 	// ray goes away from triangle => no intersect
 	if (t < 0.0)
 	{
