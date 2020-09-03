@@ -23,11 +23,11 @@ using namespace ReadScene;
 //------------------------------------------------------------
 // Main Ray Tracing Function
 //------------------------------------------------------------
-Color rayTrace(Ray &ray, Scene &scene)
+Color rayTrace(Ray& ray, Scene& scene)
 {
 	float minDistance = INFINITY;
 
-	Object *object = NULL;
+	Object* object = NULL;
 	Vector3 intersectionPoint = NULL;
 	Vector3 normal = NULL;
 	Color color = 0.0;
@@ -45,12 +45,13 @@ Color rayTrace(Ray &ray, Scene &scene)
 		}
 	}
 
-	for (Light light : scene.getLights())
+	if (object != NULL)
 	{
-		Vector3 rayFromLightToIntersection = intersectionPoint - light.Position; // P - Lp = lightDirection
-		Vector3 rayFromIntersectionToLight = -rayFromLightToIntersection;
-		if (object != NULL)
+		for (Light light : scene.getLights())
 		{
+			Vector3 rayFromLightToIntersection = intersectionPoint - light.Position; // P - Lp = lightDirection
+			Vector3 rayFromIntersectionToLight = -rayFromLightToIntersection;
+
 			float bias = 0.001f;
 			Ray rayToLightSource = Ray(intersectionPoint + normal * bias, rayFromIntersectionToLight);
 			bool isInShadow = false;
@@ -65,15 +66,18 @@ Color rayTrace(Ray &ray, Scene &scene)
 				}
 			}
 
-			float defaultObjectAlbedo = 0.18;
+			double defaultObjectAlbedo = 0.18;
 			Color ambientColor = object->getMaterial()->getColor() * defaultObjectAlbedo;
+			Color lightIlumination = light.Colour * light.Intensity / (M_PI * 4 * rayFromLightToIntersection.magnitude());
+			//rayFromIntersectionToLight /= rayFromIntersectionToLight.magnitude();
+			rayFromLightToIntersection.normalize();
 			if (isInShadow)
 			{
-				color = Color(0, 0, 0);
+				color += Color(0, 0, 0);
 			}
 			else
 			{
-				color = ambientColor * (fabs(fmax(0.0f, dot(normal, rayFromIntersectionToLight)))) * light.Colour * light.Intensity / M_PI;
+				color += ambientColor * (fabs(fmax(0.0f, dot(normal, -rayFromLightToIntersection)))) * lightIlumination;// / M_PI;
 			}
 		}
 	}
@@ -91,9 +95,9 @@ void updatePixels(int i, int j, BYTE* pixels, Color& color, int width)
 	if (b > 255) b = 255;
 
 	//Free Image Library - specific B G R
-	pixels[(j*width + i) * 3 + 0] = (int)b; // B
-	pixels[(j*width + i) * 3 + 1] = (int)g; // G
-	pixels[(j*width + i) * 3 + 2] = (int)r; // R
+	pixels[(j * width + i) * 3 + 0] = (int)b; // B
+	pixels[(j * width + i) * 3 + 1] = (int)g; // G
+	pixels[(j * width + i) * 3 + 2] = (int)r; // R
 }
 
 //------------------------------------------------------------
@@ -103,9 +107,9 @@ void saveScreenshot(std::string fname, int w, int h, BYTE* pixels)
 {
 	FreeImage_Initialise();
 
-	FIBITMAP *img = FreeImage_ConvertFromRawBits(pixels, w, h, w * 3, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
+	FIBITMAP* img = FreeImage_ConvertFromRawBits(pixels, w, h, w * 3, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
 
-	FreeImage_Save(FIF_PNG, img, fname.c_str(), 0);
+	FreeImage_Save(FIF_BMP, img, fname.c_str(), 0);
 
 	FreeImage_DeInitialise();
 }
@@ -123,7 +127,7 @@ void RayTracer::execute(std::string sceneFileName, std::string outputImageFileNa
 	scene.initializeScene(sceneData.Triangles, sceneData.Spheres, sceneData.Lights);
 
 	int pixelsSize = sceneData.ImageWidth * sceneData.ImageHeight;
-	BYTE *pixels = new BYTE[pixelsSize * 3];
+	BYTE* pixels = new BYTE[pixelsSize * 3];
 
 	for (int j = 0; j < sceneData.ImageHeight; j++)
 	{
@@ -140,5 +144,6 @@ void RayTracer::execute(std::string sceneFileName, std::string outputImageFileNa
 
 	saveScreenshot(outputImageFileName, sceneData.ImageWidth, sceneData.ImageHeight, pixels);
 
-	delete pixels;
+	delete[] pixels;
 }
+

@@ -9,7 +9,8 @@ vertex -10 -1 +10 #1
 vertex +10 -1 +10 #2
 vertex +10 -1 -10 #3
 
-point 2 2 2 1 1 1 10
+spherical_light 2 2 2 1 1 1 150
+#spherical_light -2 2 2 1 1 1 150
 
 ambient 0 0 1
 tri 0 3 1

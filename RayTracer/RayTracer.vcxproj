@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\camera.h" />
+    <ClInclude Include="Source\distantlight.h" />
     <ClInclude Include="Source\intersectioninfo.h" />
     <ClInclude Include="Source\light.h" />
     <ClInclude Include="Source\material.h" />
@@ -22,12 +23,14 @@
     <ClInclude Include="Source\scene.h" />
     <ClInclude Include="Source\scenedata.h" />
     <ClInclude Include="Source\sphere.h" />
+    <ClInclude Include="Source\sphericallight.h" />
     <ClInclude Include="Source\transform.h" />
     <ClInclude Include="Source\triangle.h" />
     <ClInclude Include="Source\vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
+    <ClCompile Include="Source\distantlight.cpp" />
     <ClCompile Include="Source\intersectioninfo.cpp" />
     <ClCompile Include="Source\light.cpp" />
     <ClCompile Include="Source\raytracer.cpp" />
@@ -37,6 +40,7 @@
     <ClCompile Include="Source\scene.cpp" />
     <ClCompile Include="Source\scenedata.cpp" />
     <ClCompile Include="Source\sphere.cpp" />
+    <ClCompile Include="Source\sphericallight.cpp" />
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\triangle.cpp" />
     <ClCompile Include="Source\vector3.cpp" />
@@ -48,14 +52,14 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">COPY "$(ProjectDir)..\References\%(Filename)\3.18.0\x86\%(Filename).dll" "$(TargetDir)" &gt; NUL</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying %(Filename) binaries to output directory...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir)%(Filename).dll</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\References\%(Filename)\x86\%(Filename).dll</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\References\%(Filename)\3.18.0\x86\%(Filename).dll</AdditionalInputs>
     </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1426BF5B-BE0B-4553-8756-71EA348D52A2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>RayTracer</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -63,14 +67,14 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfAtl>false</UseOfAtl>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

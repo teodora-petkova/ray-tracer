@@ -53,7 +53,19 @@ namespace ReadScene
 						}
 					}
 
-					if (cmd == "point")
+					if (cmd == "distant_light")
+					{
+						isInputValid = readValues(s, 7, values); // 7 values light position x y z, light color r g b, intensity i
+						if (isInputValid)
+						{
+							Vector3 lightPosition = Vector3(values[0], values[1], values[2]);
+							Vector3 lightColour = Vector3(values[3], values[4], values[5]);
+							float intensity = values[6];
+							sceneData.Lights.push_back(Light(lightPosition, lightColour, intensity));
+						}
+					}
+
+					if (cmd == "spherical_light")
 					{
 						isInputValid = readValues(s, 7, values); // 7 values light position x y z, light color r g b, intensity i
 						if (isInputValid)
