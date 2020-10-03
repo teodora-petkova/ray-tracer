@@ -21,7 +21,6 @@
     <ClInclude Include="Source\raytracer.h" />
     <ClInclude Include="Source\readfile.h" />
     <ClInclude Include="Source\scene.h" />
-    <ClInclude Include="Source\scenedata.h" />
     <ClInclude Include="Source\sphere.h" />
     <ClInclude Include="Source\sphericallight.h" />
     <ClInclude Include="Source\transform.h" />
@@ -37,8 +36,6 @@
     <ClCompile Include="Source\material.cpp" />
     <ClCompile Include="Source\ray.cpp" />
     <ClCompile Include="Source\readfile.cpp" />
-    <ClCompile Include="Source\scene.cpp" />
-    <ClCompile Include="Source\scenedata.cpp" />
     <ClCompile Include="Source\sphere.cpp" />
     <ClCompile Include="Source\sphericallight.cpp" />
     <ClCompile Include="Source\transform.cpp" />

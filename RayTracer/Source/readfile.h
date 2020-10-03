@@ -7,13 +7,12 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include "scenedata.h"
+#include "scene.h"
 
 using namespace std;
 
 namespace ReadScene
 {
-	bool readValues(stringstream &s, const int numvals, float * values);
-	SceneData readSceneFile(string filename);
+	Scene readSceneFile(string filename);
 }
 #endif

@@ -33,9 +33,6 @@
     <ClInclude Include="Source\readfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -51,9 +48,6 @@
     <ClInclude Include="Source\intersectioninfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\scenedata.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\raytracer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -64,6 +58,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\sphericallight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,9 +77,6 @@
     <ClCompile Include="Source\readfile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,9 +90,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\intersectioninfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\scenedata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\raytracer.cpp">

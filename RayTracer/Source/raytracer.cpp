@@ -12,7 +12,6 @@
 #define _USE_MATH_DEFINES
 
 #include "readfile.h"
-#include "scenedata.h"
 #include "scene.h"
 #include <math.h>
 
@@ -32,9 +31,9 @@ Color rayTrace(Ray& ray, Scene& scene)
 	Vector3 normal = NULL;
 	Color color = 0.0;
 
-	for (int i = 0; i < scene.getNumberOfObjects(); i++)
+	for (unsigned int i = 0; i < scene.Objects.size(); i++)
 	{
-		Object* testObject = scene.getObject(i);
+		Object* testObject = scene.Objects[i];
 		IntersectionInfo intersection = testObject->intersect(ray);
 		if (intersection.isHit() && testObject && intersection.getDistance() < minDistance)
 		{
@@ -47,7 +46,7 @@ Color rayTrace(Ray& ray, Scene& scene)
 
 	if (object != NULL)
 	{
-		for (Light light : scene.getLights())
+		for (Light light : scene.Lights)
 		{
 			Vector3 rayFromLightToIntersection = intersectionPoint - light.Position; // P - Lp = lightDirection
 			Vector3 rayFromIntersectionToLight = -rayFromLightToIntersection;
@@ -55,9 +54,9 @@ Color rayTrace(Ray& ray, Scene& scene)
 			float bias = 0.001f;
 			Ray rayToLightSource = Ray(intersectionPoint + normal * bias, rayFromIntersectionToLight);
 			bool isInShadow = false;
-			for (int i = 0; i < scene.getNumberOfObjects(); i++)
+			for (unsigned int i = 0; i < scene.Objects.size(); i++)
 			{
-				Object* testObject = scene.getObject(i);
+				Object* testObject = scene.Objects[i];
 				IntersectionInfo intersection = testObject->intersect(rayToLightSource);
 				if (intersection.isHit())
 				{
@@ -119,31 +118,26 @@ void saveScreenshot(std::string fname, int w, int h, BYTE* pixels)
 //------------------------------------------------------------
 void RayTracer::execute(std::string sceneFileName, std::string outputImageFileName)
 {
-	SceneData sceneData = readSceneFile(sceneFileName);
+	Scene scene = readSceneFile(sceneFileName);
 
-	Camera camera = Camera(sceneData.LookFrom, sceneData.LookAt, sceneData.Up, sceneData.FovY, sceneData.ImageWidth, sceneData.ImageHeight);
-
-	Scene scene = Scene();
-	scene.initializeScene(sceneData.Triangles, sceneData.Spheres, sceneData.Lights);
-
-	int pixelsSize = sceneData.ImageWidth * sceneData.ImageHeight;
+	int pixelsSize = scene.ImageWidth * scene.ImageHeight;
 	BYTE* pixels = new BYTE[pixelsSize * 3];
 
-	for (int j = 0; j < sceneData.ImageHeight; j++)
+	for (int j = 0; j < scene.ImageHeight; j++)
 	{
-		for (int i = 0; i < sceneData.ImageWidth; i++)
+		for (int i = 0; i < scene.ImageWidth; i++)
 		{
-			Ray rayFromCamera = Ray(camera.getOrigin(), camera.getDirectionRayForPixel(i, j));
+			Ray rayFromCamera = Ray(scene.Camera.getOrigin(),
+				scene.Camera.getDirectionRayForPixel(i, j));
 
 			Color color = rayTrace(rayFromCamera, scene);
 
 			// the (0,0) point is at bottom-left!
-			updatePixels(i, sceneData.ImageHeight - 1 - j, pixels, color, sceneData.ImageWidth);
+			updatePixels(i, scene.ImageHeight - 1 - j, pixels, color, scene.ImageWidth);
 		}
 	}
 
-	saveScreenshot(outputImageFileName, sceneData.ImageWidth, sceneData.ImageHeight, pixels);
+	saveScreenshot(outputImageFileName, scene.ImageWidth, scene.ImageHeight, pixels);
 
 	delete[] pixels;
 }
-

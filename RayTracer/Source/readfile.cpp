@@ -1,11 +1,54 @@
 #include "readfile.h"
-#include "scenedata.h"
+#include "scene.h"
 
 namespace ReadScene
 {
-	SceneData readSceneFile(string filename)
+	// Function to read the input data values
+	// Use is optional, but should be very helpful in parsing.  
+	bool readValues(stringstream& s, const int numvals, float* values)
 	{
-		SceneData sceneData = SceneData();
+		for (int i = 0; i < numvals; i++) {
+			s >> values[i];
+			if (s.fail()) {
+				cout << "Failed reading value " << i << " will skip\n";
+				return false;
+			}
+		}
+		return true;
+	}
+
+	vector<Object*> getObjects(vector<Triangle> triangles, vector<Sphere> spheres)
+	{
+		int objectsCount = triangles.size() + spheres.size();
+
+		vector<Object*> objects = vector<Object*>(objectsCount);
+		unsigned int i = 0;
+		for (; i < triangles.size(); i++)
+		{
+			objects[i] = new Triangle(triangles[i]);
+			objects[i]->setName("Triangle" + i);
+		}
+		for (int j = 0; j < spheres.size(); j++, i++)
+		{
+			objects[i] = new Sphere(spheres[j]);
+			objects[i]->setName("Sphere" + j);
+		}
+		return objects;
+	}
+
+	Scene readSceneFile(string filename)
+	{
+		// image size
+		int imageWidth = 0;
+		int imageHeight = 0;
+		// camera
+		Camera camera = Camera();
+		// objects
+		vector<Vector3> vertices = vector<Vector3>();
+		vector<Triangle> triangles = vector<Triangle>();
+		vector<Sphere> spheres = vector<Sphere>();
+		// lights
+		vector<Light> lights = vector<Light>();
 
 		string str, cmd;
 		ifstream in;
@@ -34,8 +77,8 @@ namespace ReadScene
 						if (isInputValid)
 						{
 							//size width height
-							sceneData.ImageWidth = (int)values[0];
-							sceneData.ImageHeight = (int)values[1];
+							imageWidth = (int)values[0];
+							imageHeight = (int)values[1];
 						}
 					}
 
@@ -45,11 +88,12 @@ namespace ReadScene
 						if (isInputValid)
 						{
 							//camera lookfromx lookfromy lookfromz lookatx lookaty lookatz upx upy upz fovy
-							sceneData.LookFrom = Vector3(values[0], values[1], values[2]); //lookfrom
-							sceneData.LookAt = Vector3(values[3], values[4], values[5]); //lookat
-							sceneData.Up = Vector3(values[6], values[7], values[8]); //up - normalized vector made from upx, upy, upz values.
-							sceneData.Up.normalize();
-							sceneData.FovY = values[9];
+							Vector3 lookFrom = Vector3(values[0], values[1], values[2]); //lookfrom
+							Vector3 lookAt = Vector3(values[3], values[4], values[5]); //lookat
+							Vector3 up = Vector3(values[6], values[7], values[8]); //up - normalized vector made from upx, upy, upz values.
+							up.normalize();
+							float fovY = values[9];
+							camera = Camera(lookFrom, lookAt, up, fovY, imageWidth, imageHeight);
 						}
 					}
 
@@ -61,7 +105,7 @@ namespace ReadScene
 							Vector3 lightPosition = Vector3(values[0], values[1], values[2]);
 							Vector3 lightColour = Vector3(values[3], values[4], values[5]);
 							float intensity = values[6];
-							sceneData.Lights.push_back(Light(lightPosition, lightColour, intensity));
+							lights.push_back(Light(lightPosition, lightColour, intensity));
 						}
 					}
 
@@ -73,7 +117,7 @@ namespace ReadScene
 							Vector3 lightPosition = Vector3(values[0], values[1], values[2]);
 							Vector3 lightColour = Vector3(values[3], values[4], values[5]);
 							float intensity = values[6];
-							sceneData.Lights.push_back(Light(lightPosition, lightColour, intensity));
+							lights.push_back(Light(lightPosition, lightColour, intensity));
 						}
 					}
 
@@ -82,7 +126,7 @@ namespace ReadScene
 						isInputValid = readValues(s, 3, values); // 3 values x y z
 						if (isInputValid)
 						{
-							sceneData.Vertices.push_back(Vector3(values[0], values[1], values[2]));
+							vertices.push_back(Vector3(values[0], values[1], values[2]));
 						}
 					}
 
@@ -102,11 +146,11 @@ namespace ReadScene
 						isInputValid = readValues(s, 3, values); //3 values vertex1 vertex2 vertex3
 						if (isInputValid)
 						{
-							Triangle t = Triangle(sceneData.Vertices[(int)values[0]],
-								sceneData.Vertices[(int)values[1]],
-								sceneData.Vertices[(int)values[2]]);
+							Triangle t = Triangle(vertices[(int)values[0]],
+								vertices[(int)values[1]],
+								vertices[(int)values[2]]);
 							t.setMaterial(currentMaterial);
-							sceneData.Triangles.push_back(t);
+							triangles.push_back(t);
 						}
 					}
 
@@ -115,9 +159,10 @@ namespace ReadScene
 						isInputValid = readValues(s, 4, values); //4 center: vertex1 vertex2 vertex3 + radius
 						if (isInputValid)
 						{
-							Sphere s = Sphere(Vector3(values[0], values[1], values[2]), values[3]);
+							Sphere s = Sphere(Vector3(values[0], values[1], values[2]),
+								values[3]);
 							s.setMaterial(currentMaterial);
-							sceneData.Spheres.push_back(s);
+							spheres.push_back(s);
 						}
 					}
 
@@ -127,20 +172,9 @@ namespace ReadScene
 			}
 		}
 
-		return sceneData;
-	}
+		vector<Object*> objects = getObjects(triangles, spheres);
 
-	// Function to read the input data values
-	// Use is optional, but should be very helpful in parsing.  
-	bool readValues(stringstream &s, const int numvals, float* values)
-	{
-		for (int i = 0; i < numvals; i++) {
-			s >> values[i];
-			if (s.fail()) {
-				cout << "Failed reading value " << i << " will skip\n";
-				return false;
-			}
-		}
-		return true;
+		return Scene(imageWidth, imageHeight,
+			camera, objects, lights);
 	}
 }
