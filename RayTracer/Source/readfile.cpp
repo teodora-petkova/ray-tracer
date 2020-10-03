@@ -28,7 +28,7 @@ namespace ReadScene
 			objects[i] = new Triangle(triangles[i]);
 			objects[i]->setName("Triangle" + i);
 		}
-		for (int j = 0; j < spheres.size(); j++, i++)
+		for (unsigned int j = 0; j < spheres.size(); j++, i++)
 		{
 			objects[i] = new Sphere(spheres[j]);
 			objects[i]->setName("Sphere" + j);

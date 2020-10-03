@@ -15,8 +15,6 @@
 #include "scene.h"
 #include <math.h>
 
-#include "FreeImage.h"
-
 using namespace ReadScene;
 
 //------------------------------------------------------------
@@ -84,44 +82,32 @@ Color rayTrace(Ray& ray, Scene& scene)
 	return color;
 }
 
-void updatePixels(int i, int j, BYTE* pixels, Color& color, int width)
+void updatePixels(int i, int j, unsigned char* pixels, Color& color, int width)
 {
 	int b = (int)(color.z * 255);
 	int g = (int)(color.y * 255);
 	int r = (int)(color.x * 255);
+	int a = 1;
 	if (r > 255) r = 255;
 	if (g > 255) g = 255;
 	if (b > 255) b = 255;
 
-	//Free Image Library - specific B G R
-	pixels[(j * width + i) * 3 + 0] = (int)b; // B
-	pixels[(j * width + i) * 3 + 1] = (int)g; // G
-	pixels[(j * width + i) * 3 + 2] = (int)r; // R
-}
-
-//------------------------------------------------------------
-// Free Image
-//------------------------------------------------------------
-void saveScreenshot(std::string fname, int w, int h, BYTE* pixels)
-{
-	FreeImage_Initialise();
-
-	FIBITMAP* img = FreeImage_ConvertFromRawBits(pixels, w, h, w * 3, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
-
-	FreeImage_Save(FIF_BMP, img, fname.c_str(), 0);
-
-	FreeImage_DeInitialise();
+	//SDL - specific B G R A
+	pixels[(j * width + i) * 4 + 0] = (int)b; // B
+	pixels[(j * width + i) * 4 + 1] = (int)g; // G
+	pixels[(j * width + i) * 4 + 2] = (int)r; // R
+	pixels[(j * width + i) * 4 + 3] = (int)a; // alpha (opacity)
 }
 
 //------------------------------------------------------------
 //  Main Function
 //------------------------------------------------------------
-void RayTracer::execute(std::string sceneFileName, std::string outputImageFileName)
+void RayTracer::execute(std::string sceneFileName)
 {
 	Scene scene = readSceneFile(sceneFileName);
 
 	int pixelsSize = scene.ImageWidth * scene.ImageHeight;
-	BYTE* pixels = new BYTE[pixelsSize * 3];
+	unsigned char* pixels = new unsigned char[pixelsSize * 4];
 
 	for (int j = 0; j < scene.ImageHeight; j++)
 	{
@@ -133,11 +119,9 @@ void RayTracer::execute(std::string sceneFileName, std::string outputImageFileNa
 			Color color = rayTrace(rayFromCamera, scene);
 
 			// the (0,0) point is at bottom-left!
-			updatePixels(i, scene.ImageHeight - 1 - j, pixels, color, scene.ImageWidth);
+			updatePixels(i, j, pixels, color, scene.ImageWidth);
 		}
 	}
-
-	saveScreenshot(outputImageFileName, scene.ImageWidth, scene.ImageHeight, pixels);
 
 	delete[] pixels;
 }

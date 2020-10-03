@@ -13,7 +13,7 @@ class __declspec(dllexport) RayTracer
 {
 public:
 	RayTracer() {};
-	void execute(std::string sceneFileName, std::string outputImageFileName);
+	void execute(std::string sceneFileName);
 };
 
 #endif

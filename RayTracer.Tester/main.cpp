@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	clock_t begin = clock();
 
 	RayTracer r = RayTracer();
-	r.execute(argv[1], argv[2]);
+	r.execute(argv[1]);
 
 	clock_t end = clock();
 

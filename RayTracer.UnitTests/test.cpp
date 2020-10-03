@@ -1,7 +1,6 @@
 #include "gtest\gtest.h"
 #include "glm\glm.hpp"
-
-#include <Source\camera.h>
+#include "Source\camera.h"
 
 TEST(TestCamera, CorrectlySetOrigin) {
 	Camera camera = Camera(Vector3(0, 0, 5), Vector3(0, 0, 0), Vector3(0, 1, 0), 60, 640, 480);
