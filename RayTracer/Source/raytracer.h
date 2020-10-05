@@ -8,12 +8,13 @@
 
 #include <string>
 #include "vector3.h"
+#include "scene.h"
 
 class __declspec(dllexport) RayTracer
 {
 public:
 	RayTracer() {};
-	void execute(std::string sceneFileName);
+	unsigned char* execute(Scene scene);
 };
 
 #endif

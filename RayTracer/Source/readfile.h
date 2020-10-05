@@ -13,6 +13,6 @@ using namespace std;
 
 namespace ReadScene
 {
-	Scene readSceneFile(string filename);
+	Scene __declspec(dllexport) readSceneFile(string filename);
 }
 #endif

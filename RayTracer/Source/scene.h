@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class Scene
+class __declspec(dllexport) Scene
 {
 public:
 	Scene()

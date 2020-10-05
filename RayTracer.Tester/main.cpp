@@ -1,19 +1,56 @@
 #include <iostream>
-#include <Source\raytracer.h>
 #include "SDL.h"
-
 #include "ctime"
+#include <Source\raytracer.h>
+#include <Source\scene.h>
+#include <Source\readfile.h>
 
 using namespace std;
+
+SDL_Texture* updateTexture(const char* sceneFile, const char* imageFile,
+	SDL_Window& window,
+	SDL_Renderer& renderer,
+	int size,
+	int x, int y)
+{
+	SDL_Surface* surface = SDL_GetWindowSurface(&window);
+
+	clock_t begin = clock();
+
+	RayTracer r = RayTracer();
+
+	Scene scene = ReadScene::readSceneFile(sceneFile);
+	scene.Camera.updateLookAt(x, y);
+
+	unsigned char* pixels = r.execute(scene);
+
+	clock_t end = clock();
+
+	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
+	cout << elapsed_secs << '\n';
+
+	SDL_memcpy(surface->pixels, pixels, size);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(&renderer, surface);
+	SDL_UpdateWindowSurface(&window);
+	SDL_FreeSurface(surface);
+	return texture;
+}
+
 //------------------------------------------------------------
 //  Main Function
 //------------------------------------------------------------
 int main(int argc, char* argv[])
 {
+	const char* sceneFile = argv[1];
+	const char* imageFile = argv[2];
+
 	bool quit = false;
 	SDL_Event event;
-	int x = 10;
-	int y = 25;
+	int x = 0;
+	int y = 0;
+	int rows = 640;
+	int columns = 480;
+	int size = rows * columns * sizeof(unsigned char) * 4;
 
 	if (SDL_Init(SDL_INIT_VIDEO) == -1)
 	{
@@ -21,33 +58,15 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	SDL_Window* window = SDL_CreateWindow("SDL2 Displaying Image", // window's title
+	SDL_Window* window = SDL_CreateWindow("Simple Ray tracer", // window's title
 		10, 25, // coordinates on the screen, in pixels, of the window's upper left corner
-		640, 480, // window's length and height in pixels
+		rows, columns, // window's length and height in pixels
 		SDL_WINDOW_OPENGL);
 
 	// We must call SDL_CreateRenderer in order for draw calls to affect this window.
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	clock_t begin = clock();
-
-	RayTracer r = RayTracer();
-	r.execute(argv[1]);
-
-	clock_t end = clock();
-
-	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
-	cout << elapsed_secs << '\n';
-
-	SDL_Surface* image = SDL_LoadBMP(argv[2]);
-
-	auto err = SDL_GetError();
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
-
-	SDL_FreeSurface(image);
-
-	// Select the color for drawing. It is set to red here.
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	SDL_Texture* texture = updateTexture(sceneFile, imageFile, *window, *renderer, size, 0, 0);
 
 	while (!quit)
 	{
@@ -55,19 +74,17 @@ int main(int argc, char* argv[])
 
 		switch (event.type)
 		{
-			//case SDLK_UP:
-			//	r.execute();
-
-		/*case SDL_KEYDOWN:
+		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_LEFT:  x--; break;
 			case SDLK_RIGHT: x++; break;
-			case SDLK_UP:    y--; break;
-			case SDLK_DOWN:  y++; break;
+			case SDLK_UP:    y++; break;
+			case SDLK_DOWN:  y--; break;
 			}
+			texture = updateTexture(sceneFile, imageFile, *window, *renderer, size, x, y);
 			break;
-			*/
+
 		case SDL_QUIT:
 			quit = true;
 			break;

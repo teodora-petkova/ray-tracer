@@ -102,10 +102,8 @@ void updatePixels(int i, int j, unsigned char* pixels, Color& color, int width)
 //------------------------------------------------------------
 //  Main Function
 //------------------------------------------------------------
-void RayTracer::execute(std::string sceneFileName)
+unsigned char* RayTracer::execute(Scene scene)
 {
-	Scene scene = readSceneFile(sceneFileName);
-
 	int pixelsSize = scene.ImageWidth * scene.ImageHeight;
 	unsigned char* pixels = new unsigned char[pixelsSize * 4];
 
@@ -123,5 +121,5 @@ void RayTracer::execute(std::string sceneFileName)
 		}
 	}
 
-	delete[] pixels;
+	return pixels;
 }
