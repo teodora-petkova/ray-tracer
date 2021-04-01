@@ -14,6 +14,7 @@
 #include "readfile.h"
 #include "scene.h"
 #include <math.h>
+#include <future>
 
 using namespace ReadScene;
 
@@ -104,21 +105,34 @@ void updatePixels(int i, int j, unsigned char* pixels, Color& color, int width)
 //------------------------------------------------------------
 unsigned char* RayTracer::execute(Scene scene)
 {
-	int pixelsSize = scene.ImageWidth * scene.ImageHeight;
-	unsigned char* pixels = new unsigned char[pixelsSize * 4];
+	vector<future<void>> futures;
 
-	for (int j = 0; j < scene.ImageHeight; j++)
+	int imageDims = scene.ImageWidth * scene.ImageHeight;
+	unsigned char* pixels = new unsigned char[imageDims * 4];
+
+	int num_cores = thread::hardware_concurrency();
+	volatile atomic<int> count(0);
+	while (num_cores--)
 	{
-		for (int i = 0; i < scene.ImageWidth; i++)
-		{
-			Ray rayFromCamera = Ray(scene.Camera.getOrigin(),
-				scene.Camera.getDirectionRayForPixel(i, j));
+		futures.push_back(async(launch::async, [&count, &imageDims, &pixels, &scene]()
+			{
+				while (true)
+				{
+					int index = count++;
+					if (index >= imageDims)
+						break;
+					int x = index % scene.ImageWidth;
+					int y = index / scene.ImageWidth;
 
-			Color color = rayTrace(rayFromCamera, scene);
+					Ray rayFromCamera = Ray(scene.Camera.getOrigin(),
+						scene.Camera.getDirectionRayForPixel(x, y));
 
-			// the (0,0) point is at bottom-left!
-			updatePixels(i, j, pixels, color, scene.ImageWidth);
-		}
+					Color color = rayTrace(rayFromCamera, scene);
+
+					// the (0,0) point is at bottom-left!
+					updatePixels(x, y, pixels, color, scene.ImageWidth);
+				}
+			}));
 	}
 
 	return pixels;
