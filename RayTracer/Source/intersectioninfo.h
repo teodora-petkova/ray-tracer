@@ -10,16 +10,23 @@ class IntersectionInfo
 {
 public:
 	IntersectionInfo();
-	IntersectionInfo(bool isHit, float distance, Vector3 normal);
+	IntersectionInfo(bool isHit, Vector3 intersectionPoint, float distance, Vector3 normal);
 
 	bool isHit()
 	{
 		return isObjectHit;
 	}
+
+	Vector3 getIntersectionPoint()
+	{
+		return intersectionPoint;
+	}
+
 	float getDistance()
 	{
 		return distance;
 	}
+
 	Vector3 getNormal()
 	{
 		return normal;
@@ -27,6 +34,7 @@ public:
 
 private:
 	bool isObjectHit;
+	Vector3 intersectionPoint;
 	float distance;
 	Vector3 normal;
 };

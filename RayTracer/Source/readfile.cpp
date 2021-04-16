@@ -3,8 +3,6 @@
 
 namespace ReadScene
 {
-	// Function to read the input data values
-	// Use is optional, but should be very helpful in parsing.  
 	bool readValues(stringstream& s, const int numvals, float* values)
 	{
 		for (int i = 0; i < numvals; i++) {
@@ -26,12 +24,10 @@ namespace ReadScene
 		for (; i < triangles.size(); i++)
 		{
 			objects[i] = new Triangle(triangles[i]);
-			objects[i]->setName("Triangle" + i);
 		}
 		for (unsigned int j = 0; j < spheres.size(); j++, i++)
 		{
 			objects[i] = new Sphere(spheres[j]);
-			objects[i]->setName("Sphere" + j);
 		}
 		return objects;
 	}
@@ -70,10 +66,11 @@ namespace ReadScene
 					// Position and color for light, colors for others - up to 10 parameters for cameras
 					float values[10];
 
-					bool isInputValid; // Validity of input 
+					bool isInputValid;
 					if (cmd == "size")
 					{
-						isInputValid = readValues(s, 2, values); // 10 values eye cen up fov
+						// 10 values eye center up fov
+						isInputValid = readValues(s, 2, values);
 						if (isInputValid)
 						{
 							//size width height
@@ -84,13 +81,14 @@ namespace ReadScene
 
 					if (cmd == "camera")
 					{
-						isInputValid = readValues(s, 10, values); // 10 values eye center up fov
+						// 10 values eye center up fov
+						isInputValid = readValues(s, 10, values);
 						if (isInputValid)
 						{
 							//camera lookfromx lookfromy lookfromz lookatx lookaty lookatz upx upy upz fovy
-							Vector3 lookFrom = Vector3(values[0], values[1], values[2]); //lookfrom
-							Vector3 lookAt = Vector3(values[3], values[4], values[5]); //lookat
-							Vector3 up = Vector3(values[6], values[7], values[8]); //up - normalized vector made from upx, upy, upz values.
+							Vector3 lookFrom = Vector3(values[0], values[1], values[2]);
+							Vector3 lookAt = Vector3(values[3], values[4], values[5]);
+							Vector3 up = Vector3(values[6], values[7], values[8]);
 							up.normalize();
 							float fovY = values[9];
 							camera = Camera(lookFrom, lookAt, up, fovY, imageWidth, imageHeight);
@@ -99,7 +97,8 @@ namespace ReadScene
 
 					if (cmd == "distant_light")
 					{
-						isInputValid = readValues(s, 7, values); // 7 values light position x y z, light color r g b, intensity i
+						// 7 values light position x y z, light color r g b, intensity i
+						isInputValid = readValues(s, 7, values);
 						if (isInputValid)
 						{
 							Vector3 lightPosition = Vector3(values[0], values[1], values[2]);
@@ -111,7 +110,8 @@ namespace ReadScene
 
 					if (cmd == "spherical_light")
 					{
-						isInputValid = readValues(s, 7, values); // 7 values light position x y z, light color r g b, intensity i
+						// 7 values light position x y z, light color r g b, intensity i
+						isInputValid = readValues(s, 7, values);
 						if (isInputValid)
 						{
 							Vector3 lightPosition = Vector3(values[0], values[1], values[2]);
@@ -123,7 +123,8 @@ namespace ReadScene
 
 					if (cmd == "vertex")
 					{
-						isInputValid = readValues(s, 3, values); // 3 values x y z
+						// 3 values x y z
+						isInputValid = readValues(s, 3, values);
 						if (isInputValid)
 						{
 							vertices.push_back(Vector3(values[0], values[1], values[2]));
@@ -132,7 +133,8 @@ namespace ReadScene
 
 					if (cmd == "ambient")
 					{
-						isInputValid = readValues(s, 3, values); //3 values r g b
+						// 3 values r g b
+						isInputValid = readValues(s, 3, values);
 						if (isInputValid)
 						{
 							Material m = Material();
@@ -143,7 +145,8 @@ namespace ReadScene
 
 					if (cmd == "tri")
 					{
-						isInputValid = readValues(s, 3, values); //3 values vertex1 vertex2 vertex3
+						// 3 values vertex1 vertex2 vertex3
+						isInputValid = readValues(s, 3, values);
 						if (isInputValid)
 						{
 							Triangle t = Triangle(vertices[(int)values[0]],
@@ -156,7 +159,8 @@ namespace ReadScene
 
 					if (cmd == "sphere")
 					{
-						isInputValid = readValues(s, 4, values); //4 center: vertex1 vertex2 vertex3 + radius
+						// 4 center: vertex1 vertex2 vertex3 + radius
+						isInputValid = readValues(s, 4, values);
 						if (isInputValid)
 						{
 							Sphere s = Sphere(Vector3(values[0], values[1], values[2]),

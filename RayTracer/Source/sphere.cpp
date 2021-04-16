@@ -7,24 +7,21 @@ using namespace std;
 
 Sphere::Sphere()
 {
-	sphereCenter = Vector3(0.0, 0.0, 0.0);
-	sphereRadius = 1.0;
-	sphereRadiusSquared = 1.0;
-	sphereRadiusInverse = 1.0;
+	center = Vector3(0.0, 0.0, 0.0);
+	radius = 1.0;
 }
 
-IntersectionInfo Sphere::intersect(Ray &ray)
+IntersectionInfo Sphere::intersect(Ray& ray)
 {
-	Vector3 originMinusSphereCenter = ray.getOrigin() - sphereCenter;
+	Vector3 originMinusSphereCenter = ray.getOrigin() - center;
 	float a = dot(ray.getDirection(), ray.getDirection());
 	float b = 2 * dot(ray.getDirection(), originMinusSphereCenter);
-	float c = dot(originMinusSphereCenter, originMinusSphereCenter) - sphereRadius * sphereRadius;
+	float c = dot(originMinusSphereCenter, originMinusSphereCenter) - radius * radius;
 
 	float discriminant = b * b - 4 * a * c;
 	bool isHit = false;
 	float distance = INFINITY;
-	// If the discriminant is less than 0, then we totally miss the sphere.
-	// This happens most of the time.
+
 	if (discriminant > 0)
 	{
 		float d = sqrt(discriminant);
@@ -33,35 +30,15 @@ IntersectionInfo Sphere::intersect(Ray &ray)
 		float root2 = (-b + d) / _2a;
 
 		isHit = false;
-		// If root2 < 0 and root1 < 0, so they are both misses.
 		if (root1 > 0 && root2 > 0)
 		{
-			// If root2 > 0 and root1 > 0, we hit the sphere.
-			if (root1 < root2)
-			{
-				distance = root1;
-			}
-			else
-			{
-				distance = root2;
-			}
+			distance = (root1 < root2) ? root1 : root2;
 			isHit = true;
-		}
-		// If root2 > 0 and root1 < 0, we are inside the sphere.
-		else if (root1 < 0 && root2 > 0)
-		{
-			distance = root2;
-			//isHit = true;
-		}
-		else if (root1 > 0 && root2 < 0)
-		{
-			distance = root1;
-			//isHit = true;
 		}
 	}
 	Vector3 intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
-	Vector3 normal = (intersectionPoint - sphereCenter)*distance;
+	Vector3 normal = (intersectionPoint - center) * distance;
 	normal.normalize();
 
-	return IntersectionInfo(isHit, distance, normal);
+	return IntersectionInfo(isHit, intersectionPoint, distance, normal);
 }

@@ -9,7 +9,7 @@ Ray::Ray()
 	rayDirection = Vector3(0.0, 0.0, 0.0);
 }
 
-Ray::Ray(const Vector3 &origin, Vector3 &direction)
+Ray::Ray(const Vector3& origin, Vector3& direction)
 {
 	rayOrigin = origin;
 	rayDirection = direction;

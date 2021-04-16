@@ -23,7 +23,6 @@
     <ClInclude Include="Source\scene.h" />
     <ClInclude Include="Source\sphere.h" />
     <ClInclude Include="Source\sphericallight.h" />
-    <ClInclude Include="Source\transform.h" />
     <ClInclude Include="Source\triangle.h" />
     <ClInclude Include="Source\vector3.h" />
   </ItemGroup>
@@ -38,7 +37,6 @@
     <ClCompile Include="Source\readfile.cpp" />
     <ClCompile Include="Source\sphere.cpp" />
     <ClCompile Include="Source\sphericallight.cpp" />
-    <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\triangle.cpp" />
     <ClCompile Include="Source\vector3.cpp" />
   </ItemGroup>

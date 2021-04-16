@@ -109,7 +109,7 @@ Camera::Camera()
 
 	this->w = Vector3();
 	this->u = Vector3();
-	this->u = Vector3();
+	this->v = Vector3();
 
 	this->fovx = 0.5f;
 	this->fovy = 0.5f;

@@ -10,9 +10,10 @@ IntersectionInfo::IntersectionInfo()
 	this->normal = Vector3();
 }
 
-IntersectionInfo::IntersectionInfo(bool isHit, float distance, Vector3 normal)
+IntersectionInfo::IntersectionInfo(bool isHit, Vector3 intersectionPoint, float distance, Vector3 normal)
 {
 	this->isObjectHit = isHit;
+	this->intersectionPoint = intersectionPoint;
 	this->distance = distance;
 	this->normal = normal;
 }

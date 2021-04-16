@@ -26,20 +26,18 @@ Color rayTrace(Ray& ray, Scene& scene)
 	float minDistance = INFINITY;
 
 	Object* object = NULL;
-	Vector3 intersectionPoint = NULL;
-	Vector3 normal = NULL;
+	IntersectionInfo intersection = IntersectionInfo();
 	Color color = 0.0;
 
 	for (unsigned int i = 0; i < scene.Objects.size(); i++)
 	{
 		Object* testObject = scene.Objects[i];
-		IntersectionInfo intersection = testObject->intersect(ray);
-		if (intersection.isHit() && testObject && intersection.getDistance() < minDistance)
+		IntersectionInfo testIntersection = testObject->intersect(ray);
+		if (testIntersection.isHit() && testObject && testIntersection.getDistance() < minDistance)
 		{
 			object = testObject;
+			intersection = testIntersection;
 			minDistance = intersection.getDistance();
-			intersectionPoint = ray.getOrigin() + ray.getDirection() * intersection.getDistance();
-			normal = intersection.getNormal();
 		}
 	}
 
@@ -47,11 +45,11 @@ Color rayTrace(Ray& ray, Scene& scene)
 	{
 		for (Light light : scene.Lights)
 		{
-			Vector3 rayFromLightToIntersection = intersectionPoint - light.Position; // P - Lp = lightDirection
+			Vector3 rayFromLightToIntersection = intersection.getIntersectionPoint() - light.Position; // P - Lp = lightDirection
 			Vector3 rayFromIntersectionToLight = -rayFromLightToIntersection;
 
 			float bias = 0.001f;
-			Ray rayToLightSource = Ray(intersectionPoint + normal * bias, rayFromIntersectionToLight);
+			Ray rayToLightSource = Ray(intersection.getIntersectionPoint() + intersection.getNormal() * bias, rayFromIntersectionToLight);
 			bool isInShadow = false;
 			for (unsigned int i = 0; i < scene.Objects.size(); i++)
 			{
@@ -64,9 +62,9 @@ Color rayTrace(Ray& ray, Scene& scene)
 				}
 			}
 
-			double defaultObjectAlbedo = 0.18;
+			float defaultObjectAlbedo = 0.18f;
 			Color ambientColor = object->getMaterial()->getColor() * defaultObjectAlbedo;
-			Color lightIlumination = light.Colour * light.Intensity / (M_PI * 4 * rayFromLightToIntersection.magnitude());
+			Color lightIlumination = light.Colour * light.Intensity / (M_PI * 4.0f * rayFromLightToIntersection.magnitude());
 			//rayFromIntersectionToLight /= rayFromIntersectionToLight.magnitude();
 			rayFromLightToIntersection.normalize();
 			if (isInShadow)
@@ -75,7 +73,7 @@ Color rayTrace(Ray& ray, Scene& scene)
 			}
 			else
 			{
-				color += ambientColor * (fabs(fmax(0.0f, dot(normal, -rayFromLightToIntersection)))) * lightIlumination;// / M_PI;
+				color += ambientColor * (fabs(fmax(0.0f, dot(intersection.getNormal(), -rayFromLightToIntersection)))) * lightIlumination;// / M_PI;
 			}
 		}
 	}

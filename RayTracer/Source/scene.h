@@ -21,11 +21,11 @@ public:
 		this->ImageWidth = 600;
 		this->ImageHeight = 400;
 
-		// camera
-		Vector3 lookFrom = Vector3(0.0, 0.0, 5.0); // Initial eye position, also for resets
-		Vector3 lookAt = Vector3(0.0, 1.0, 0.0); // Initial up position, also for resets
-		Vector3 up = Vector3(0.0, 0.0, 0.0); // Center look at point 
-		float fovY = 90.0; // Field of view
+		// Camera
+		Vector3 lookFrom = Vector3(0.0, 0.0, 5.0); // initial eye position, also for resets
+		Vector3 lookAt = Vector3(0.0, 1.0, 0.0); // initial up position, also for resets
+		Vector3 up = Vector3(0.0, 0.0, 0.0); // center look at point 
+		float fovY = 90.0; // field of view
 		this->Camera = Camera::Camera(lookFrom, lookAt, up, fovY,
 			this->ImageWidth, this->ImageHeight);
 

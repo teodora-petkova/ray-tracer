@@ -11,24 +11,24 @@ class Ray
 public:
 	Ray();
 
-	Ray(const Vector3 &origin, Vector3 &direction);
+	Ray(const Vector3& origin, Vector3& direction);
 
-	void setOrigin(Vector3 &origin)
+	void setOrigin(Vector3& origin)
 	{
 		rayOrigin = origin;
 	}
 
-	void setDirection(Vector3 &direction)
+	void setDirection(Vector3& direction)
 	{
 		rayDirection = direction;
 	}
 
-	Vector3 &getOrigin()
+	Vector3& getOrigin()
 	{
 		return rayOrigin;
 	}
 
-	Vector3 &getDirection()
+	Vector3& getDirection()
 	{
 		return rayDirection;
 	}

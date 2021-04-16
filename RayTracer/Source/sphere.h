@@ -9,51 +9,30 @@
 #include "ray.h"
 #include "object.h"
 
-#define SPHERE 1
-
 class Sphere : public  Object
 {
 public:
 	Sphere();
 
-	Sphere(const Vector3 &center, float radius) :
-		sphereCenter(center),
-		sphereRadius(radius),
-		sphereRadiusSquared(radius*radius),
-		sphereRadiusInverse(1.0f / radius) {};
-
-	int getType()
-	{
-		return SPHERE;
-	}
+	Sphere(const Vector3& center, float radius) :
+		center(center),
+		radius(radius) {}
 
 	Vector3 getCenter()
 	{
-		return sphereCenter;
+		return center;
 	}
 
 	float getRadius()
 	{
-		return sphereRadius;
+		return radius;
 	}
 
-	float getRadiusSq()
-	{
-		return sphereRadiusSquared;
-	}
-
-	Vector3 getNormal(Vector3 &position)
-	{
-		return (position - sphereCenter)*sphereRadiusInverse;
-	}
-
-	IntersectionInfo intersect(Ray &ray);
+	IntersectionInfo intersect(Ray& ray);
 
 private:
-	Vector3 sphereCenter;
-	float sphereRadius;
-	float sphereRadiusSquared;
-	float sphereRadiusInverse;
+	Vector3 center;
+	float radius;
 };
 
 #endif

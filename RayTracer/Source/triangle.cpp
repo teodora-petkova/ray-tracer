@@ -20,6 +20,7 @@ static bool isOnSameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 	}
 
 }
+
 static bool isPointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 {
 	//IF the point P is:
@@ -46,7 +47,7 @@ Triangle::Triangle()
 	pointC = Vector3(0.0, 1.0, 0.0);
 }
 
-IntersectionInfo Triangle::intersect(Ray &ray)
+IntersectionInfo Triangle::intersect(Ray& ray)
 {
 	IntersectionInfo info = IntersectionInfo();
 	float epsilon = 0.0000001f;
@@ -124,9 +125,8 @@ IntersectionInfo Triangle::intersect(Ray &ray)
 	// Check if point is in triangle
 	if ((uu >= 0.0f) && (vv >= 0.0f) && (uu + vv < 1.0f))
 	{
-		return IntersectionInfo(true, t, n);
+		return IntersectionInfo(true, pointP, t, n);
 	}
 
 	return info;
 }
-
