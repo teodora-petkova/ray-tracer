@@ -7,10 +7,10 @@ using namespace std;
 
 static bool isOnSameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 {
-	Vector3 vector1 = cross(b - a, p - a);
-	Vector3 vector2 = cross(b - a, c - a);
+	Vector3 vector1 = Vector3::cross(b - a, p - a);
+	Vector3 vector2 = Vector3::cross(b - a, c - a);
 	// in one direction
-	if (dot(vector1, vector2) >= 0)
+	if (Vector3::dot(vector1, vector2) >= 0)
 	{
 		return true;
 	}
@@ -56,7 +56,7 @@ IntersectionInfo Triangle::intersect(Ray& ray)
 	Vector3 u = pointB - pointA; //AB = u
 	Vector3 v = pointC - pointA; //AC = v
 
-	Vector3 n = cross(v, u);
+	Vector3 n = Vector3::cross(v, u).normalize();
 	n.normalize();
 
 	//triangle is degenerate(a segment or a point)
@@ -69,8 +69,8 @@ IntersectionInfo Triangle::intersect(Ray& ray)
 	// plane: P.n - A.n = 0;
 	// t = (A.n - Po.n)/(P1.n);
 
-	float a = dot((pointA - ray.getOrigin()), n);
-	float b = dot(ray.getDirection(), n);
+	float a = Vector3::dot((pointA - ray.getOrigin()), n);
+	float b = Vector3::dot(ray.getDirection(), n);
 
 	// ray is  parallel to triangle plane
 	if (fabs(b) < epsilon)
@@ -111,11 +111,11 @@ IntersectionInfo Triangle::intersect(Ray& ray)
 	Vector3 v2 = pointP - pointA;
 
 	// Compute dot products
-	float dot00 = dot(v0, v0);
-	float dot01 = dot(v0, v1);
-	float dot02 = dot(v0, v2);
-	float dot11 = dot(v1, v1);
-	float dot12 = dot(v1, v2);
+	float dot00 = Vector3::dot(v0, v0);
+	float dot01 = Vector3::dot(v0, v1);
+	float dot02 = Vector3::dot(v0, v2);
+	float dot11 = Vector3::dot(v1, v1);
+	float dot12 = Vector3::dot(v1, v2);
 
 	// Compute barycentric coordinates
 	float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);

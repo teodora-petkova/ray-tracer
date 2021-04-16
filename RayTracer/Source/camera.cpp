@@ -17,25 +17,23 @@ std::tuple<Vector3, Vector3, Vector3> calculateWUV(Vector3 lookAt, Vector3 lookF
 	//     W = -----------
 	//         || LA-LF ||
 
-	w = lookAt - lookFrom;
-	w.normalize();
+	w = (lookAt - lookFrom).normalize();
 
 	//3.2. U corresponds to the "X" axis
 	//            W x UP
 	//     U = -------------
 	//         || W x UP ||
 
-	viewUp.normalize();
-	u = cross(w, viewUp);
-	u.normalize();
+	viewUp = viewUp.normalize();
+
+	u = Vector3::cross(w, viewUp).normalize();
 
 	//2.3. V is the "Up" vector
 	//          W x U
 	//    V = -----------
 	//       || W x U ||
 
-	v = cross(u, w);
-	v.normalize();
+	v = Vector3::cross(u, w).normalize();
 
 	return std::make_tuple(w, u, v);
 }
@@ -82,8 +80,7 @@ Vector3 Camera::getDirectionRayForPixel(int x, int y)
 	float xScreen = (2 * xNDC - 1) * tan(this->fovx / 2);
 	float yScreen = (-2 * yNDC + 1) * tan(this->fovy / 2);
 
-	direction = this->u * xScreen + this->v * yScreen + this->w;
-	direction.normalize();
+	direction = (this->u * xScreen + this->v * yScreen + this->w).normalize();
 
 	return direction;
 }

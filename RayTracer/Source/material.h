@@ -8,29 +8,45 @@
 
 typedef Vector3 Color;
 
-class Material
+class __declspec(dllexport) Material
 {
 public:
 	Material();
 
-	void setColor(Color &color)
-	{
-		materialColor = color;
-	}
-
-	void setColor(float r, float g, float b)
-	{
-		materialColor.x = r;
-		materialColor.y = g;
-		materialColor.z = b;
-	}
+	Material(Color color, float ambient, float diffuse, float specular,
+		int shininess);
 
 	Color getColor()
 	{
 		return materialColor;
 	}
 
+	float getAmbient()
+	{
+		return ambient;
+	}
+
+	float getDiffuse()
+	{
+		return diffuse;
+	}
+
+	int getShininess()
+	{
+		return shininess;
+	}
+
+	float getSpecular()
+	{
+		return specular;
+	}
+
 private:
 	Color materialColor;
+	float ambient;
+	float diffuse;
+	float specular;
+	int shininess;
+
 };
 #endif

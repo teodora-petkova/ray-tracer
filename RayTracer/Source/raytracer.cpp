@@ -21,14 +21,38 @@ using namespace ReadScene;
 //------------------------------------------------------------
 // Main Ray Tracing Function
 //------------------------------------------------------------
+
+bool isInShadow(IntersectionInfo intersection, Vector3 lightPosition,
+	std::vector<Object*> objects)
+{
+	// P - Lp = lightDirection
+	Vector3 rayFromLightToIntersection = intersection.getIntersectionPoint() - lightPosition;
+
+	Vector3 rayFromIntersectionToLight = -rayFromLightToIntersection;
+
+	float bias = 0.001f;
+	Ray rayToLightSource = Ray(intersection.getIntersectionPoint() + intersection.getNormal() * bias, rayFromIntersectionToLight);
+	bool isInShadow = false;
+	for (unsigned int i = 0; i < objects.size(); i++)
+	{
+		Object* testObject = objects[i];
+		IntersectionInfo intersection = testObject->intersect(rayToLightSource);
+		if (intersection.isHit())
+		{
+			isInShadow = true;
+			break;
+		}
+	}
+
+	return isInShadow;
+}
+
 Color rayTrace(Ray& ray, Scene& scene)
 {
-	float minDistance = INFINITY;
-
 	Object* object = NULL;
 	IntersectionInfo intersection = IntersectionInfo();
-	Color color = 0.0;
 
+	float minDistance = INFINITY;
 	for (unsigned int i = 0; i < scene.Objects.size(); i++)
 	{
 		Object* testObject = scene.Objects[i];
@@ -41,43 +65,24 @@ Color rayTrace(Ray& ray, Scene& scene)
 		}
 	}
 
-	if (object != NULL)
+	Color color = 0.0;
+	if (intersection.isHit())
 	{
 		for (Light light : scene.Lights)
 		{
-			Vector3 rayFromLightToIntersection = intersection.getIntersectionPoint() - light.Position; // P - Lp = lightDirection
-			Vector3 rayFromIntersectionToLight = -rayFromLightToIntersection;
-
-			float bias = 0.001f;
-			Ray rayToLightSource = Ray(intersection.getIntersectionPoint() + intersection.getNormal() * bias, rayFromIntersectionToLight);
-			bool isInShadow = false;
-			for (unsigned int i = 0; i < scene.Objects.size(); i++)
-			{
-				Object* testObject = scene.Objects[i];
-				IntersectionInfo intersection = testObject->intersect(rayToLightSource);
-				if (intersection.isHit())
-				{
-					isInShadow = true;
-					break;
-				}
-			}
-
-			float defaultObjectAlbedo = 0.18f;
-			Color ambientColor = object->getMaterial()->getColor() * defaultObjectAlbedo;
-			Color lightIlumination = light.Colour * light.Intensity / (M_PI * 4.0f * rayFromLightToIntersection.magnitude());
-			//rayFromIntersectionToLight /= rayFromIntersectionToLight.magnitude();
-			rayFromLightToIntersection.normalize();
-			if (isInShadow)
+			if (isInShadow(intersection, light.getPosition(), scene.Objects))
 			{
 				color += Color(0, 0, 0);
 			}
 			else
 			{
-				color += ambientColor * (fabs(fmax(0.0f, dot(intersection.getNormal(), -rayFromLightToIntersection)))) * lightIlumination;// / M_PI;
+				color += light.getPhongColor(intersection.getIntersectionPoint(),
+					intersection.getNormal().normalize(),
+					scene.Camera.getOrigin().normalize(),
+					object->getMaterial());
 			}
 		}
 	}
-
 	return color;
 }
 

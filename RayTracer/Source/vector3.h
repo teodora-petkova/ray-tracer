@@ -7,6 +7,7 @@
 #pragma once
 
 #include <math.h>
+#include <ostream>
 #define MAX(a,b) a < b ? b : a
 
 class __declspec(dllexport) Vector3
@@ -37,10 +38,14 @@ public:
 	Vector3 operator/=(float f);
 	bool operator==(const Vector3& v2) const;
 	float magnitude();
-	friend float dot(Vector3 v1, Vector3 v2);
-	void normalize();
-	friend Vector3 cross(Vector3 v1, Vector3 v2);
+	Vector3 normalize();
+
+	static float dot(Vector3 v1, Vector3 v2);
+	static Vector3 cross(Vector3 v1, Vector3 v2);
+	Vector3 reflect(Vector3 normal);
 
 	float x, y, z;
 };
+
+__declspec(dllexport) std::ostream& operator<<(std::ostream& os, Vector3 const& v);
 #endif

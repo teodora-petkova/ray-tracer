@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\camera.h" />
-    <ClInclude Include="Source\distantlight.h" />
     <ClInclude Include="Source\intersectioninfo.h" />
     <ClInclude Include="Source\light.h" />
     <ClInclude Include="Source\material.h" />
@@ -22,13 +21,11 @@
     <ClInclude Include="Source\readfile.h" />
     <ClInclude Include="Source\scene.h" />
     <ClInclude Include="Source\sphere.h" />
-    <ClInclude Include="Source\sphericallight.h" />
     <ClInclude Include="Source\triangle.h" />
     <ClInclude Include="Source\vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
-    <ClCompile Include="Source\distantlight.cpp" />
     <ClCompile Include="Source\intersectioninfo.cpp" />
     <ClCompile Include="Source\light.cpp" />
     <ClCompile Include="Source\raytracer.cpp" />
@@ -36,7 +33,6 @@
     <ClCompile Include="Source\ray.cpp" />
     <ClCompile Include="Source\readfile.cpp" />
     <ClCompile Include="Source\sphere.cpp" />
-    <ClCompile Include="Source\sphericallight.cpp" />
     <ClCompile Include="Source\triangle.cpp" />
     <ClCompile Include="Source\vector3.cpp" />
   </ItemGroup>

@@ -89,35 +89,23 @@ namespace ReadScene
 							Vector3 lookFrom = Vector3(values[0], values[1], values[2]);
 							Vector3 lookAt = Vector3(values[3], values[4], values[5]);
 							Vector3 up = Vector3(values[6], values[7], values[8]);
-							up.normalize();
+
 							float fovY = values[9];
 							camera = Camera(lookFrom, lookAt, up, fovY, imageWidth, imageHeight);
 						}
 					}
 
-					if (cmd == "distant_light")
+					if (cmd == "point_light")
 					{
-						// 7 values light position x y z, light color r g b, intensity i
-						isInputValid = readValues(s, 7, values);
+						// 10 values light position x y z, light color r g b, brightness, ambient, diffuse, specular
+						isInputValid = readValues(s, 10, values);
 						if (isInputValid)
 						{
 							Vector3 lightPosition = Vector3(values[0], values[1], values[2]);
 							Vector3 lightColour = Vector3(values[3], values[4], values[5]);
-							float intensity = values[6];
-							lights.push_back(Light(lightPosition, lightColour, intensity));
-						}
-					}
 
-					if (cmd == "spherical_light")
-					{
-						// 7 values light position x y z, light color r g b, intensity i
-						isInputValid = readValues(s, 7, values);
-						if (isInputValid)
-						{
-							Vector3 lightPosition = Vector3(values[0], values[1], values[2]);
-							Vector3 lightColour = Vector3(values[3], values[4], values[5]);
-							float intensity = values[6];
-							lights.push_back(Light(lightPosition, lightColour, intensity));
+							lights.push_back(Light(lightPosition, lightColour,
+								values[6], values[7], values[8], values[9]));
 						}
 					}
 
@@ -131,14 +119,14 @@ namespace ReadScene
 						}
 					}
 
-					if (cmd == "ambient")
+					if (cmd == "material")
 					{
-						// 3 values r g b
-						isInputValid = readValues(s, 3, values);
+						// 3 values r g b, ambient, diffuse, specular, shininess
+						isInputValid = readValues(s, 7, values);
 						if (isInputValid)
 						{
-							Material m = Material();
-							m.setColor(values[0], values[1], values[2]);
+							Material m = Material(Color(values[0], values[1], values[2]),
+								values[3], values[4], values[5], values[6]);
 							currentMaterial = m;
 						}
 					}

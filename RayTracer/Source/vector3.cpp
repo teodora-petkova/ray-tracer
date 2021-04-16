@@ -86,25 +86,25 @@ Vector3 Vector3::operator-()
 //------------------------------------------------------------------------
 // Vector addition/subtraction/multiplication/division with another Vector
 //------------------------------------------------------------------------
-void Vector3::operator +=(Vector3 v)
+void Vector3::operator+=(Vector3 v)
 {
 	x += v.x;
 	y += v.y;
 	z += v.z;
 }
-void Vector3::operator -=(Vector3 v)
+void Vector3::operator-=(Vector3 v)
 {
 	x -= v.x;
 	y -= v.y;
 	z -= v.z;
 }
-void Vector3::operator *=(Vector3 v)
+void Vector3::operator*=(Vector3 v)
 {
 	x *= v.x;
 	y *= v.y;
 	z *= v.z;
 }
-void Vector3::operator /=(Vector3 v)
+void Vector3::operator/=(Vector3 v)
 {
 	x /= v.x;
 	y /= v.y;
@@ -113,19 +113,19 @@ void Vector3::operator /=(Vector3 v)
 //------------------------------------------------------------------------
 // Vector addition/subtraction/multiplication/division with a scalar.
 //------------------------------------------------------------------------
-Vector3 Vector3::operator +=(float f)
+Vector3 Vector3::operator+=(float f)
 {
 	return Vector3(x + f, y + f, z + f);
 }
-Vector3 Vector3::operator -=(float f)
+Vector3 Vector3::operator-=(float f)
 {
 	return Vector3(x - f, y - f, z - f);
 }
-Vector3 Vector3::operator *=(float f)
+Vector3 Vector3::operator*=(float f)
 {
 	return Vector3(x * f, y * f, z * f);
 }
-Vector3 Vector3::operator /=(float f)
+Vector3 Vector3::operator/=(float f)
 {
 	float recip;
 	if (f < 0.000001f)  f = 1.0f;
@@ -142,12 +142,12 @@ float Vector3::magnitude()
 }
 
 //v(x1, y1, z1) dot w(x2, y2, z2) = x1*x2 + y1*y2 + z1*z2
-float dot(Vector3 v1, Vector3 v2)
+float Vector3::dot(Vector3 v1, Vector3 v2)
 {
 	return(v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
-Vector3 cross(Vector3 v1, Vector3 v2)
+Vector3 Vector3::cross(Vector3 v1, Vector3 v2)
 {
 	Vector3 v = Vector3();
 	v.x = ((v1.y * v2.z) - (v1.z * v2.y));
@@ -157,7 +157,7 @@ Vector3 cross(Vector3 v1, Vector3 v2)
 	return v;
 }
 
-void Vector3::normalize()
+Vector3 Vector3::normalize()
 {
 	float m = magnitude();
 	if (m < 0.0000001f)
@@ -165,12 +165,27 @@ void Vector3::normalize()
 		m = 1.0f;
 	}
 	float invertedMagnitude = 1 / m;
-	x = x * invertedMagnitude;
-	y = y * invertedMagnitude;
-	z = z * invertedMagnitude;
+	return Vector3(
+		x * invertedMagnitude,
+		y * invertedMagnitude,
+		z * invertedMagnitude);
 }
 
 bool Vector3::operator==(const Vector3& v2) const
 {
-	return x == v2.x && y == v2.y && z == v2.z;
+	float epsilon = 0.0001;
+	return fabs(x - v2.x) < epsilon &&
+		fabs(y - v2.y) < epsilon &&
+		fabs(z - v2.z) < epsilon;
+}
+
+Vector3 Vector3::reflect(Vector3 normal)
+{
+	return *this - normal * dot(*this, normal) * 2;
+}
+
+std::ostream& operator<<(std::ostream& os, Vector3 const& v)
+{
+	os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	return os;
 }
