@@ -7,16 +7,16 @@ using namespace std;
 
 Sphere::Sphere()
 {
-	center = Vector3(0.0, 0.0, 0.0);
+	center = Tuple::Point(0, 0, 0);
 	radius = 1.0;
 }
 
 IntersectionInfo Sphere::intersect(Ray& ray)
 {
-	Vector3 originMinusSphereCenter = ray.getOrigin() - center;
-	float a = Vector3::dot(ray.getDirection(), ray.getDirection());
-	float b = 2 * Vector3::dot(ray.getDirection(), originMinusSphereCenter);
-	float c = Vector3::dot(originMinusSphereCenter, originMinusSphereCenter) - radius * radius;
+	Tuple originMinusSphereCenter = ray.getOrigin() - center;
+	float a = Tuple::dot(ray.getDirection(), ray.getDirection());
+	float b = 2 * Tuple::dot(ray.getDirection(), originMinusSphereCenter);
+	float c = Tuple::dot(originMinusSphereCenter, originMinusSphereCenter) - radius * radius;
 
 	float discriminant = b * b - 4 * a * c;
 	bool isHit = false;
@@ -36,8 +36,8 @@ IntersectionInfo Sphere::intersect(Ray& ray)
 			isHit = true;
 		}
 	}
-	Vector3 intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
-	Vector3 normal = ((intersectionPoint - center) * distance).normalize();
+	Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
+	Tuple normal = ((intersectionPoint - center) * distance).normalize();
 
 	return IntersectionInfo(isHit, intersectionPoint, distance, normal);
 }

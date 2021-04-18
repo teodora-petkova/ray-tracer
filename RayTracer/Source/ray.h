@@ -4,28 +4,28 @@
 #ifndef CRAY_H
 #define CRAY_H
 
-#include "vector3.h"
+#include "Tuple.h"
 
 class Ray
 {
 public:
 	Ray();
 
-	Ray(const Vector3& origin, Vector3& direction);
+	Ray(const Tuple& origin, Tuple& direction);
 
-	Vector3& getOrigin()
+	Tuple& getOrigin()
 	{
 		return rayOrigin;
 	}
 
-	Vector3& getDirection()
+	Tuple& getDirection()
 	{
 		return rayDirection;
 	}
 
 private:
-	Vector3 rayOrigin;
-	Vector3 rayDirection;
+	Tuple rayOrigin;
+	Tuple rayDirection;
 };
 
 #endif

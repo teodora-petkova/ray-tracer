@@ -5,12 +5,12 @@
 
 using namespace std;
 
-static bool isOnSameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
+static bool isOnSameSide(Tuple p, Tuple a, Tuple b, Tuple c)
 {
-	Vector3 vector1 = Vector3::cross(b - a, p - a);
-	Vector3 vector2 = Vector3::cross(b - a, c - a);
+	Tuple vector1 = Tuple::cross(b - a, p - a);
+	Tuple vector2 = Tuple::cross(b - a, c - a);
 	// in one direction
-	if (Vector3::dot(vector1, vector2) >= 0)
+	if (Tuple::dot(vector1, vector2) >= 0)
 	{
 		return true;
 	}
@@ -21,7 +21,7 @@ static bool isOnSameSide(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 
 }
 
-static bool isPointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
+static bool isPointInTriangle(Tuple p, Tuple a, Tuple b, Tuple c)
 {
 	//IF the point P is:
 	//	- on the same side of AB as C AND
@@ -42,9 +42,9 @@ static bool isPointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
 
 Triangle::Triangle()
 {
-	pointA = Vector3(-1.0, 0.0, 0.0);
-	pointB = Vector3(1.0, 0.0, 0.0);
-	pointC = Vector3(0.0, 1.0, 0.0);
+	pointA = Tuple::Vector(-1.0, 0.0, 0.0);
+	pointB = Tuple::Vector(1.0, 0.0, 0.0);
+	pointC = Tuple::Vector(0.0, 1.0, 0.0);
 }
 
 IntersectionInfo Triangle::intersect(Ray& ray)
@@ -53,14 +53,14 @@ IntersectionInfo Triangle::intersect(Ray& ray)
 	float epsilon = 0.0000001f;
 
 	// get triangle edge vectors and plane normal
-	Vector3 u = pointB - pointA; //AB = u
-	Vector3 v = pointC - pointA; //AC = v
+	Tuple u = pointB - pointA; //AB = u
+	Tuple v = pointC - pointA; //AC = v
 
-	Vector3 n = Vector3::cross(v, u).normalize();
+	Tuple n = Tuple::cross(v, u).normalize();
 	n.normalize();
 
 	//triangle is degenerate(a segment or a point)
-	if (n == Vector3(0, 0, 0))
+	if (n == Tuple::Vector(0, 0, 0))
 	{
 		return info;
 	}
@@ -69,8 +69,8 @@ IntersectionInfo Triangle::intersect(Ray& ray)
 	// plane: P.n - A.n = 0;
 	// t = (A.n - Po.n)/(P1.n);
 
-	float a = Vector3::dot((pointA - ray.getOrigin()), n);
-	float b = Vector3::dot(ray.getDirection(), n);
+	float a = Tuple::dot((pointA - ray.getOrigin()), n);
+	float b = Tuple::dot(ray.getDirection(), n);
 
 	// ray is  parallel to triangle plane
 	if (fabs(b) < epsilon)
@@ -97,7 +97,7 @@ IntersectionInfo Triangle::intersect(Ray& ray)
 
 	// for a segment, also test if (t > 1.0) => no intersect
 	// find the intersection point of the ray and the plane
-	Vector3 pointP = ray.getOrigin() + ray.getDirection() * t;
+	Tuple pointP = ray.getOrigin() + ray.getDirection() * t;
 
 	/*if(PointInTriangle(pointP, pointA, pointB, pointC))
 	{
@@ -106,16 +106,16 @@ IntersectionInfo Triangle::intersect(Ray& ray)
 	return false;*/
 
 	// Compute vectors        
-	Vector3 v0 = pointC - pointA;
-	Vector3 v1 = pointB - pointA;
-	Vector3 v2 = pointP - pointA;
+	Tuple v0 = pointC - pointA;
+	Tuple v1 = pointB - pointA;
+	Tuple v2 = pointP - pointA;
 
 	// Compute dot products
-	float dot00 = Vector3::dot(v0, v0);
-	float dot01 = Vector3::dot(v0, v1);
-	float dot02 = Vector3::dot(v0, v2);
-	float dot11 = Vector3::dot(v1, v1);
-	float dot12 = Vector3::dot(v1, v2);
+	float dot00 = Tuple::dot(v0, v0);
+	float dot01 = Tuple::dot(v0, v1);
+	float dot02 = Tuple::dot(v0, v2);
+	float dot11 = Tuple::dot(v1, v1);
+	float dot12 = Tuple::dot(v1, v2);
 
 	// Compute barycentric coordinates
 	float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);

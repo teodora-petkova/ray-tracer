@@ -3,11 +3,11 @@
 //---------------------------------------------------------------------
 #include "camera.h"
 
-std::tuple<Vector3, Vector3, Vector3> calculateWUV(Vector3 lookAt, Vector3 lookFrom, Vector3 viewUp)
+std::tuple<Tuple, Tuple, Tuple> calculateWUV(Tuple lookAt, Tuple lookFrom, Tuple viewUp)
 {
-	Vector3 w = Vector3();
-	Vector3 u = Vector3();
-	Vector3 v = Vector3();
+	Tuple w = Tuple();
+	Tuple u = Tuple();
+	Tuple v = Tuple();
 
 	// Calculating the new coordinate system - u, v, w, that the camera defines i.e. determine the three orthogonal vectors that are the 
 	//		axes of the coordinate system, U, V, and W
@@ -26,20 +26,20 @@ std::tuple<Vector3, Vector3, Vector3> calculateWUV(Vector3 lookAt, Vector3 lookF
 
 	viewUp = viewUp.normalize();
 
-	u = Vector3::cross(w, viewUp).normalize();
+	u = Tuple::cross(w, viewUp).normalize();
 
 	//2.3. V is the "Up" vector
 	//          W x U
 	//    V = -----------
 	//       || W x U ||
 
-	v = Vector3::cross(u, w).normalize();
+	v = Tuple::cross(u, w).normalize();
 
 	return std::make_tuple(w, u, v);
 }
 
 
-Camera::Camera(Vector3 lookFromPoint, Vector3 lookAtPoint, Vector3 viewUpVector,
+Camera::Camera(Tuple lookFromPoint, Tuple lookAtPoint, Tuple viewUpVector,
 	float fieldOfViewAngleY, int width, int height)
 {
 	this->width = width;
@@ -63,9 +63,9 @@ Camera::Camera(Vector3 lookFromPoint, Vector3 lookAtPoint, Vector3 viewUpVector,
 	this->v = std::get<2>(t);
 }
 
-Vector3 Camera::getDirectionRayForPixel(int x, int y)
+Tuple Camera::getDirectionRayForPixel(int x, int y)
 {
-	Vector3 direction = Vector3();
+	Tuple direction = Tuple();
 
 	// 1. Raster space
 	// add 0.5 to centralize in the middle of the pixel
@@ -85,14 +85,14 @@ Vector3 Camera::getDirectionRayForPixel(int x, int y)
 	return direction;
 }
 
-Vector3 Camera::getOrigin()
+Tuple Camera::getOrigin()
 {
 	return this->origin;
 }
 
 void Camera::updateLookAt(int x, int y)
 {
-	this->lookAt = Vector3(this->lookAt.x + x, this->lookAt.y + y, this->lookAt.z);
+	this->lookAt = Tuple::Vector(this->lookAt.x + x, this->lookAt.y + y, this->lookAt.z);
 
 	auto t = calculateWUV(this->lookAt, this->lookFrom, this->viewUp);
 	this->w = std::get<0>(t);
@@ -102,11 +102,11 @@ void Camera::updateLookAt(int x, int y)
 
 Camera::Camera()
 {
-	this->origin = Vector3();
+	this->origin = Tuple();
 
-	this->w = Vector3();
-	this->u = Vector3();
-	this->v = Vector3();
+	this->w = Tuple();
+	this->u = Tuple();
+	this->v = Tuple();
 
 	this->fovx = 0.5f;
 	this->fovy = 0.5f;

@@ -5,11 +5,11 @@
 
 Ray::Ray()
 {
-	rayOrigin = Vector3(0.0, 0.0, 0.0);
-	rayDirection = Vector3(0.0, 0.0, 0.0);
+	rayOrigin = Tuple::Point(0.0, 0.0, 0.0);
+	rayDirection = Tuple::Vector(0.0, 0.0, 0.0);
 }
 
-Ray::Ray(const Vector3& origin, Vector3& direction)
+Ray::Ray(const Tuple& origin, Tuple& direction)
 {
 	rayOrigin = origin;
 	rayDirection = direction;

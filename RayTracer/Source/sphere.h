@@ -5,7 +5,7 @@
 #define SPHERE_H
 
 #include <cmath>
-#include "vector3.h"
+#include "Tuple.h"
 #include "ray.h"
 #include "object.h"
 
@@ -14,11 +14,11 @@ class Sphere : public  Object
 public:
 	Sphere();
 
-	Sphere(const Vector3& center, float radius) :
+	Sphere(const Tuple& center, float radius) :
 		center(center),
 		radius(radius) {}
 
-	Vector3 getCenter()
+	Tuple getCenter()
 	{
 		return center;
 	}
@@ -31,7 +31,7 @@ public:
 	IntersectionInfo intersect(Ray& ray);
 
 private:
-	Vector3 center;
+	Tuple center;
 	float radius;
 };
 

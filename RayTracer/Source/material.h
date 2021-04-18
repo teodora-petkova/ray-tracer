@@ -4,9 +4,8 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "vector3.h"
-
-typedef Vector3 Color;
+#include "tuple.h"
+#include "color.h"
 
 class __declspec(dllexport) Material
 {
@@ -14,11 +13,11 @@ public:
 	Material();
 
 	Material(Color color, float ambient, float diffuse, float specular,
-		int shininess);
+		float shininess);
 
 	Color getColor()
 	{
-		return materialColor;
+		return color;
 	}
 
 	float getAmbient()
@@ -31,7 +30,7 @@ public:
 		return diffuse;
 	}
 
-	int getShininess()
+	float getShininess()
 	{
 		return shininess;
 	}
@@ -42,11 +41,11 @@ public:
 	}
 
 private:
-	Color materialColor;
+	Color color;
 	float ambient;
 	float diffuse;
 	float specular;
-	int shininess;
+	float shininess;
 
 };
 #endif

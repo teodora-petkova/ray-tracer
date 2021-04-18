@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\camera.h" />
+    <ClInclude Include="Source\color.h" />
     <ClInclude Include="Source\intersectioninfo.h" />
     <ClInclude Include="Source\light.h" />
     <ClInclude Include="Source\material.h" />
@@ -22,7 +23,7 @@
     <ClInclude Include="Source\scene.h" />
     <ClInclude Include="Source\sphere.h" />
     <ClInclude Include="Source\triangle.h" />
-    <ClInclude Include="Source\vector3.h" />
+    <ClInclude Include="Source\tuple.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
@@ -34,7 +35,7 @@
     <ClCompile Include="Source\readfile.cpp" />
     <ClCompile Include="Source\sphere.cpp" />
     <ClCompile Include="Source\triangle.cpp" />
-    <ClCompile Include="Source\vector3.cpp" />
+    <ClCompile Include="Source\tuple.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

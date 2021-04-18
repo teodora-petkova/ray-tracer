@@ -22,13 +22,13 @@ using namespace ReadScene;
 // Main Ray Tracing Function
 //------------------------------------------------------------
 
-bool isInShadow(IntersectionInfo intersection, Vector3 lightPosition,
+bool isInShadow(IntersectionInfo intersection, Tuple lightPosition,
 	std::vector<Object*> objects)
 {
 	// P - Lp = lightDirection
-	Vector3 rayFromLightToIntersection = intersection.getIntersectionPoint() - lightPosition;
+	Tuple rayFromLightToIntersection = intersection.getIntersectionPoint() - lightPosition;
 
-	Vector3 rayFromIntersectionToLight = -rayFromLightToIntersection;
+	Tuple rayFromIntersectionToLight = -rayFromLightToIntersection;
 
 	float bias = 0.001f;
 	Ray rayToLightSource = Ray(intersection.getIntersectionPoint() + intersection.getNormal() * bias, rayFromIntersectionToLight);
@@ -65,18 +65,18 @@ Color rayTrace(Ray& ray, Scene& scene)
 		}
 	}
 
-	Color color = 0.0;
+	Color color = Color(0, 0, 0);
 	if (intersection.isHit())
 	{
-		for (Light light : scene.Lights)
+		for (Light* light : scene.Lights)
 		{
-			if (isInShadow(intersection, light.getPosition(), scene.Objects))
+			if (isInShadow(intersection, light->getPosition(), scene.Objects))
 			{
 				color += Color(0, 0, 0);
 			}
 			else
 			{
-				color += light.getPhongColor(intersection.getIntersectionPoint(),
+				color += light->getPhongColor(intersection.getIntersectionPoint(),
 					intersection.getNormal().normalize(),
 					scene.Camera.getOrigin().normalize(),
 					object->getMaterial());

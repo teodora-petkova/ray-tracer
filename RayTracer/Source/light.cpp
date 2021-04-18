@@ -2,15 +2,15 @@
 
 Light::Light()
 {
-	this->position = Vector3(0, 0, 0);
-	this->color = Color(0.2, 0.2, 0.2);
-	this->brightness = 0.9;
-	this->ambient = 0.9;
-	this->diffuse = 0.9;
-	this->specular = 0.9;
+	this->position = Tuple::Point(0, 0, 0);
+	this->color = Color(0.2f, 0.2f, 0.2f);
+	this->brightness = 0.9f;
+	this->ambient = 0.9f;
+	this->diffuse = 0.9f;
+	this->specular = 0.9f;
 }
 
-Light::Light(Vector3 position, Color colour,
+Light::Light(Tuple position, Color colour,
 	float brightness,
 	float ambientIntensity,
 	float diffuseIntensity,
@@ -24,16 +24,16 @@ Light::Light(Vector3 position, Color colour,
 	this->specular = specularIntensity;
 }
 
-Color Light::getPhongColor(Vector3 intersection_point,
-	Vector3 unit_normal, Vector3 unit_camera,
+Color Light::getPhongColor(Tuple intersection_point,
+	Tuple unit_normal, Tuple unit_camera,
 	Material* material)
 {
-	Vector3 unit_light = (this->position - intersection_point).normalize();
-	Vector3 unit_reflected = (-unit_light).reflect(unit_normal).normalize();
-	Vector3 unit_view = (unit_camera - intersection_point).normalize();
+	Tuple unit_light = (this->position - intersection_point).normalize();
+	Tuple unit_reflected = (-unit_light).reflect(unit_normal).normalize();
+	Tuple unit_view = (unit_camera - intersection_point).normalize();
 
-	float ldotN = Vector3::dot(unit_light, unit_normal);
-	float rdotV = Vector3::dot(unit_reflected, unit_view);
+	float ldotN = Tuple::dot(unit_light, unit_normal);
+	float rdotV = Tuple::dot(unit_reflected, unit_view);
 	Color light_color = this->color * this->brightness;
 
 	// ambient
@@ -42,13 +42,11 @@ Color Light::getPhongColor(Vector3 intersection_point,
 
 	// diffuse
 	float diffuseness = material->getDiffuse() * this->diffuse;
-	Color diffuse = light_color * diffuseness * fmax(ldotN, 0);
+	Color diffuse = light_color * diffuseness * fmax(ldotN, 0.0f);
 
 	// specular
 	float specularness = material->getSpecular() * this->specular;
-	float a = fmax(rdotV, 0);
-	float b = powf(rdotV, 10);
-	Color specular = light_color * powf(fmax(rdotV, 0), material->getShininess()) * specularness;
+	Color specular = light_color * powf(fmax(rdotV, 0.0f), material->getShininess()) * specularness;
 
 	Color phong_intensity = ambient + diffuse + specular;
 

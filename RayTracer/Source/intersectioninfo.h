@@ -4,20 +4,20 @@
 #ifndef INTERSECTIONINFO_H
 #define INTERSECTIONINFO_H
 
-#include "vector3.h"
+#include "Tuple.h"
 
 class IntersectionInfo
 {
 public:
 	IntersectionInfo();
-	IntersectionInfo(bool isHit, Vector3 intersectionPoint, float distance, Vector3 normal);
+	IntersectionInfo(bool isHit, Tuple intersectionPoint, float distance, Tuple normal);
 
 	bool isHit()
 	{
 		return isObjectHit;
 	}
 
-	Vector3 getIntersectionPoint()
+	Tuple getIntersectionPoint()
 	{
 		return intersectionPoint;
 	}
@@ -27,16 +27,16 @@ public:
 		return distance;
 	}
 
-	Vector3 getNormal()
+	Tuple getNormal()
 	{
 		return normal;
 	}
 
 private:
 	bool isObjectHit;
-	Vector3 intersectionPoint;
+	Tuple intersectionPoint;
 	float distance;
-	Vector3 normal;
+	Tuple normal;
 };
 
 #endif

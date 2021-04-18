@@ -6,26 +6,25 @@
 
 #pragma once
 
-#include "vector3.h"
+#include "tuple.h"
+#include "color.h"
 #include "material.h"
-
-typedef Vector3 Color;
 
 class __declspec(dllexport) Light
 {
 public:
 	Light();
-	Light(Vector3 position, Color colour,
+	Light(Tuple position, Color colour,
 		float brightness,
 		float ambientIntensity,
 		float diffuseIntensity,
 		float specularIntensity);
 
-	Color getPhongColor(Vector3 intersection_point,
-		Vector3 unit_normal, Vector3 unit_camera,
+	Color getPhongColor(Tuple intersection_point,
+		Tuple unit_normal, Tuple unit_camera,
 		Material* material);
 
-	Vector3 getPosition()
+	Tuple getPosition()
 	{
 		return position;
 	}
@@ -56,7 +55,7 @@ public:
 	}
 
 private:
-	Vector3 position;
+	Tuple position;
 	Color color;
 	float brightness;
 	float ambient;

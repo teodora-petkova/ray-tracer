@@ -4,12 +4,12 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "vector3.h"
+#include "Tuple.h"
 #include "ray.h"
 #include "material.h"
 #include "intersectioninfo.h"
 
-class Object
+class __declspec(dllexport) Object
 {
 public:
 	Object() {}

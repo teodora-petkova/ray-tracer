@@ -7,7 +7,7 @@
 #pragma once
 
 #include <string>
-#include "vector3.h"
+#include "Tuple.h"
 #include "scene.h"
 
 class __declspec(dllexport) RayTracer

@@ -3,11 +3,11 @@
 #include "Source\camera.h"
 
 TEST(CameraTests, CorrectlySetOrigin) {
-	Camera camera = Camera(Vector3(0, 0, 5), Vector3(0, 0, 0), Vector3(0, 1, 0), 60, 640, 480);
-	EXPECT_EQ(camera.getOrigin(), Vector3(0, 0, 5));
+	Camera camera = Camera(Tuple::Vector(0, 0, 5), Tuple::Vector(0, 0, 0), Tuple::Vector(0, 1, 0), 60, 640, 480);
+	EXPECT_EQ(camera.getOrigin(), Tuple::Point(0, 0, 5));
 }
 
 TEST(CameraTests, DirectionalRayFor00) {
-	Camera camera = Camera(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 1), 60, 1, 1);
-	EXPECT_EQ(camera.getDirectionRayForPixel(0, 0), Vector3(0, 0, -1));
+	Camera camera = Camera(Tuple::Vector(0, 0, 1), Tuple::Vector(0, 0, 0), Tuple::Vector(0, 1, 1), 60, 1, 1);
+	EXPECT_EQ(camera.getDirectionRayForPixel(0, 0), Tuple::Vector(0, 0, -1));
 }

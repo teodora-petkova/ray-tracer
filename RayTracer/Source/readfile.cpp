@@ -40,11 +40,11 @@ namespace ReadScene
 		// camera
 		Camera camera = Camera();
 		// objects
-		vector<Vector3> vertices = vector<Vector3>();
+		vector<Tuple> vertices = vector<Tuple>();
 		vector<Triangle> triangles = vector<Triangle>();
 		vector<Sphere> spheres = vector<Sphere>();
 		// lights
-		vector<Light> lights = vector<Light>();
+		vector<Light*> lights = vector<Light*>();
 
 		string str, cmd;
 		ifstream in;
@@ -86,9 +86,9 @@ namespace ReadScene
 						if (isInputValid)
 						{
 							//camera lookfromx lookfromy lookfromz lookatx lookaty lookatz upx upy upz fovy
-							Vector3 lookFrom = Vector3(values[0], values[1], values[2]);
-							Vector3 lookAt = Vector3(values[3], values[4], values[5]);
-							Vector3 up = Vector3(values[6], values[7], values[8]);
+							Tuple lookFrom = Tuple::Vector(values[0], values[1], values[2]);
+							Tuple lookAt = Tuple::Vector(values[3], values[4], values[5]);
+							Tuple up = Tuple::Vector(values[6], values[7], values[8]);
 
 							float fovY = values[9];
 							camera = Camera(lookFrom, lookAt, up, fovY, imageWidth, imageHeight);
@@ -101,10 +101,10 @@ namespace ReadScene
 						isInputValid = readValues(s, 10, values);
 						if (isInputValid)
 						{
-							Vector3 lightPosition = Vector3(values[0], values[1], values[2]);
-							Vector3 lightColour = Vector3(values[3], values[4], values[5]);
+							Tuple lightPosition = Tuple::Point(values[0], values[1], values[2]);
+							Tuple lightColour = Color::Color(values[3], values[4], values[5]);
 
-							lights.push_back(Light(lightPosition, lightColour,
+							lights.push_back(new Light(lightPosition, lightColour,
 								values[6], values[7], values[8], values[9]));
 						}
 					}
@@ -115,7 +115,7 @@ namespace ReadScene
 						isInputValid = readValues(s, 3, values);
 						if (isInputValid)
 						{
-							vertices.push_back(Vector3(values[0], values[1], values[2]));
+							vertices.push_back(Tuple::Vector(values[0], values[1], values[2]));
 						}
 					}
 
@@ -151,7 +151,7 @@ namespace ReadScene
 						isInputValid = readValues(s, 4, values);
 						if (isInputValid)
 						{
-							Sphere s = Sphere(Vector3(values[0], values[1], values[2]),
+							Sphere s = Sphere(Tuple::Vector(values[0], values[1], values[2]),
 								values[3]);
 							s.setMaterial(currentMaterial);
 							spheres.push_back(s);
