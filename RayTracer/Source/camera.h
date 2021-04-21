@@ -8,7 +8,6 @@
 
 #pragma warning(push, 0)
 #include <tuple>
-#include "glm\glm.hpp"
 #pragma warning(pop)
 
 #include "raytracer_exports.h"

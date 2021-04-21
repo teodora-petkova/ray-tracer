@@ -1,7 +1,7 @@
 #pragma warning(push, 0)
 #include <iostream>
 #include <ctime>
-#include "sdl.h"
+#include "SDL.h"
 #pragma warning(pop)
 
 #include "source\raytracer.h"

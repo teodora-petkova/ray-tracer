@@ -1,6 +1,5 @@
 #pragma warning(push, 0)
 #include "gtest\gtest.h"
-#include "glm\glm.hpp"
 #pragma warning(pop)
 #include "source\tuple.h"
 

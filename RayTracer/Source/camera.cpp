@@ -38,6 +38,7 @@ std::tuple<Tuple, Tuple, Tuple> calculateWUV(Tuple lookAt, Tuple lookFrom, Tuple
 	return std::make_tuple(w, u, v);
 }
 
+#define degreesToRadians(x) x*(3.141592f/180.0f)
 
 Camera::Camera(Tuple lookFromPoint, Tuple lookAtPoint, Tuple viewUpVector,
 	float fieldOfViewAngleY, int width, int height)
@@ -54,7 +55,7 @@ Camera::Camera(Tuple lookFromPoint, Tuple lookAtPoint, Tuple viewUpVector,
 
 	//Calculating fovx, fovy
 	float aspectRatio = (float)this->width / (float)this->height;
-	this->fovy = glm::radians(fieldOfViewAngleY);
+	this->fovy = degreesToRadians(fieldOfViewAngleY);
 	this->fovx = 2 * atan(tan(this->fovy / 2) * aspectRatio);
 
 	auto t = calculateWUV(this->lookAt, this->lookFrom, this->viewUp);
