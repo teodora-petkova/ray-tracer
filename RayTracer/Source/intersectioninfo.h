@@ -4,7 +4,7 @@
 #ifndef INTERSECTIONINFO_H
 #define INTERSECTIONINFO_H
 
-#include "Tuple.h"
+#include "tuple.h"
 
 class IntersectionInfo
 {

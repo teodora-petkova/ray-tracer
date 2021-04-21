@@ -1,13 +1,16 @@
+#pragma warning(push, 0)
 #include <iostream>
-#include "SDL.h"
-#include "ctime"
-#include <Source\raytracer.h>
-#include <Source\scene.h>
-#include <Source\readfile.h>
+#include <ctime>
+#include "sdl.h"
+#pragma warning(pop)
+
+#include "source\raytracer.h"
+#include "source\scene.h"
+#include "Source\readfile.h"
 
 using namespace std;
 
-SDL_Texture* updateTexture(const char* sceneFile, const char* imageFile,
+SDL_Texture* updateTexture(const char* sceneFile,
 	SDL_Window& window,
 	SDL_Renderer& renderer,
 	int size,
@@ -42,7 +45,6 @@ SDL_Texture* updateTexture(const char* sceneFile, const char* imageFile,
 int main(int argc, char* argv[])
 {
 	const char* sceneFile = argv[1];
-	const char* imageFile = argv[2];
 
 	bool quit = false;
 	SDL_Event event;
@@ -66,7 +68,7 @@ int main(int argc, char* argv[])
 	// We must call SDL_CreateRenderer in order for draw calls to affect this window.
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	SDL_Texture* texture = updateTexture(sceneFile, imageFile, *window, *renderer, size, 0, 0);
+	SDL_Texture* texture = updateTexture(sceneFile, *window, *renderer, size, 0, 0);
 
 	while (!quit)
 	{
@@ -82,7 +84,7 @@ int main(int argc, char* argv[])
 			case SDLK_UP:    y++; break;
 			case SDLK_DOWN:  y--; break;
 			}
-			texture = updateTexture(sceneFile, imageFile, *window, *renderer, size, x, y);
+			texture = updateTexture(sceneFile, *window, *renderer, size, x, y);
 			break;
 
 		case SDL_QUIT:

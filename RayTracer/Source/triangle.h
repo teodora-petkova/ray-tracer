@@ -4,7 +4,10 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
+#pragma warning(push, 0)
 #include <cmath>
+#pragma warning(pop)
+
 #include "Tuple.h"
 #include "ray.h"
 #include "object.h"

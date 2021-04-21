@@ -6,11 +6,16 @@
 
 #pragma once
 
-#include <math.h>
+#pragma warning(push, 0)
+#include <cmath>
 #include <ostream>
+#pragma warning(pop)
+
+#include "raytracer_exports.h"
+
 #define MAX(a,b) a < b ? b : a
 
-class __declspec(dllexport) Tuple
+class RAYTRACER_EXPORT Tuple
 {
 public:
 	Tuple();
@@ -47,5 +52,5 @@ public:
 	float x, y, z, w;
 };
 
-__declspec(dllexport) std::ostream& operator<<(std::ostream& os, Tuple const& v);
+RAYTRACER_EXPORT std::ostream& operator<<(std::ostream& os, Tuple const& v);
 #endif

@@ -1,6 +1,8 @@
+#pragma warning(push, 0)
 #include "gtest\gtest.h"
 #include "glm\glm.hpp"
-#include "Source\tuple.h"
+#pragma warning(pop)
+#include "source\tuple.h"
 
 TEST(VectorTests, VectorIsEqualToItself) {
 	Tuple v = Tuple::Vector(1, 2, 3);

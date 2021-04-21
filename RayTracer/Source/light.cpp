@@ -38,17 +38,17 @@ Color Light::getPhongColor(Tuple intersection_point,
 
 	// ambient
 	float ambientness = material->getAmbient() * this->ambient;
-	Color ambient = light_color * ambientness;
+	Color ambient_color = light_color * ambientness;
 
 	// diffuse
 	float diffuseness = material->getDiffuse() * this->diffuse;
-	Color diffuse = light_color * diffuseness * fmax(ldotN, 0.0f);
+	Color diffuse_color = light_color * diffuseness * fmax(ldotN, 0.0f);
 
 	// specular
 	float specularness = material->getSpecular() * this->specular;
-	Color specular = light_color * powf(fmax(rdotV, 0.0f), material->getShininess()) * specularness;
+	Color specular_color = light_color * powf(fmax(rdotV, 0.0f), material->getShininess()) * specularness;
 
-	Color phong_intensity = ambient + diffuse + specular;
+	Color phong_intensity = ambient_color + diffuse_color + specular_color;
 
 	return material->getColor() * phong_intensity;
 }

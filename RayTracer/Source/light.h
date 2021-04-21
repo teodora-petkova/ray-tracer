@@ -6,11 +6,12 @@
 
 #pragma once
 
+#include "raytracer_exports.h"
 #include "tuple.h"
 #include "color.h"
 #include "material.h"
 
-class __declspec(dllexport) Light
+class RAYTRACER_EXPORT Light
 {
 public:
 	Light();

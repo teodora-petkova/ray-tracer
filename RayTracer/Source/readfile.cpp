@@ -151,10 +151,10 @@ namespace ReadScene
 						isInputValid = readValues(s, 4, values);
 						if (isInputValid)
 						{
-							Sphere s = Sphere(Tuple::Vector(values[0], values[1], values[2]),
+							Sphere sphere = Sphere(Tuple::Vector(values[0], values[1], values[2]),
 								values[3]);
-							s.setMaterial(currentMaterial);
-							spheres.push_back(s);
+							sphere.setMaterial(currentMaterial);
+							spheres.push_back(sphere);
 						}
 					}
 

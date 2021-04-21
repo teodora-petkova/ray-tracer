@@ -4,16 +4,20 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Tuple.h"
+#pragma warning(push, 0)
+#include <vector>
+#pragma warning(pop)
+
+#include "raytracer_exports.h"
+#include "tuple.h"
 #include "light.h"
 #include "sphere.h"
 #include "triangle.h"
 #include "camera.h"
-#include <vector>
 
 using namespace std;
 
-class __declspec(dllexport) Scene
+class Scene
 {
 public:
 	Scene()

@@ -1,19 +1,19 @@
 //------------------------------------------------------------
 // Cray.h Header
 //------------------------------------------------------------
-#ifndef CRAY_H
-#define CRAY_H
+#ifndef RAY_H
+#define RAY_H
 
-#include "Tuple.h"
+#include "tuple.h"
 
 class Ray
 {
 public:
 	Ray();
 
-	Ray(const Tuple& origin, Tuple& direction);
+	Ray(Tuple origin, Tuple direction);
 
-	Tuple& getOrigin()
+	Tuple getOrigin()
 	{
 		return rayOrigin;
 	}

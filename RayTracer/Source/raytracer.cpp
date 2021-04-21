@@ -13,8 +13,11 @@
 
 #include "readfile.h"
 #include "scene.h"
+
+#pragma warning(push, 0)
 #include <math.h>
 #include <future>
+#pragma warning(pop)
 
 using namespace ReadScene;
 
@@ -36,8 +39,8 @@ bool isInShadow(IntersectionInfo intersection, Tuple lightPosition,
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		Object* testObject = objects[i];
-		IntersectionInfo intersection = testObject->intersect(rayToLightSource);
-		if (intersection.isHit())
+		IntersectionInfo testIntersection = testObject->intersect(rayToLightSource);
+		if (testIntersection.isHit())
 		{
 			isInShadow = true;
 			break;
@@ -88,19 +91,20 @@ Color rayTrace(Ray& ray, Scene& scene)
 
 void updatePixels(int i, int j, unsigned char* pixels, Color& color, int width)
 {
-	int b = (int)(color.z * 255);
-	int g = (int)(color.y * 255);
-	int r = (int)(color.x * 255);
+	int b = int(color.z * 255);
+	int g = int(color.y * 255);
+	int r = int(color.x * 255);
 	int a = 1;
+
 	if (r > 255) r = 255;
 	if (g > 255) g = 255;
 	if (b > 255) b = 255;
 
 	//SDL - specific B G R A
-	pixels[(j * width + i) * 4 + 0] = (int)b; // B
-	pixels[(j * width + i) * 4 + 1] = (int)g; // G
-	pixels[(j * width + i) * 4 + 2] = (int)r; // R
-	pixels[(j * width + i) * 4 + 3] = (int)a; // alpha (opacity)
+	pixels[(j * width + i) * 4 + 0] = b;
+	pixels[(j * width + i) * 4 + 1] = g;
+	pixels[(j * width + i) * 4 + 2] = r;
+	pixels[(j * width + i) * 4 + 3] = a;
 }
 
 //------------------------------------------------------------

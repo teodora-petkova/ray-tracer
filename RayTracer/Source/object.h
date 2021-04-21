@@ -4,12 +4,13 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "Tuple.h"
+#include "raytracer_exports.h"
+#include "tuple.h"
 #include "ray.h"
 #include "material.h"
 #include "intersectioninfo.h"
 
-class __declspec(dllexport) Object
+class Object
 {
 public:
 	Object() {}

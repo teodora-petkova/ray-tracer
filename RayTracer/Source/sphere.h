@@ -4,8 +4,11 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
+#pragma warning(push, 0)
 #include <cmath>
-#include "Tuple.h"
+#pragma warning(pop)
+
+#include "tuple.h"
 #include "ray.h"
 #include "object.h"
 

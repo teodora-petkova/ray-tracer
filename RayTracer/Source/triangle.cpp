@@ -5,6 +5,7 @@
 
 using namespace std;
 
+/*
 static bool isOnSameSide(Tuple p, Tuple a, Tuple b, Tuple c)
 {
 	Tuple vector1 = Tuple::cross(b - a, p - a);
@@ -26,7 +27,7 @@ static bool isPointInTriangle(Tuple p, Tuple a, Tuple b, Tuple c)
 	//IF the point P is:
 	//	- on the same side of AB as C AND
 	//  - on the same side of BC as A AND
-	//  - on the same side of CA as B, 
+	//  - on the same side of CA as B,
 	// THEN it is in the triangle.
 	if (isOnSameSide(p, a, b, c) &&
 		isOnSameSide(p, b, a, c) &&
@@ -39,6 +40,7 @@ static bool isPointInTriangle(Tuple p, Tuple a, Tuple b, Tuple c)
 		return false;
 	}
 }
+*/
 
 Triangle::Triangle()
 {

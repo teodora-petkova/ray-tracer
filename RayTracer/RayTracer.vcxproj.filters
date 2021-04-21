@@ -54,6 +54,9 @@
     <ClInclude Include="Source\color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\raytracer_exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">

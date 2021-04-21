@@ -6,10 +6,14 @@
 
 #pragma once
 
-#include <math.h>
-#include "tuple.h"
+#pragma warning(push, 0)
+#include <cmath>
+#include <tuple>
+#pragma warning(pop)
 
-class __declspec(dllexport) Color : public Tuple
+#include "raytracer_exports.h"
+
+class RAYTRACER_EXPORT Color : public Tuple
 {
 public:
 	Color() : Tuple() {}

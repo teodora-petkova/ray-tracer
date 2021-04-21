@@ -6,11 +6,15 @@
 
 #pragma once
 
-#include <string>
-#include "Tuple.h"
+#pragma warning(push, 0)
+#include <string.h>
+#pragma warning(pop)
+
+#include "raytracer_exports.h"
+#include "tuple.h"
 #include "scene.h"
 
-class __declspec(dllexport) RayTracer
+class RAYTRACER_EXPORT RayTracer
 {
 public:
 	RayTracer() {};

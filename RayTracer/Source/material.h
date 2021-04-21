@@ -4,10 +4,11 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include "raytracer_exports.h"
 #include "tuple.h"
 #include "color.h"
 
-class __declspec(dllexport) Material
+class RAYTRACER_EXPORT Material
 {
 public:
 	Material();

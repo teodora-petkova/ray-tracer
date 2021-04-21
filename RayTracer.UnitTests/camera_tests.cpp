@@ -1,6 +1,8 @@
+#pragma warning(push, 0)
 #include "gtest\gtest.h"
 #include "glm\glm.hpp"
-#include "Source\camera.h"
+#pragma warning(pop)
+#include "source\camera.h"
 
 TEST(CameraTests, CorrectlySetOrigin) {
 	Camera camera = Camera(Tuple::Vector(0, 0, 5), Tuple::Vector(0, 0, 0), Tuple::Vector(0, 1, 0), 60, 640, 480);

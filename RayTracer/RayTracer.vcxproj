@@ -19,6 +19,7 @@
     <ClInclude Include="Source\object.h" />
     <ClInclude Include="Source\ray.h" />
     <ClInclude Include="Source\raytracer.h" />
+    <ClInclude Include="Source\raytracer_exports.h" />
     <ClInclude Include="Source\readfile.h" />
     <ClInclude Include="Source\scene.h" />
     <ClInclude Include="Source\sphere.h" />
@@ -80,7 +81,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

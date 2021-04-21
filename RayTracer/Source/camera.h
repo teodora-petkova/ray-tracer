@@ -6,11 +6,15 @@
 
 #pragma once
 
-#include "Tuple.h"
-#include "glm\glm.hpp"
+#pragma warning(push, 0)
 #include <tuple>
+#include "glm\glm.hpp"
+#pragma warning(pop)
 
-class __declspec(dllexport) Camera
+#include "raytracer_exports.h"
+#include "tuple.h"
+
+class RAYTRACER_EXPORT Camera
 {
 public:
 	Camera();
