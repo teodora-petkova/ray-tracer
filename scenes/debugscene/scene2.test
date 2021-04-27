@@ -1,20 +1,20 @@
 size 640 480
 
-camera 0 0 5 0 0 0 0 1 0 40
+camera 0 0 -5 0 0 0 0 1 0 40
 
 maxverts 8
 
-vertex -2 -1 -2 #0
-vertex -2 -1 +2 #1
-vertex +2 -1 +2 #2
-vertex +2 -1 -2 #3
-vertex -2 +1 -2 #4
-vertex -2 +1 +2 #5
-vertex +2 +1 +2 #6
-vertex +2 +1 -2 #7
+vertex -2 -1 +2 #0
+vertex -2 -1 -2 #1
+vertex +2 -1 -2 #2
+vertex +2 -1 +2 #3
+vertex -2 +1 +2 #4
+vertex -2 +1 -2 #5
+vertex +2 +1 -2 #6
+vertex +2 +1 +2 #7
 
 #point 0 0 -1.5 1 1 1 5
-point_light 1 2 3 1 1 1 1 1 1 1
+point_light 1 2 -3 1 1 1 1 1 1 1
 
 material 0 0 1 0.1 0.9 0.9 1
 tri 0 3 1
@@ -31,5 +31,3 @@ tri 0 4 7
 
 material 1 0 0 0.1 0.9 0.9 200
 sphere 0 0 0 1
-
-spheres = [sphere1, sphere2]

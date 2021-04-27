@@ -11,12 +11,12 @@ Sphere::Sphere()
 	radius = 1.0;
 }
 
-IntersectionInfo Sphere::intersect(Ray& ray)
+static std::pair<bool, float> algebraic_intersect(Sphere sphere, Ray& ray)
 {
-	Tuple originMinusSphereCenter = ray.getOrigin() - center;
+	Tuple originMinusSphereCenter = ray.getOrigin() - sphere.getCenter();
 	float a = Tuple::dot(ray.getDirection(), ray.getDirection());
 	float b = 2 * Tuple::dot(ray.getDirection(), originMinusSphereCenter);
-	float c = Tuple::dot(originMinusSphereCenter, originMinusSphereCenter) - radius * radius;
+	float c = Tuple::dot(originMinusSphereCenter, originMinusSphereCenter) - sphere.getRadius() * sphere.getRadius();
 
 	float discriminant = b * b - 4 * a * c;
 	bool isHit = false;
@@ -36,6 +36,44 @@ IntersectionInfo Sphere::intersect(Ray& ray)
 			isHit = true;
 		}
 	}
+
+	return std::make_pair(isHit, distance);
+}
+
+static std::pair<bool, float> geometric_intersect(Sphere sphere, Ray& ray)
+{
+	bool isHit = true;
+	float distance = INFINITY;
+
+	Tuple l = sphere.getCenter() - ray.getOrigin();
+	float t0 = Tuple::dot(l, ray.getDirection().normalize());
+	if (t0 < 0)
+	{
+		return std::make_pair(false, distance);
+	}
+	float d2 = Tuple::dot(l, l) - t0 * t0;
+	float r2 = sphere.getRadius() * sphere.getRadius();
+	if (d2 > r2)
+	{
+		return std::make_pair(false, distance);
+	}
+
+	float th0 = sqrt(r2 - d2);
+
+	float t1 = t0 - th0;
+	float t2 = t0 + th0;
+
+	distance = ((t2 > t1) ? t1 : t2) / ray.getDirection().magnitude();
+
+	return std::make_pair(isHit, distance);
+}
+
+IntersectionInfo Sphere::intersect(Ray& ray)
+{
+	auto pair = geometric_intersect(*this, ray);
+	bool isHit = pair.first;
+	float distance = pair.second;
+
 	Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
 	Tuple normal = ((intersectionPoint - center) * distance).normalize();
 

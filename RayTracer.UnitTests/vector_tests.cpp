@@ -35,3 +35,10 @@ TEST(VectorTests, CrossProductOfTwoNonZeroVectorsIsCorrect) {
 
 	EXPECT_EQ(Tuple::cross(v1, v2), Tuple::Vector(-3, 6, -3));
 }
+
+TEST(VectorTests, CrossProductWithNegativeCoordinatesIsCorrect) {
+	Tuple v1 = Tuple::Vector(-2, 0, 0);
+	Tuple v2 = Tuple::Vector(-1, 0.5, 0);
+
+	EXPECT_EQ(Tuple::cross(v1, v2), Tuple::Vector(0, 0, -1));
+}

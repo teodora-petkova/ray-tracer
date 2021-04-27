@@ -35,6 +35,7 @@
   <ItemGroup>
     <ClCompile Include="camera_tests.cpp" />
     <ClCompile Include="light_tests.cpp" />
+    <ClCompile Include="triangle_tests.cpp" />
     <ClCompile Include="vector_tests.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -4,9 +4,10 @@
 #ifndef RAY_H
 #define RAY_H
 
+#include "raytracer_exports.h"
 #include "tuple.h"
 
-class Ray
+class RAYTRACER_EXPORT Ray
 {
 public:
 	Ray();
