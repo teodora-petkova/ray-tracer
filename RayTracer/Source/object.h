@@ -10,25 +10,27 @@
 #include "material.h"
 #include "intersectioninfo.h"
 
-class Object
+class RAYTRACER_EXPORT Object
 {
 public:
 	Object() {}
 
-	void setMaterial(Material& material)
+	void setMaterial(MaterialPtr material)
 	{
 		objectMaterial = material;
 	}
 
-	Material* getMaterial()
+	MaterialPtr getMaterial()
 	{
-		return &objectMaterial;
+		return objectMaterial;
 	}
 
 	virtual IntersectionInfo intersect(Ray& ray) = 0;
 
 protected:
-	Material objectMaterial;
+	MaterialPtr objectMaterial;
 };
+
+using ObjectPtr = std::shared_ptr<Object>;
 
 #endif

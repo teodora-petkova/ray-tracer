@@ -15,36 +15,18 @@ namespace ReadScene
 		return true;
 	}
 
-	vector<Object*> getObjects(vector<Triangle> triangles, vector<Sphere> spheres)
-	{
-		int objectsCount = triangles.size() + spheres.size();
-
-		vector<Object*> objects = vector<Object*>(objectsCount);
-		unsigned int i = 0;
-		for (; i < triangles.size(); i++)
-		{
-			objects[i] = new Triangle(triangles[i]);
-		}
-		for (unsigned int j = 0; j < spheres.size(); j++, i++)
-		{
-			objects[i] = new Sphere(spheres[j]);
-		}
-		return objects;
-	}
-
 	Scene readSceneFile(string filename)
 	{
 		// image size
 		int imageWidth = 0;
 		int imageHeight = 0;
 		// camera
-		Camera camera = Camera();
+		Camera camera;
 		// objects
 		vector<Tuple> vertices = vector<Tuple>();
-		vector<Triangle> triangles = vector<Triangle>();
-		vector<Sphere> spheres = vector<Sphere>();
+		vector<ObjectPtr> objects = vector<ObjectPtr>();
 		// lights
-		vector<Light*> lights = vector<Light*>();
+		vector<LightPtr> lights = vector<LightPtr>();
 
 		string str, cmd;
 		ifstream in;
@@ -53,7 +35,7 @@ namespace ReadScene
 		{
 			getline(in, str);
 
-			Material currentMaterial;
+			MaterialPtr currentMaterial;
 
 			while (in)
 			{
@@ -104,8 +86,8 @@ namespace ReadScene
 							Tuple lightPosition = Tuple::Point(values[0], values[1], values[2]);
 							Tuple lightColour = Color::Color(values[3], values[4], values[5]);
 
-							lights.push_back(new Light(lightPosition, lightColour,
-								values[6], values[7], values[8], values[9]));
+							lights.push_back(std::make_shared<Light>(Light(lightPosition, lightColour,
+								values[6], values[7], values[8], values[9])));
 						}
 					}
 
@@ -125,8 +107,8 @@ namespace ReadScene
 						isInputValid = readValues(s, 7, values);
 						if (isInputValid)
 						{
-							Material m = Material(Color(values[0], values[1], values[2]),
-								values[3], values[4], values[5], values[6]);
+							MaterialPtr m = std::make_shared<Material>(Material(Color(values[0], values[1], values[2]),
+								values[3], values[4], values[5], values[6]));
 							currentMaterial = m;
 						}
 					}
@@ -137,11 +119,11 @@ namespace ReadScene
 						isInputValid = readValues(s, 3, values);
 						if (isInputValid)
 						{
-							Triangle t = Triangle(vertices[(int)values[0]],
+							ObjectPtr triangle = std::make_shared<Triangle>(Triangle(vertices[(int)values[0]],
 								vertices[(int)values[1]],
-								vertices[(int)values[2]]);
-							t.setMaterial(currentMaterial);
-							triangles.push_back(t);
+								vertices[(int)values[2]]));
+							triangle->setMaterial(currentMaterial);
+							objects.push_back(triangle);
 						}
 					}
 
@@ -151,10 +133,10 @@ namespace ReadScene
 						isInputValid = readValues(s, 4, values);
 						if (isInputValid)
 						{
-							Sphere sphere = Sphere(Tuple::Vector(values[0], values[1], values[2]),
-								values[3]);
-							sphere.setMaterial(currentMaterial);
-							spheres.push_back(sphere);
+							ObjectPtr sphere = std::make_shared<Sphere>(Sphere(Tuple::Vector(values[0],
+								values[1], values[2]), values[3]));
+							sphere->setMaterial(currentMaterial);
+							objects.push_back(sphere);
 						}
 					}
 
@@ -163,8 +145,6 @@ namespace ReadScene
 				getline(in, str);
 			}
 		}
-
-		vector<Object*> objects = getObjects(triangles, spheres);
 
 		return Scene(imageWidth, imageHeight,
 			camera, objects, lights);

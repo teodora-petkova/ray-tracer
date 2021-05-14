@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------
 #include "camera.h"
 
-std::tuple<Tuple, Tuple, Tuple> calculateWUV(Tuple lookAt, Tuple lookFrom, Tuple viewUp)
+std::tuple<Tuple, Tuple, Tuple> calculateWUV(Tuple& lookAt, Tuple& lookFrom, Tuple& viewUp)
 {
 	Tuple w = Tuple();
 	Tuple u = Tuple();
@@ -50,9 +50,6 @@ Camera::Camera(Tuple lookFromPoint, Tuple lookAtPoint, Tuple viewUpVector,
 	this->lookAt = lookAtPoint;
 	this->viewUp = viewUpVector;
 
-	// The origin of each ray, O, is precisely LF.
-	this->origin = lookFromPoint;
-
 	//Calculating fovx, fovy
 	float aspectRatio = (float)this->width / (float)this->height;
 	this->fovy = degreesToRadians(fieldOfViewAngleY);
@@ -88,14 +85,14 @@ Tuple Camera::getDirectionRayForPixel(int x, int y)
 
 Tuple Camera::getOrigin()
 {
-	return this->origin;
+	return this->lookFrom;
 }
 
 void Camera::updateLookAt(int x, int y)
 {
-	this->lookAt = Tuple::Vector(this->lookAt.x + x, this->lookAt.y + y, this->lookAt.z);
+	Tuple updatedLookAt = Tuple::Vector(this->lookAt.x + x, this->lookAt.y + y, this->lookAt.z);
 
-	auto t = calculateWUV(this->lookAt, this->lookFrom, this->viewUp);
+	auto t = calculateWUV(updatedLookAt, this->lookFrom, this->viewUp);
 	this->w = std::get<0>(t);
 	this->u = std::get<1>(t);
 	this->v = std::get<2>(t);
@@ -103,8 +100,6 @@ void Camera::updateLookAt(int x, int y)
 
 Camera::Camera()
 {
-	this->origin = Tuple();
-
 	this->w = Tuple();
 	this->u = Tuple();
 	this->v = Tuple();

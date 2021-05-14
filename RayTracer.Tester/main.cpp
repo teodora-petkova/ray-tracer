@@ -10,7 +10,7 @@
 
 using namespace std;
 
-SDL_Texture* updateTexture(const char* sceneFile,
+SDL_Texture* updateTexture(Scene& scene,
 	SDL_Window& window,
 	SDL_Renderer& renderer,
 	int size,
@@ -22,7 +22,6 @@ SDL_Texture* updateTexture(const char* sceneFile,
 
 	RayTracer r = RayTracer();
 
-	Scene scene = ReadScene::readSceneFile(sceneFile);
 	scene.Camera.updateLookAt(x, y);
 
 	unsigned char* pixels = r.execute(scene);
@@ -36,6 +35,8 @@ SDL_Texture* updateTexture(const char* sceneFile,
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(&renderer, surface);
 	SDL_UpdateWindowSurface(&window);
 	SDL_FreeSurface(surface);
+	delete[] pixels;
+
 	return texture;
 }
 
@@ -45,13 +46,14 @@ SDL_Texture* updateTexture(const char* sceneFile,
 int main(int argc, char* argv[])
 {
 	const char* sceneFile = argv[1];
+	Scene scene = ReadScene::readSceneFile(sceneFile);
 
 	bool quit = false;
 	SDL_Event event;
 	int x = 0;
 	int y = 0;
-	int rows = 640;
-	int columns = 480;
+	int rows = scene.ImageWidth;
+	int columns = scene.ImageHeight;
 	int size = rows * columns * sizeof(unsigned char) * 4;
 
 	if (SDL_Init(SDL_INIT_VIDEO) == -1)
@@ -68,7 +70,7 @@ int main(int argc, char* argv[])
 	// We must call SDL_CreateRenderer in order for draw calls to affect this window.
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	SDL_Texture* texture = updateTexture(sceneFile, *window, *renderer, size, 0, 0);
+	SDL_Texture* texture = updateTexture(scene, *window, *renderer, size, x, y);
 
 	while (!quit)
 	{
@@ -84,7 +86,8 @@ int main(int argc, char* argv[])
 			case SDLK_UP:    y++; break;
 			case SDLK_DOWN:  y--; break;
 			}
-			texture = updateTexture(sceneFile, *window, *renderer, size, x, y);
+			//printf("(x, y) = (%d, %d)\n", x, y);
+			texture = updateTexture(scene, *window, *renderer, size, x, y);
 			break;
 
 		case SDL_QUIT:

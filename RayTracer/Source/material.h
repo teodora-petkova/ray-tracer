@@ -49,4 +49,7 @@ private:
 	float shininess;
 
 };
+
+using MaterialPtr = std::shared_ptr<Material>;
+
 #endif

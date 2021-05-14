@@ -26,7 +26,7 @@ Light::Light(Tuple position, Color colour,
 
 Color Light::getPhongColor(Tuple intersection_point,
 	Tuple unit_normal, Tuple unit_camera,
-	Material* material)
+	MaterialPtr material)
 {
 	Tuple unit_light = (this->position - intersection_point).normalize();
 	Tuple unit_reflected = (-unit_light).reflect(unit_normal).normalize();

@@ -22,7 +22,6 @@ public:
 	Tuple getOrigin();
 	void updateLookAt(int x, int y);
 private:
-	Tuple origin;
 	Tuple lookAt;
 	Tuple lookFrom;
 	Tuple viewUp;

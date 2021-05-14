@@ -23,7 +23,7 @@ public:
 
 	Color getPhongColor(Tuple intersection_point,
 		Tuple unit_normal, Tuple unit_camera,
-		Material* material);
+		MaterialPtr material);
 
 	Tuple getPosition()
 	{
@@ -63,4 +63,7 @@ private:
 	float diffuse;
 	float specular;
 };
+
+using LightPtr = std::shared_ptr<Light>;
+
 #endif

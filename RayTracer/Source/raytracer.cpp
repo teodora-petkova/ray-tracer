@@ -26,7 +26,7 @@ using namespace ReadScene;
 //------------------------------------------------------------
 
 bool isInShadow(IntersectionInfo intersection, Tuple lightPosition,
-	std::vector<Object*> objects)
+	std::vector<ObjectPtr> objects)
 {
 	// P - Lp = lightDirection
 	Tuple rayFromLightToIntersection = intersection.getIntersectionPoint() - lightPosition;
@@ -38,7 +38,7 @@ bool isInShadow(IntersectionInfo intersection, Tuple lightPosition,
 	bool isInShadow = false;
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
-		Object* testObject = objects[i];
+		ObjectPtr testObject = objects[i];
 		IntersectionInfo testIntersection = testObject->intersect(rayToLightSource);
 		if (testIntersection.isHit())
 		{
@@ -52,13 +52,13 @@ bool isInShadow(IntersectionInfo intersection, Tuple lightPosition,
 
 Color rayTrace(Ray& ray, Scene& scene)
 {
-	Object* object = NULL;
+	ObjectPtr object = NULL;
 	IntersectionInfo intersection = IntersectionInfo();
 
 	float minDistance = INFINITY;
 	for (unsigned int i = 0; i < scene.Objects.size(); i++)
 	{
-		Object* testObject = scene.Objects[i];
+		ObjectPtr testObject = scene.Objects[i];
 		IntersectionInfo testIntersection = testObject->intersect(ray);
 		if (testIntersection.isHit() && testObject && testIntersection.getDistance() < minDistance)
 		{
@@ -71,7 +71,7 @@ Color rayTrace(Ray& ray, Scene& scene)
 	Color color = Color(0, 0, 0);
 	if (intersection.isHit())
 	{
-		for (Light* light : scene.Lights)
+		for (LightPtr light : scene.Lights)
 		{
 			if (isInShadow(intersection, light->getPosition(), scene.Objects))
 			{
@@ -118,10 +118,10 @@ unsigned char* RayTracer::execute(Scene scene)
 	unsigned char* pixels = new unsigned char[imageDims * 4];
 
 	int num_cores = thread::hardware_concurrency();
-	volatile atomic<int> count(0);
+	atomic<int> count(0);
 	while (num_cores--)
 	{
-		futures.push_back(async(launch::async, [&count, &imageDims, &pixels, &scene]()
+		futures.push_back(async(std::launch::async, [&count, &imageDims, pixels, &scene]()
 			{
 				while (true)
 				{

@@ -34,14 +34,14 @@ public:
 			this->ImageWidth, this->ImageHeight);
 
 		// Objects
-		this->Objects = vector<Object*>();
+		this->Objects = std::vector<ObjectPtr>();
 
 		// lights
-		this->Lights = vector<Light*>();
+		this->Lights = std::vector<LightPtr>();
 	}
 
 	Scene(int width, int height, Camera camera,
-		vector<Object*> objects, vector<Light*> lights)
+		vector<ObjectPtr> objects, vector<LightPtr> lights)
 	{
 		this->ImageWidth = width;
 		this->ImageHeight = height;
@@ -62,10 +62,10 @@ public:
 	Camera Camera;
 
 	// Objects
-	vector<Object*> Objects;
+	vector<ObjectPtr> Objects;
 
 	//Lights
-	vector<Light*> Lights;
+	vector<LightPtr> Lights;
 };
 
 #endif
