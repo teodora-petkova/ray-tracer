@@ -6,38 +6,29 @@
 
 #include "source\raytracer.h"
 #include "source\scene.h"
-#include "Source\readfile.h"
+#include "source\readfile.h"
+#include "SDL\SDLApp.h"
 
 using namespace std;
 
-SDL_Texture* updateTexture(Scene& scene,
-	SDL_Window& window,
-	SDL_Renderer& renderer,
-	int size,
+void updateWindow(SDLApp& window,
+	Scene& scene, int size,
 	int x, int y)
 {
-	SDL_Surface* surface = SDL_GetWindowSurface(&window);
-
 	clock_t begin = clock();
-
-	RayTracer r = RayTracer();
 
 	scene.Camera.updateLookAt(x, y);
 
+	RayTracer r = RayTracer();
 	unsigned char* pixels = r.execute(scene);
+	window.Update(pixels, size);
+	delete[] pixels;
+	pixels = nullptr;
 
 	clock_t end = clock();
 
 	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
 	cout << elapsed_secs << '\n';
-
-	SDL_memcpy(surface->pixels, pixels, size);
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(&renderer, surface);
-	SDL_UpdateWindowSurface(&window);
-	SDL_FreeSurface(surface);
-	delete[] pixels;
-
-	return texture;
 }
 
 //------------------------------------------------------------
@@ -48,68 +39,51 @@ int main(int argc, char* argv[])
 	const char* sceneFile = argv[1];
 	Scene scene = ReadScene::readSceneFile(sceneFile);
 
-	bool quit = false;
-	SDL_Event event;
 	int x = 0;
 	int y = 0;
 	int rows = scene.ImageWidth;
 	int columns = scene.ImageHeight;
 	int size = rows * columns * sizeof(unsigned char) * 4;
 
-	if (SDL_Init(SDL_INIT_VIDEO) == -1)
+	bool quit = false;
+	SDL_Event event;
+
+	try
 	{
-		printf("SDL Init error: %s", SDL_GetError());
+
+		SDLApp window("Simple Ray tracer", 10, 25, rows, columns);
+
+		updateWindow(window, scene, size, x, y);
+
+		while (!quit)
+		{
+			SDL_WaitEvent(&event);
+
+			switch (event.type)
+			{
+			case SDL_KEYDOWN:
+				switch (event.key.keysym.sym)
+				{
+				case SDLK_LEFT:  x--; break;
+				case SDLK_RIGHT: x++; break;
+				case SDLK_UP:    y++; break;
+				case SDLK_DOWN:  y--; break;
+				}
+
+				//printf("(x, y) = (%d, %d)\n", x, y);
+				updateWindow(window, scene, size, x, y);
+				break;
+
+			case SDL_QUIT:
+				quit = true;
+				break;
+			}
+		}
+	}
+	catch (std::exception& e) {
+		std::cerr << e.what() << std::endl;
 		return 1;
 	}
-
-	SDL_Window* window = SDL_CreateWindow("Simple Ray tracer", // window's title
-		10, 25, // coordinates on the screen, in pixels, of the window's upper left corner
-		rows, columns, // window's length and height in pixels
-		SDL_WINDOW_OPENGL);
-
-	// We must call SDL_CreateRenderer in order for draw calls to affect this window.
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
-
-	SDL_Texture* texture = updateTexture(scene, *window, *renderer, size, x, y);
-
-	while (!quit)
-	{
-		SDL_WaitEvent(&event);
-
-		switch (event.type)
-		{
-		case SDL_KEYDOWN:
-			switch (event.key.keysym.sym)
-			{
-			case SDLK_LEFT:  x--; break;
-			case SDLK_RIGHT: x++; break;
-			case SDLK_UP:    y++; break;
-			case SDLK_DOWN:  y--; break;
-			}
-			//printf("(x, y) = (%d, %d)\n", x, y);
-			texture = updateTexture(scene, *window, *renderer, size, x, y);
-			break;
-
-		case SDL_QUIT:
-			quit = true;
-			break;
-		}
-
-		// Clear the entire screen to our selected color.
-		SDL_RenderClear(renderer);
-		//SDL_Rect rect = { x, y, 64, 64 };
-		SDL_RenderCopy(renderer, texture, NULL, NULL);// &rect);
-		// Up until now everything was drawn behind the scenes.
-		// This will show the new, red contents of the window.
-		SDL_RenderPresent(renderer);
-	}
-
-	// cleanup SDL
-
-	SDL_DestroyTexture(texture);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
 
 	return 0;
 }
