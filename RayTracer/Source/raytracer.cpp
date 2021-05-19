@@ -25,7 +25,7 @@ using namespace ReadScene;
 // Main Ray Tracing Function
 //------------------------------------------------------------
 
-bool isInShadow(IntersectionInfo intersection, Tuple lightPosition,
+bool IsInShadow(IntersectionInfo intersection, Tuple lightPosition,
 	std::vector<ObjectPtr> objects)
 {
 	// P - Lp = lightDirection
@@ -50,7 +50,7 @@ bool isInShadow(IntersectionInfo intersection, Tuple lightPosition,
 	return isInShadow;
 }
 
-Color rayTrace(Ray& ray, Scene& scene)
+Color TraceSingleRay(Ray& ray, Scene& scene)
 {
 	ObjectPtr object = NULL;
 	IntersectionInfo intersection = IntersectionInfo();
@@ -73,7 +73,7 @@ Color rayTrace(Ray& ray, Scene& scene)
 	{
 		for (LightPtr light : scene.Lights)
 		{
-			if (isInShadow(intersection, light->getPosition(), scene.Objects))
+			if (IsInShadow(intersection, light->getPosition(), scene.Objects))
 			{
 				color += Color(0, 0, 0);
 			}
@@ -89,39 +89,21 @@ Color rayTrace(Ray& ray, Scene& scene)
 	return color;
 }
 
-void updatePixels(int i, int j, unsigned char* pixels, Color& color, int width)
-{
-	int b = int(color.z * 255);
-	int g = int(color.y * 255);
-	int r = int(color.x * 255);
-	int a = 1;
-
-	if (r > 255) r = 255;
-	if (g > 255) g = 255;
-	if (b > 255) b = 255;
-
-	//SDL - specific B G R A
-	pixels[(j * width + i) * 4 + 0] = b;
-	pixels[(j * width + i) * 4 + 1] = g;
-	pixels[(j * width + i) * 4 + 2] = r;
-	pixels[(j * width + i) * 4 + 3] = a;
-}
-
 //------------------------------------------------------------
 //  Main Function
 //------------------------------------------------------------
-unsigned char* RayTracer::execute(Scene scene)
+Canvas RayTracer::TraceRays(Scene& scene)
 {
-	vector<future<void>> futures;
-
-	int imageDims = scene.ImageWidth * scene.ImageHeight;
-	unsigned char* pixels = new unsigned char[imageDims * 4];
-
+	vector<future<void>> futureCalculations;
 	int num_cores = thread::hardware_concurrency();
+
+	Canvas canvas = Canvas(scene.ImageWidth, scene.ImageHeight);
+	int imageDims = scene.ImageWidth * scene.ImageHeight;
+
 	atomic<int> count(0);
 	while (num_cores--)
 	{
-		futures.push_back(async(std::launch::async, [&count, &imageDims, pixels, &scene]()
+		futureCalculations.push_back(std::async([&count, &imageDims, &canvas, &scene]()
 			{
 				while (true)
 				{
@@ -134,13 +116,18 @@ unsigned char* RayTracer::execute(Scene scene)
 					Ray rayFromCamera = Ray(scene.Camera.getOrigin(),
 						scene.Camera.getDirectionRayForPixel(x, y));
 
-					Color color = rayTrace(rayFromCamera, scene);
+					Color color = TraceSingleRay(rayFromCamera, scene);
 
 					// the (0,0) point is at bottom-left!
-					updatePixels(x, y, pixels, color, scene.ImageWidth);
-				}
-			}));
+					canvas.WritePixel(x, y, color);
+				}}
+		));
 	}
 
-	return pixels;
+	for (auto&& f : futureCalculations)
+	{
+		f.get();
+	}
+
+	return canvas;
 }

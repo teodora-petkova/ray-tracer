@@ -13,12 +13,13 @@
 #include "raytracer_exports.h"
 #include "tuple.h"
 #include "scene.h"
+#include "canvas.h"
 
 class RAYTRACER_EXPORT RayTracer
 {
 public:
 	RayTracer() {};
-	unsigned char* execute(Scene scene);
+	Canvas TraceRays(Scene& scene);
 };
 
 #endif

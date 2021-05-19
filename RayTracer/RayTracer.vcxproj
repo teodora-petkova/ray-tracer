@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\camera.h" />
+    <ClInclude Include="Source\canvas.h" />
     <ClInclude Include="Source\color.h" />
     <ClInclude Include="Source\intersectioninfo.h" />
     <ClInclude Include="Source\light.h" />
@@ -28,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
+    <ClCompile Include="Source\canvas.cpp" />
     <ClCompile Include="Source\intersectioninfo.cpp" />
     <ClCompile Include="Source\light.cpp" />
     <ClCompile Include="Source\raytracer.cpp" />

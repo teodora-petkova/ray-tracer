@@ -11,7 +11,35 @@
 
 using namespace std;
 
-void updateWindow(SDLApp& window,
+
+unsigned char GetColorComponent(float colorComponentF)
+{
+	int colorComponent = int(colorComponentF * 255);
+
+	if (colorComponent > 255) colorComponent = 255;
+
+	return (unsigned char)colorComponent;
+}
+
+void UpdatePixels(const Canvas& canvas, unsigned char* pixels)
+{
+	int width = canvas.getWidth();
+
+	for (int i = 0; i < canvas.getWidth(); i++)
+	{
+		for (int j = 0; j < canvas.getHeight(); j++)
+		{
+			Color color = canvas.PixelAt(i, j);
+			//SDL - specific B G R A
+			pixels[(j * width + i) * 4 + 0] = GetColorComponent(color.b());
+			pixels[(j * width + i) * 4 + 1] = GetColorComponent(color.g());
+			pixels[(j * width + i) * 4 + 2] = GetColorComponent(color.r());
+			pixels[(j * width + i) * 4 + 3] = (unsigned char)1;
+		}
+	}
+}
+
+void UpdateWindow(SDLApp& window,
 	Scene& scene, int size,
 	int x, int y)
 {
@@ -19,9 +47,14 @@ void updateWindow(SDLApp& window,
 
 	scene.Camera.updateLookAt(x, y);
 
-	RayTracer r = RayTracer();
-	unsigned char* pixels = r.execute(scene);
+	RayTracer rayTracer = RayTracer();
+	Canvas canvas = rayTracer.TraceRays(scene);
+
+	unsigned char* pixels = new unsigned char[scene.ImageWidth * scene.ImageHeight * 4];
+	UpdatePixels(canvas, pixels);
+
 	window.Update(pixels, size);
+
 	delete[] pixels;
 	pixels = nullptr;
 
@@ -50,10 +83,9 @@ int main(int argc, char* argv[])
 
 	try
 	{
-
 		SDLApp window("Simple Ray tracer", 10, 25, rows, columns);
 
-		updateWindow(window, scene, size, x, y);
+		UpdateWindow(window, scene, size, x, y);
 
 		while (!quit)
 		{
@@ -71,7 +103,7 @@ int main(int argc, char* argv[])
 				}
 
 				//printf("(x, y) = (%d, %d)\n", x, y);
-				updateWindow(window, scene, size, x, y);
+				UpdateWindow(window, scene, size, x, y);
 				break;
 
 			case SDL_QUIT:

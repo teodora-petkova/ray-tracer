@@ -8,9 +8,9 @@
 
 #pragma warning(push, 0)
 #include <cmath>
-#include <tuple>
 #pragma warning(pop)
 
+#include "tuple.h"
 #include "raytracer_exports.h"
 
 class RAYTRACER_EXPORT Color : public Tuple

@@ -57,6 +57,9 @@
     <ClInclude Include="Source\raytracer_exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\canvas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\tuple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\canvas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
