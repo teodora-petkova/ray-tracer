@@ -52,6 +52,8 @@ public:
 
 	~Scene()
 	{
+		Objects.clear();
+		Lights.clear();
 	}
 
 	// image size

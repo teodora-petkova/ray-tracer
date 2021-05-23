@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 unsigned char GetColorComponent(float colorComponentF)
 {
 	int colorComponent = int(colorComponentF * 255);
@@ -61,7 +60,7 @@ void UpdateWindow(SDLApp& window,
 	clock_t end = clock();
 
 	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
-	cout << elapsed_secs << '\n';
+	cout << "Elapsed time in seconds: " << elapsed_secs << " sec\n";
 }
 
 //------------------------------------------------------------
