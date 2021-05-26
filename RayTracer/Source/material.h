@@ -13,33 +13,15 @@ class RAYTRACER_EXPORT Material
 public:
 	Material();
 
-	Material(Color color, float ambient, float diffuse, float specular,
-		float shininess);
+	Material(const Color& color,
+		float ambient, float diffuse,
+		float specular, float shininess);
 
-	Color getColor()
-	{
-		return color;
-	}
-
-	float getAmbient()
-	{
-		return ambient;
-	}
-
-	float getDiffuse()
-	{
-		return diffuse;
-	}
-
-	float getShininess()
-	{
-		return shininess;
-	}
-
-	float getSpecular()
-	{
-		return specular;
-	}
+	Color getColor() const { return color; }
+	float getAmbient() const { return ambient; }
+	float getDiffuse() const { return diffuse; }
+	float getShininess() const { return shininess; }
+	float getSpecular() const { return specular; }
 
 private:
 	Color color;
@@ -47,7 +29,6 @@ private:
 	float diffuse;
 	float specular;
 	float shininess;
-
 };
 
 using MaterialPtr = std::shared_ptr<Material>;

@@ -3,9 +3,7 @@
 //------------------------------------------------------------
 #include "triangle.h"
 
-using namespace std;
-
-void Triangle::initialize()
+void Triangle::Initialize()
 {
 	// get triangle edge vectors and plane normal
 	// the triangle's precomputed normal is used
@@ -15,21 +13,21 @@ void Triangle::initialize()
 	Tuple AC = C - A;
 
 	// right-handed coordinate system!!!
-	normal = Tuple::cross(AB, AC).normalize();
+	normal = AB.Cross(AC).Normalize();
 }
 
-bool Triangle::isPointInTriangleByBarycentricCoordinates(Tuple P)
+bool Triangle::IsPointInTriangleByBarycentricCoordinates(const Tuple& P) const
 {
 	// compute dot products in advance
 	Tuple AP = P - A;
 	Tuple AB = B - A;
 	Tuple AC = C - A;
 
-	float d00 = Tuple::dot(AB, AB);
-	float d01 = Tuple::dot(AB, AC);
-	float d02 = Tuple::dot(AB, AP);
-	float d11 = Tuple::dot(AC, AC);
-	float d12 = Tuple::dot(AC, AP);
+	float d00 = AB.Dot(AB);
+	float d01 = AB.Dot(AC);
+	float d02 = AB.Dot(AP);
+	float d11 = AC.Dot(AC);
+	float d12 = AC.Dot(AP);
 
 	// compute barycentric coordinates
 	float inverted_denominator = 1 / (d00 * d11 - d01 * d01);
@@ -48,11 +46,11 @@ bool Triangle::isPointInTriangleByBarycentricCoordinates(Tuple P)
 	}
 }
 
-bool Triangle::isPointInTriangleByHalfPlanes(Tuple P)
+bool Triangle::IsPointInTriangleByHalfPlanes(const Tuple& P) const
 {
-	if (Tuple::dot(Tuple::cross(B - A, P - A), normal) >= 0 &&
-		Tuple::dot(Tuple::cross(C - B, P - B), normal) >= 0 &&
-		Tuple::dot(Tuple::cross(A - C, P - C), normal) >= 0)
+	if ((B - A).Cross(P - A).Dot(normal) >= 0 &&
+		(C - B).Cross(P - B).Dot(normal) >= 0 &&
+		(A - C).Cross(P - C).Dot(normal) >= 0)
 	{
 		return true;
 	}
@@ -63,22 +61,25 @@ bool Triangle::isPointInTriangleByHalfPlanes(Tuple P)
 }
 
 Triangle::Triangle() :
+	Object(),
 	A(Tuple::Vector(-1.0, 0.0, 0.0)),
 	B(Tuple::Vector(1.0, 0.0, 0.0)),
 	C(Tuple::Vector(0.0, 1.0, 0.0))
 {
-	initialize();
+	Initialize();
 }
 
-Triangle::Triangle(Tuple& point1, Tuple& point2, Tuple& point3) :
+Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
+	MaterialPtr material) :
+	Object(material),
 	A(point1),
 	B(point2),
 	C(point3)
 {
-	initialize();
+	Initialize();
 }
 
-IntersectionInfo Triangle::intersect(Ray& ray)
+IntersectionInfo Triangle::Intersect(const Ray& ray) const
 {
 	float epsilon = 0.0000001f;
 
@@ -96,8 +97,8 @@ IntersectionInfo Triangle::intersect(Ray& ray)
 	// (l = AP - any vector on the plane, n - the normal vector of the plane)
 	// t = (PoA*n)/(v*n)
 
-	float a = Tuple::dot((A - ray.getOrigin()), this->normal);
-	float b = Tuple::dot(ray.getDirection(), this->normal);
+	float a = (A - ray.getOrigin()).Dot(this->normal);
+	float b = (ray.getDirection()).Dot(this->normal);
 
 	// ray is  parallel to triangle plane
 	if (fabs(b) < epsilon)
@@ -118,7 +119,7 @@ IntersectionInfo Triangle::intersect(Ray& ray)
 	// the intersection point of the ray and the plane
 	Tuple P = ray.getOrigin() + ray.getDirection() * t;
 
-	if (Triangle::isPointInTriangleByBarycentricCoordinates(P))
+	if (Triangle::IsPointInTriangleByBarycentricCoordinates(P))
 		//if (Triangle::isPointInTriangleByHalfPlanes(P))
 	{
 		return IntersectionInfo(true, P, t, this->normal);

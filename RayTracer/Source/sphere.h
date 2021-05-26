@@ -12,26 +12,25 @@
 #include "ray.h"
 #include "object.h"
 
-class Sphere : public  Object
+class Sphere : public virtual Object
 {
 public:
-	Sphere();
+	Sphere() : Object(material)
+		, center(Tuple::Point(0, 0, 0))
+		, radius(1)
+	{}
 
-	Sphere(const Tuple& center, float radius) :
+	Sphere(const Tuple& center, float radius,
+		MaterialPtr material) :
+		Object(material),
 		center(center),
-		radius(radius) {}
+		radius(radius)
+	{}
 
-	Tuple getCenter()
-	{
-		return center;
-	}
+	IntersectionInfo Intersect(const Ray& ray) const override;
 
-	float getRadius()
-	{
-		return radius;
-	}
-
-	IntersectionInfo intersect(Ray& ray);
+	Tuple getCenter() const { return center; }
+	float getRadius() const { return radius; }
 
 private:
 	Tuple center;

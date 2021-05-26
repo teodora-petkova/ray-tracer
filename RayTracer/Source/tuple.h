@@ -18,39 +18,57 @@
 class RAYTRACER_EXPORT Tuple
 {
 public:
-	Tuple();
-	Tuple(float x, float y, float z, float w);
+	Tuple() : x(0), y(0), z(0), w(0)
+	{}
+
+	Tuple(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)
+	{}
+
+	Tuple(const Tuple& v) : x(v.x), y(v.y), z(v.z), w(v.w)
+	{}
+
 	static Tuple Point(float x, float y, float z);
 	static Tuple Vector(float x, float y, float z);
-	Tuple(const Tuple& v);
-	void operator=(float f);
-	void operator=(Tuple v);
-	Tuple operator+(Tuple v);
-	Tuple operator-(Tuple v);
-	Tuple operator*(Tuple v);
-	Tuple operator/(Tuple v);
-	Tuple operator+(float f);
-	Tuple operator-(float f);
-	Tuple operator-();
-	Tuple operator*(float f);
-	Tuple operator/(float f);
-	void operator+=(Tuple v);
-	void operator-=(Tuple v);
-	void operator*=(Tuple v);
-	void operator/=(Tuple v);
+
 	bool operator==(const Tuple& v2) const;
-	float magnitude();
-	Tuple normalize();
 
-	static float dot(Tuple v1, Tuple v2);
-	static Tuple cross(Tuple v1, Tuple v2);
-	Tuple reflect(Tuple normal);
+	void operator=(float f);
+	void operator=(const Tuple& v);
 
-	bool isPoint();
-	bool isVector();
+	Tuple operator+(const Tuple& v) const;
+	Tuple operator-(const Tuple& v) const;
+	Tuple operator*(const Tuple& v) const;
+	Tuple operator/(const Tuple& v) const;
 
+	Tuple operator-() const;
+	Tuple operator+(float f) const;
+	Tuple operator-(float f) const;
+	Tuple operator*(float f) const;
+	Tuple operator/(float f) const;
+
+	void operator+=(const Tuple& v);
+	void operator-=(const Tuple& v);
+	void operator*=(const Tuple& v);
+	void operator/=(const Tuple& v);
+
+	float Magnitude() const;
+	Tuple Normalize() const;
+
+	float Dot(const Tuple& other) const;
+	Tuple Cross(const Tuple& other) const;
+	Tuple Reflect(const Tuple& normal) const;
+
+	bool IsPoint() const;
+	bool IsVector() const;
+
+	float X() const { return x; }
+	float Y() const { return y; }
+	float Z() const { return z; }
+	float W() const { return w; }
+
+protected:
 	float x, y, z, w;
 };
 
-RAYTRACER_EXPORT std::ostream& operator<<(std::ostream& os, Tuple const& v);
+RAYTRACER_EXPORT std::ostream& operator<<(std::ostream& os, const Tuple& v);
 #endif

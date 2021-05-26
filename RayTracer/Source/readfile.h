@@ -13,10 +13,8 @@
 #include "raytracer_exports.h"
 #include "scene.h"
 
-using namespace std;
-
 namespace ReadScene
 {
-	Scene RAYTRACER_EXPORT readSceneFile(string filename);
+	Scene RAYTRACER_EXPORT ReadSceneFile(const std::string& filename);
 }
 #endif

@@ -17,10 +17,14 @@ class RAYTRACER_EXPORT Camera
 {
 public:
 	Camera();
-	Camera(Tuple lookFromPoint, Tuple lookAtPoint, Tuple viewUpVector, float fieldOfViewAngleY, int width, int height);
-	Tuple getDirectionRayForPixel(int x, int y);
-	Tuple getOrigin();
-	void updateLookAt(int x, int y);
+	Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple& viewUpVector,
+		float fieldOfViewAngleY, int width, int height);
+
+	Tuple CalculateDirectionRayForPixel(int x, int y) const;
+	void UpdateLookAt(int x, int y);
+
+	Tuple getOrigin() const;
+
 private:
 	Tuple lookAt;
 	Tuple lookFrom;

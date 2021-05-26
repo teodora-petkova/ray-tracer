@@ -39,8 +39,8 @@ bool IsInShadow(IntersectionInfo intersection, Tuple lightPosition,
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		ObjectPtr testObject = objects[i];
-		IntersectionInfo testIntersection = testObject->intersect(rayToLightSource);
-		if (testIntersection.isHit())
+		IntersectionInfo testIntersection = testObject->Intersect(rayToLightSource);
+		if (testIntersection.getIsHit())
 		{
 			isInShadow = true;
 			break;
@@ -56,11 +56,11 @@ Color TraceSingleRay(Ray& ray, Scene& scene)
 	IntersectionInfo intersection = IntersectionInfo();
 
 	float minDistance = INFINITY;
-	for (unsigned int i = 0; i < scene.Objects.size(); i++)
+	for (unsigned int i = 0; i < scene.getObjects().size(); i++)
 	{
-		ObjectPtr testObject = scene.Objects[i];
-		IntersectionInfo testIntersection = testObject->intersect(ray);
-		if (testIntersection.isHit() && testObject && testIntersection.getDistance() < minDistance)
+		ObjectPtr testObject = scene.getObjects()[i];
+		IntersectionInfo testIntersection = testObject->Intersect(ray);
+		if (testIntersection.getIsHit() && testObject && testIntersection.getDistance() < minDistance)
 		{
 			object = testObject;
 			intersection = testIntersection;
@@ -69,19 +69,19 @@ Color TraceSingleRay(Ray& ray, Scene& scene)
 	}
 
 	Color color = Color(0, 0, 0);
-	if (intersection.isHit())
+	if (intersection.getIsHit())
 	{
-		for (LightPtr light : scene.Lights)
+		for (LightPtr light : scene.getLights())
 		{
-			if (IsInShadow(intersection, light->getPosition(), scene.Objects))
+			if (IsInShadow(intersection, light->getPosition(), scene.getObjects()))
 			{
 				color += Color(0, 0, 0);
 			}
 			else
 			{
-				color += light->getPhongColor(intersection.getIntersectionPoint(),
-					intersection.getNormal().normalize(),
-					scene.Camera.getOrigin().normalize(),
+				color += light->CalculatePhongColor(intersection.getIntersectionPoint(),
+					intersection.getNormal().Normalize(),
+					scene.getCamera().getOrigin().Normalize(),
 					object->getMaterial());
 			}
 		}
@@ -136,18 +136,18 @@ Color TraceSingleRay(Ray& ray, Scene& scene)
 
 void RayTracePixelChunks(int threadNum, int chunkSize, Scene& scene, Canvas* canvas)
 {
-	int width = scene.ImageWidth;
+	int width = scene.getImageWidth();
 
 	int heightStart = threadNum * chunkSize;
 	int heightEnd = (threadNum + 1) * chunkSize;
-	heightEnd = heightEnd < scene.ImageHeight ? heightEnd : scene.ImageHeight;
+	heightEnd = heightEnd < scene.getImageHeight() ? heightEnd : scene.getImageHeight();
 
 	for (int x = 0; x < width; x++)
 	{
 		for (int y = heightStart; y < heightEnd; y++)
 		{
-			Ray rayFromCamera = Ray(scene.Camera.getOrigin(),
-				scene.Camera.getDirectionRayForPixel(x, y));
+			Ray rayFromCamera = Ray(scene.getCamera().getOrigin(),
+				scene.getCamera().CalculateDirectionRayForPixel(x, y));
 
 			Color color = TraceSingleRay(rayFromCamera, scene);
 
@@ -156,12 +156,12 @@ void RayTracePixelChunks(int threadNum, int chunkSize, Scene& scene, Canvas* can
 	}
 }
 
-Canvas RayTracer::TraceRays(Scene& scene)
+Canvas RayTracer::TraceRays(const Scene& scene) const
 {
-	Canvas canvas = Canvas(scene.ImageWidth, scene.ImageHeight);
+	Canvas canvas = Canvas(scene.getImageWidth(), scene.getImageHeight());
 
-	int numThreads = thread::hardware_concurrency();
-	int chunkSize = scene.ImageHeight / numThreads;
+	int numThreads = std::thread::hardware_concurrency();
+	int chunkSize = scene.getImageHeight() / numThreads;
 
 	std::vector<std::thread> threads(numThreads);
 

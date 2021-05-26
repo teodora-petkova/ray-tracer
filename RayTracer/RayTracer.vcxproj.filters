@@ -80,9 +80,6 @@
     <ClCompile Include="Source\triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\intersectioninfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\raytracer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

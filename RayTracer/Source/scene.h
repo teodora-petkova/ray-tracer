@@ -15,59 +15,60 @@
 #include "triangle.h"
 #include "camera.h"
 
-using namespace std;
-
 class Scene
 {
 public:
 	Scene()
 	{
-		this->ImageWidth = 600;
-		this->ImageHeight = 400;
+		this->width = 600;
+		this->height = 400;
 
 		// Camera
 		Tuple lookFrom = Tuple::Vector(0.0, 0.0, 5.0); // initial eye position, also for resets
 		Tuple lookAt = Tuple::Vector(0.0, 1.0, 0.0); // initial up position, also for resets
 		Tuple up = Tuple::Vector(0.0, 0.0, 0.0); // center look at point 
 		float fovY = 90.0; // field of view
-		this->Camera = Camera::Camera(lookFrom, lookAt, up, fovY,
-			this->ImageWidth, this->ImageHeight);
+		this->camera = Camera::Camera(lookFrom, lookAt, up, fovY,
+			this->width, this->height);
 
 		// Objects
-		this->Objects = std::vector<ObjectPtr>();
+		this->objects = std::vector<ObjectPtr>();
 
 		// lights
-		this->Lights = std::vector<LightPtr>();
+		this->lights = std::vector<LightPtr>();
 	}
 
-	Scene(int width, int height, Camera camera,
-		vector<ObjectPtr> objects, vector<LightPtr> lights)
-	{
-		this->ImageWidth = width;
-		this->ImageHeight = height;
-		this->Camera = camera;
-		this->Objects = objects;
-		this->Lights = lights;
-	}
+	Scene(int width, int height, const Camera& camera,
+		std::vector<ObjectPtr> objects, std::vector<LightPtr> lights) :
+		width(width),
+		height(height),
+		camera(camera),
+		objects(objects),
+		lights(lights)
+	{}
 
 	~Scene()
 	{
-		Objects.clear();
-		Lights.clear();
+		objects.clear();
+		lights.clear();
 	}
 
-	// image size
-	int ImageWidth;
-	int ImageHeight;
+	int getImageWidth() const { return width; }
+	int getImageHeight() const { return height; }
 
-	// camera
-	Camera Camera;
+	const std::vector<ObjectPtr>& getObjects() const { return objects; }
+	const std::vector<LightPtr>& getLights() const { return lights; }
 
-	// Objects
-	vector<ObjectPtr> Objects;
+	const Camera& getCamera() const { return camera; }
+	Camera& getModifiableCamera() { return camera; }
 
-	//Lights
-	vector<LightPtr> Lights;
+private:
+	int width;
+	int height;
+
+	Camera camera;
+	std::vector<ObjectPtr> objects;
+	std::vector<LightPtr> lights;
 };
 
 #endif

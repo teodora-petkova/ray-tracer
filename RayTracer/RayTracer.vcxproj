@@ -30,7 +30,6 @@
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
     <ClCompile Include="Source\canvas.cpp" />
-    <ClCompile Include="Source\intersectioninfo.cpp" />
     <ClCompile Include="Source\light.cpp" />
     <ClCompile Include="Source\raytracer.cpp" />
     <ClCompile Include="Source\material.cpp" />

@@ -13,14 +13,14 @@
 #include "ray.h"
 #include "object.h"
 
-class RAYTRACER_EXPORT Triangle : public  Object
+class RAYTRACER_EXPORT Triangle : public virtual Object
 {
 public:
 	Triangle();
+	Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
+		MaterialPtr material);
 
-	Triangle(Tuple& point1, Tuple& point2, Tuple& point3);
-
-	IntersectionInfo intersect(Ray& ray);
+	IntersectionInfo Intersect(const Ray& ray) const override;
 
 private:
 	Tuple A;
@@ -28,9 +28,9 @@ private:
 	Tuple C;
 	Tuple normal;
 
-	void initialize();
-	bool isPointInTriangleByBarycentricCoordinates(Tuple P);
-	bool isPointInTriangleByHalfPlanes(Tuple P);
+	void Initialize();
+	bool IsPointInTriangleByBarycentricCoordinates(const Tuple& P) const;
+	bool IsPointInTriangleByHalfPlanes(const Tuple& P) const;
 };
 
 #endif

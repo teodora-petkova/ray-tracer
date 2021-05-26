@@ -19,7 +19,7 @@ class RAYTRACER_EXPORT RayTracer
 {
 public:
 	RayTracer() {};
-	Canvas TraceRays(Scene& scene);
+	Canvas TraceRays(const Scene& scene) const;
 };
 
 #endif

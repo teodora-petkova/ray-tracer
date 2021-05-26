@@ -13,22 +13,18 @@
 class RAYTRACER_EXPORT Object
 {
 public:
-	Object() {}
+	Object() :material(nullptr)
+	{}
 
-	void setMaterial(MaterialPtr material)
-	{
-		objectMaterial = material;
-	}
+	Object(MaterialPtr material) : material(material)
+	{}
 
-	MaterialPtr getMaterial()
-	{
-		return objectMaterial;
-	}
+	virtual IntersectionInfo Intersect(const Ray& ray) const = 0;
 
-	virtual IntersectionInfo intersect(Ray& ray) = 0;
+	MaterialPtr getMaterial() const { return material; }
 
 protected:
-	MaterialPtr objectMaterial;
+	MaterialPtr material;
 };
 
 using ObjectPtr = std::shared_ptr<Object>;

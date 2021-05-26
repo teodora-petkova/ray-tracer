@@ -3,19 +3,19 @@
 
 namespace ReadScene
 {
-	bool readValues(stringstream& s, const int numvals, float* values)
+	bool readValues(std::stringstream& s, const int numvals, float* values)
 	{
 		for (int i = 0; i < numvals; i++) {
 			s >> values[i];
 			if (s.fail()) {
-				cout << "Failed reading value " << i << " will skip\n";
+				std::cout << "Failed reading value " << i << " will skip\n";
 				return false;
 			}
 		}
 		return true;
 	}
 
-	Scene readSceneFile(string filename)
+	Scene ReadSceneFile(const std::string& filename)
 	{
 		// image size
 		int imageWidth = 0;
@@ -23,13 +23,13 @@ namespace ReadScene
 		// camera
 		Camera camera;
 		// objects
-		vector<Tuple> vertices = vector<Tuple>();
-		vector<ObjectPtr> objects = vector<ObjectPtr>();
+		std::vector<Tuple> vertices = std::vector<Tuple>();
+		std::vector<ObjectPtr> objects = std::vector<ObjectPtr>();
 		// lights
-		vector<LightPtr> lights = vector<LightPtr>();
+		std::vector<LightPtr> lights = std::vector<LightPtr>();
 
-		string str, cmd;
-		ifstream in;
+		std::string str, cmd;
+		std::ifstream in;
 		in.open(filename);
 		if (in.is_open())
 		{
@@ -40,9 +40,9 @@ namespace ReadScene
 			while (in)
 			{
 				// ruled out comment and blank lines 
-				if ((str.find_first_not_of(" \t\r\n") != string::npos) && (str[0] != '#'))
+				if ((str.find_first_not_of(" \t\r\n") != std::string::npos) && (str[0] != '#'))
 				{
-					stringstream s(str);
+					std::stringstream s(str);
 					s >> cmd;
 
 					// Position and color for light, colors for others - up to 10 parameters for cameras
@@ -121,8 +121,7 @@ namespace ReadScene
 						{
 							ObjectPtr triangle = std::make_shared<Triangle>(Triangle(vertices[(int)values[0]],
 								vertices[(int)values[1]],
-								vertices[(int)values[2]]));
-							triangle->setMaterial(currentMaterial);
+								vertices[(int)values[2]], currentMaterial));
 							objects.push_back(triangle);
 						}
 					}
@@ -134,8 +133,7 @@ namespace ReadScene
 						if (isInputValid)
 						{
 							ObjectPtr sphere = std::make_shared<Sphere>(Sphere(Tuple::Vector(values[0],
-								values[1], values[2]), values[3]));
-							sphere->setMaterial(currentMaterial);
+								values[1], values[2]), values[3], currentMaterial));
 							objects.push_back(sphere);
 						}
 					}

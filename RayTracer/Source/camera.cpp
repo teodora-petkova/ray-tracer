@@ -3,12 +3,8 @@
 //---------------------------------------------------------------------
 #include "camera.h"
 
-std::tuple<Tuple, Tuple, Tuple> calculateWUV(Tuple& lookAt, Tuple& lookFrom, Tuple& viewUp)
+std::tuple<Tuple, Tuple, Tuple> calculateWUV(const Tuple& lookAt, const Tuple& lookFrom, const Tuple& viewUp)
 {
-	Tuple w = Tuple();
-	Tuple u = Tuple();
-	Tuple v = Tuple();
-
 	// Calculating the new coordinate system - u, v, w, that the camera defines i.e. determine the three orthogonal vectors that are the 
 	//		axes of the coordinate system, U, V, and W
 
@@ -16,31 +12,26 @@ std::tuple<Tuple, Tuple, Tuple> calculateWUV(Tuple& lookAt, Tuple& lookFrom, Tup
 	//            LA-LF
 	//     W = -----------
 	//         || LA-LF ||
-
-	w = (lookAt - lookFrom).normalize();
+	Tuple w = (lookAt - lookFrom).Normalize();
 
 	//3.2. U corresponds to the "X" axis
 	//            W x UP
 	//     U = -------------
 	//         || W x UP ||
-
-	viewUp = viewUp.normalize();
-
-	u = Tuple::cross(w, viewUp).normalize();
+	Tuple u = w.Cross(viewUp.Normalize()).Normalize();
 
 	//2.3. V is the "Up" vector
 	//          W x U
 	//    V = -----------
 	//       || W x U ||
-
-	v = Tuple::cross(u, w).normalize();
+	Tuple v = u.Cross(w).Normalize();
 
 	return std::make_tuple(w, u, v);
 }
 
 #define degreesToRadians(x) x*(3.141592f/180.0f)
 
-Camera::Camera(Tuple lookFromPoint, Tuple lookAtPoint, Tuple viewUpVector,
+Camera::Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple& viewUpVector,
 	float fieldOfViewAngleY, int width, int height)
 {
 	this->width = width;
@@ -61,7 +52,7 @@ Camera::Camera(Tuple lookFromPoint, Tuple lookAtPoint, Tuple viewUpVector,
 	this->v = std::get<2>(t);
 }
 
-Tuple Camera::getDirectionRayForPixel(int x, int y)
+Tuple Camera::CalculateDirectionRayForPixel(int x, int y) const
 {
 	Tuple direction = Tuple();
 
@@ -78,19 +69,19 @@ Tuple Camera::getDirectionRayForPixel(int x, int y)
 	float xScreen = (2 * xNDC - 1) * tan(this->fovx / 2);
 	float yScreen = (-2 * yNDC + 1) * tan(this->fovy / 2);
 
-	direction = (this->u * xScreen + this->v * yScreen + this->w).normalize();
+	direction = (this->u * xScreen + this->v * yScreen + this->w).Normalize();
 
 	return direction;
 }
 
-Tuple Camera::getOrigin()
+Tuple Camera::getOrigin() const
 {
 	return this->lookFrom;
 }
 
-void Camera::updateLookAt(int x, int y)
+void Camera::UpdateLookAt(int x, int y)
 {
-	Tuple updatedLookAt = Tuple::Vector(this->lookAt.x + x, this->lookAt.y + y, this->lookAt.z);
+	Tuple updatedLookAt = Tuple::Vector(this->lookAt.X() + x, this->lookAt.Y() + y, this->lookAt.Z());
 
 	auto t = calculateWUV(updatedLookAt, this->lookFrom, this->viewUp);
 	this->w = std::get<0>(t);

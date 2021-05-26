@@ -14,46 +14,40 @@
 class RAYTRACER_EXPORT Light
 {
 public:
-	Light();
-	Light(Tuple position, Color colour,
+	Light() :
+		position(Tuple::Point(0, 0, 0)),
+		color(Color(0.2f, 0.2f, 0.2f)),
+		brightness(0.9f),
+		ambient(0.9f),
+		diffuse(0.9f),
+		specular(0.9f)
+	{}
+
+	Light(const Tuple& position,
+		const Color& colour,
 		float brightness,
 		float ambientIntensity,
 		float diffuseIntensity,
-		float specularIntensity);
+		float specularIntensity) :
+		position(position),
+		color(colour),
+		brightness(brightness),
+		ambient(ambientIntensity),
+		diffuse(diffuseIntensity),
+		specular(specularIntensity)
+	{}
 
-	Color getPhongColor(Tuple intersection_point,
-		Tuple unit_normal, Tuple unit_camera,
-		MaterialPtr material);
+	Color CalculatePhongColor(const Tuple& intersection_point,
+		const Tuple& unit_normal,
+		const Tuple& unit_camera,
+		MaterialPtr material) const;
 
-	Tuple getPosition()
-	{
-		return position;
-	}
-
-	Color getColor()
-	{
-		return color;
-	}
-
-	float getBrightness()
-	{
-		return brightness;
-	}
-
-	float getAmbient()
-	{
-		return ambient;
-	}
-
-	float getDiffuse()
-	{
-		return diffuse;
-	}
-
-	float getSpecular()
-	{
-		return specular;
-	}
+	Tuple getPosition() const { return position; }
+	Color getColor() const { return color; }
+	float getBrightness() const { return brightness; }
+	float getAmbient() const { return ambient; }
+	float getDiffuse() const { return diffuse; }
+	float getSpecular() const { return specular; }
 
 private:
 	Tuple position;

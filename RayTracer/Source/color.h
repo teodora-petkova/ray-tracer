@@ -17,12 +17,12 @@ class RAYTRACER_EXPORT Color : public Tuple
 {
 public:
 	Color() : Tuple() {}
-	Color(Tuple const& t) : Tuple(t.x, t.y, t.z, t.w) {}
+	Color(Tuple const& t) : Tuple(t.X(), t.Y(), t.Z(), t.W()) {}
 	Color(float r, float g, float b) : Tuple(r, g, b, 0.0f) {}
 
-	float r() const { return this->x; }
-	float g() const { return this->y; }
-	float b() const { return this->z; }
+	float R() const { return this->x; }
+	float G() const { return this->y; }
+	float B() const { return this->z; }
 };
 
 #endif

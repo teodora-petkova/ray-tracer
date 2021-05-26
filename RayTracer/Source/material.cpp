@@ -12,8 +12,9 @@ Material::Material()
 	this->shininess = 200;
 }
 
-Material::Material(Color color, float ambient, float diffuse, float specular,
-	float shininess)
+Material::Material(const Color& color,
+	float ambient, float diffuse,
+	float specular, float shininess)
 {
 	this->color = color;
 	this->ambient = ambient;

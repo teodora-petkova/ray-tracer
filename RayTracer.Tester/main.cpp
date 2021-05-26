@@ -9,8 +9,6 @@
 #include "source\readfile.h"
 #include "SDL\SDLApp.h"
 
-using namespace std;
-
 unsigned char GetColorComponent(float colorComponentF)
 {
 	int colorComponent = int(colorComponentF * 255);
@@ -30,9 +28,9 @@ void UpdatePixels(const Canvas& canvas, unsigned char* pixels)
 		{
 			Color color = canvas.PixelAt(i, j);
 			//SDL - specific B G R A
-			pixels[(j * width + i) * 4 + 0] = GetColorComponent(color.b());
-			pixels[(j * width + i) * 4 + 1] = GetColorComponent(color.g());
-			pixels[(j * width + i) * 4 + 2] = GetColorComponent(color.r());
+			pixels[(j * width + i) * 4 + 0] = GetColorComponent(color.B());
+			pixels[(j * width + i) * 4 + 1] = GetColorComponent(color.G());
+			pixels[(j * width + i) * 4 + 2] = GetColorComponent(color.R());
 			pixels[(j * width + i) * 4 + 3] = (unsigned char)1;
 		}
 	}
@@ -44,12 +42,12 @@ void UpdateWindow(SDLApp& window,
 {
 	clock_t begin = clock();
 
-	scene.Camera.updateLookAt(x, y);
+	scene.getModifiableCamera().UpdateLookAt(x, y);
 
 	RayTracer rayTracer = RayTracer();
 	Canvas canvas = rayTracer.TraceRays(scene);
 
-	unsigned char* pixels = new unsigned char[scene.ImageWidth * scene.ImageHeight * 4];
+	unsigned char* pixels = new unsigned char[scene.getImageWidth() * scene.getImageHeight() * 4];
 	UpdatePixels(canvas, pixels);
 
 	window.Update(pixels, size);
@@ -60,7 +58,7 @@ void UpdateWindow(SDLApp& window,
 	clock_t end = clock();
 
 	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
-	cout << "Elapsed time in seconds: " << elapsed_secs << " sec\n";
+	std::cout << "Elapsed time in seconds: " << elapsed_secs << " sec\n";
 }
 
 //------------------------------------------------------------
@@ -69,12 +67,12 @@ void UpdateWindow(SDLApp& window,
 int main(int argc, char* argv[])
 {
 	const char* sceneFile = argv[1];
-	Scene scene = ReadScene::readSceneFile(sceneFile);
+	Scene scene = ReadScene::ReadSceneFile(sceneFile);
 
 	int x = 0;
 	int y = 0;
-	int rows = scene.ImageWidth;
-	int columns = scene.ImageHeight;
+	int rows = scene.getImageWidth();
+	int columns = scene.getImageHeight();
 	int size = rows * columns * sizeof(unsigned char) * 4;
 
 	bool quit = false;

@@ -9,7 +9,7 @@ Ray::Ray()
 	rayDirection = Tuple::Vector(0.0, 0.0, 0.0);
 }
 
-Ray::Ray(Tuple origin, Tuple direction)
+Ray::Ray(const Tuple& origin, const Tuple& direction)
 {
 	rayOrigin = origin;
 	rayDirection = direction;

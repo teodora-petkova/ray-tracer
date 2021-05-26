@@ -25,11 +25,12 @@ public:
 	Color PixelAt(int x, int y) const;
 	void WritePixel(int x, int y, const Color& color);
 
-	Color* pixels;
 private:
 	int width;
 	int height;
+
 	// the (0,0) point is at bottom-left!
+	Color* pixels;
 };
 
 #endif

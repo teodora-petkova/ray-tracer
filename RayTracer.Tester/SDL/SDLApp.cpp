@@ -1,6 +1,5 @@
 #include "SDLApp.h"
 
-
 SDLApp::SDLApp(const std::string& title, int x, int y, int w, int h,
 	Uint32 flags)
 {

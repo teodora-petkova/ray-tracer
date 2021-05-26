@@ -9,12 +9,6 @@
 #pragma warning(pop)
 
 class SDLApp {
-private:
-	// Managed SDL2_Window object
-	SDL_Window* window;
-	// use SDL_CreateRenderer in order for draw calls to affect this window.
-	SDL_Renderer* renderer;
-
 public:
 	// title - window's title
 	// x, y coordinates on the screen, in pixels, of the window's upper left corner
@@ -23,12 +17,18 @@ public:
 	virtual ~SDLApp();
 
 	// no copying or moving of the class objects
-	SDLApp(SDLApp&& other) = delete;
-	SDLApp& operator=(SDLApp&& other) = delete;
 	SDLApp(const SDLApp& other) = delete;
 	SDLApp& operator=(const SDLApp& other) = delete;
+	SDLApp(SDLApp&& other) = delete;
+	SDLApp& operator=(SDLApp&& other) = delete;
 
 	void Update(unsigned char* pixels, size_t size);
+
+private:
+	// Managed SDL2_Window object
+	SDL_Window* window;
+	// use SDL_CreateRenderer in order for draw calls to affect this window.
+	SDL_Renderer* renderer;
 };
 
 #endif

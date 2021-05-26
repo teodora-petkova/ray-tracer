@@ -11,18 +11,10 @@ class RAYTRACER_EXPORT Ray
 {
 public:
 	Ray();
+	Ray(const Tuple& origin, const Tuple& direction);
 
-	Ray(Tuple origin, Tuple direction);
-
-	Tuple getOrigin()
-	{
-		return rayOrigin;
-	}
-
-	Tuple& getDirection()
-	{
-		return rayDirection;
-	}
+	Tuple getOrigin() const { return rayOrigin; }
+	Tuple getDirection() const { return rayDirection; }
 
 private:
 	Tuple rayOrigin;
