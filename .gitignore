@@ -1,5 +1,8 @@
 #Visual studio data
 .vs/*
 *.suo
-bin/*
+Debug/*
+RayTracer/Debug/*
+RayTracer.Tester/Debug/*
+RayTracer.UnitTests/Debug/*
 packages/*
