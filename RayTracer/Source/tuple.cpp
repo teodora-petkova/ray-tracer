@@ -25,10 +25,9 @@ bool Tuple::IsVector() const
 
 bool Tuple::operator==(const Tuple& v2) const
 {
-	float epsilon = 0.0001f;
-	return fabs(x - v2.x) < epsilon &&
-		fabs(y - v2.y) < epsilon &&
-		fabs(z - v2.z) < epsilon;
+	return equals(x, v2.x) &&
+		equals(y, v2.y) &&
+		equals(z, v2.z);
 }
 
 void Tuple::operator=(float f)

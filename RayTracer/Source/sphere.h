@@ -15,9 +15,9 @@
 class Sphere : public virtual Object
 {
 public:
-	Sphere() : Object(material)
-		, center(Tuple::Point(0, 0, 0))
-		, radius(1)
+	Sphere() : Object(material),
+		center(Tuple::Point(0, 0, 0)),
+		radius(1)
 	{}
 
 	Sphere(const Tuple& center, float radius,

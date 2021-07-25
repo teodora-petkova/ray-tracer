@@ -12,8 +12,7 @@
 #pragma warning(pop)
 
 #include "raytracer_exports.h"
-
-#define MAX(a,b) a < b ? b : a
+#include "utils.h"
 
 class RAYTRACER_EXPORT Tuple
 {

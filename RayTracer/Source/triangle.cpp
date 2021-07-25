@@ -81,8 +81,6 @@ Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3
 
 IntersectionInfo Triangle::Intersect(const Ray& ray) const
 {
-	float epsilon = 0.0000001f;
-
 	IntersectionInfo info = IntersectionInfo();
 
 	// the triangle is degenerate(a segment or a point)

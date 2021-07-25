@@ -17,6 +17,7 @@
     <ClInclude Include="Source\intersectioninfo.h" />
     <ClInclude Include="Source\light.h" />
     <ClInclude Include="Source\material.h" />
+    <ClInclude Include="Source\matrix.h" />
     <ClInclude Include="Source\object.h" />
     <ClInclude Include="Source\ray.h" />
     <ClInclude Include="Source\raytracer.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="Source\sphere.h" />
     <ClInclude Include="Source\triangle.h" />
     <ClInclude Include="Source\tuple.h" />
+    <ClInclude Include="Source\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
