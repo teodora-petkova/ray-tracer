@@ -3,10 +3,6 @@
 
 #pragma once
 
-#pragma warning(push, 0)
-#include <string.h>
-#pragma warning(pop)
-
 #include "raytracer_exports.h"
 #include "color.h"
 
@@ -151,7 +147,7 @@ public:
 		return m;
 	}
 
-	float Determinant() const
+	float Matrix<ROWS, COLUMNS>::Determinant() const
 	{
 		static_assert((ROWS == COLUMNS), "The Matrix must be square i.e. have the same number of rows as columns.");
 

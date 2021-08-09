@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "readfile.h"
 #include "scene.h"
+#include "transformations.h"
 
 #define MAINPROGRAM 
 #define _USE_MATH_DEFINES
@@ -59,7 +60,12 @@ Color TraceSingleRay(Ray& ray, Scene& scene)
 	for (unsigned int i = 0; i < scene.getObjects().size(); i++)
 	{
 		ObjectPtr testObject = scene.getObjects()[i];
-		IntersectionInfo testIntersection = testObject->Intersect(ray);
+
+
+		Matrix<4, 4> t = Transformations::Shearing(0.3, 0, 0, 0, 0, 0);
+		Ray ray2 = Ray(t * ray.getOrigin(), t * ray.getDirection());
+
+		IntersectionInfo testIntersection = testObject->Intersect(ray2);
 		if (testIntersection.getIsHit() && testObject && testIntersection.getDistance() < minDistance)
 		{
 			object = testObject;
