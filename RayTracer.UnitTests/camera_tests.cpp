@@ -10,5 +10,5 @@ TEST(CameraTests, CorrectlySetOrigin) {
 
 TEST(CameraTests, DirectionalRayFor00) {
 	Camera camera = Camera(Tuple::Vector(0, 0, 1), Tuple::Vector(0, 0, 0), Tuple::Vector(0, 1, 1), 60, 1, 1);
-	EXPECT_EQ(camera.CalculateDirectionRayForPixel(0, 0), Tuple::Vector(0, 0, -1));
+	EXPECT_EQ(camera.CalculateRayForPixel(0, 0).getDirection(), Tuple::Vector(0, 0, -1));
 }

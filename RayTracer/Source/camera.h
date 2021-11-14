@@ -12,6 +12,9 @@
 
 #include "raytracer_exports.h"
 #include "tuple.h"
+#include "ray.h"
+#include "matrix.h"
+#include "transformations.h"
 
 class RAYTRACER_EXPORT Camera
 {
@@ -20,11 +23,10 @@ public:
 	Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple& viewUpVector,
 		float fieldOfViewAngleY, int width, int height);
 
-	Tuple CalculateDirectionRayForPixel(int x, int y) const;
+	Ray CalculateRayForPixel(int x, int y) const;
 	void UpdateLookAt(int x, int y);
 
 	Tuple getOrigin() const;
-
 private:
 	Tuple lookAt;
 	Tuple lookFrom;

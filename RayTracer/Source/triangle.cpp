@@ -70,8 +70,8 @@ Triangle::Triangle() :
 }
 
 Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
-	MaterialPtr material) :
-	Object(material),
+	MaterialPtr material, Matrix<4, 4> transformation) :
+	Object(material, transformation),
 	A(point1),
 	B(point2),
 	C(point3)
@@ -79,8 +79,10 @@ Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3
 	Initialize();
 }
 
-IntersectionInfo Triangle::Intersect(const Ray& ray) const
+IntersectionInfo Triangle::Intersect(const Ray& initialRay) const
 {
+	Ray ray = initialRay * this->getTransformation();
+
 	IntersectionInfo info = IntersectionInfo();
 
 	// the triangle is degenerate(a segment or a point)

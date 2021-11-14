@@ -37,6 +37,8 @@
     <ClCompile Include="canvas_tests.cpp" />
     <ClCompile Include="light_tests.cpp" />
     <ClCompile Include="matrix_tests.cpp" />
+    <ClCompile Include="ray_tests.cpp" />
+    <ClCompile Include="sphere_tests.cpp" />
     <ClCompile Include="transformation_tests.cpp" />
     <ClCompile Include="triangle_tests.cpp" />
     <ClCompile Include="vector_tests.cpp" />

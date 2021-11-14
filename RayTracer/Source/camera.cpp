@@ -52,7 +52,7 @@ Camera::Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple
 	this->v = std::get<2>(t);
 }
 
-Tuple Camera::CalculateDirectionRayForPixel(int x, int y) const
+Ray Camera::CalculateRayForPixel(int x, int y) const
 {
 	Tuple direction = Tuple();
 
@@ -71,7 +71,7 @@ Tuple Camera::CalculateDirectionRayForPixel(int x, int y) const
 
 	direction = (this->u * xScreen + this->v * yScreen + this->w).Normalize();
 
-	return direction;
+	return Ray(this->lookFrom, direction);
 }
 
 Tuple Camera::getOrigin() const

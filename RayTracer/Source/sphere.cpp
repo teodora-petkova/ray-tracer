@@ -14,7 +14,7 @@ static std::pair<bool, float> AlgebraicIntersect(const Sphere& sphere, const Ray
 	bool isHit = false;
 	float distance = INFINITY;
 
-	if (discriminant > 0)
+	if (discriminant >= 0)
 	{
 		float d = sqrt(discriminant);
 		float _2a = 2.0f * a;
@@ -22,7 +22,8 @@ static std::pair<bool, float> AlgebraicIntersect(const Sphere& sphere, const Ray
 		float root2 = (-b + d) / _2a;
 
 		isHit = false;
-		if (root1 > 0 && root2 > 0)
+
+		if (root1 > 0 || root2 > 0)
 		{
 			distance = (root1 < root2) ? root1 : root2;
 			isHit = true;
@@ -60,14 +61,25 @@ static std::pair<bool, float> GeometricIntersect(const Sphere& sphere, const Ray
 	return std::make_pair(isHit, distance);
 }
 
-IntersectionInfo Sphere::Intersect(const Ray& ray) const
+Tuple Sphere::getNormal(Tuple intersectionPoint) const
 {
+	Tuple objectPoint = this->getTransformation() * intersectionPoint;
+	Tuple objectNormal = (objectPoint - this->getCenter());
+	Tuple worldNormal = this->getTransposedTransformation() * objectNormal;
+	worldNormal = Tuple::Vector(worldNormal.X(), worldNormal.Y(), worldNormal.Z());
+	return worldNormal.Normalize();
+}
+
+IntersectionInfo Sphere::Intersect(const Ray& initialRay) const
+{
+	Ray ray = initialRay * this->getTransformation();
+
 	auto pair = GeometricIntersect(*this, ray);
 	bool isHit = pair.first;
 	float distance = pair.second;
 
 	Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
-	Tuple normal = ((intersectionPoint - center) * distance).Normalize();
+	Tuple normal = this->getNormal(intersectionPoint);
 
 	return IntersectionInfo(isHit, intersectionPoint, distance, normal);
 }

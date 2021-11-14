@@ -147,7 +147,7 @@ public:
 		return m;
 	}
 
-	float Matrix<ROWS, COLUMNS>::Determinant() const
+	float Determinant() const
 	{
 		static_assert((ROWS == COLUMNS), "The Matrix must be square i.e. have the same number of rows as columns.");
 

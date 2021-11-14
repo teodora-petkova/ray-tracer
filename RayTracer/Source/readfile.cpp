@@ -1,5 +1,6 @@
 #include "readfile.h"
 #include "scene.h"
+#include "matrix.h"
 
 namespace ReadScene
 {
@@ -28,7 +29,7 @@ namespace ReadScene
 		// lights
 		std::vector<LightPtr> lights = std::vector<LightPtr>();
 
-		std::string str, cmd;
+		std::string str, command;
 		std::ifstream in;
 		in.open(filename);
 		if (in.is_open())
@@ -36,6 +37,7 @@ namespace ReadScene
 			getline(in, str);
 
 			MaterialPtr currentMaterial;
+			Matrix<4, 4> currentTransformation = Matrix<4, 4>::IdentityMatrix();
 
 			while (in)
 			{
@@ -43,13 +45,13 @@ namespace ReadScene
 				if ((str.find_first_not_of(" \t\r\n") != std::string::npos) && (str[0] != '#'))
 				{
 					std::stringstream s(str);
-					s >> cmd;
+					s >> command;
 
 					// Position and color for light, colors for others - up to 10 parameters for cameras
 					float values[10];
 
 					bool isInputValid;
-					if (cmd == "size")
+					if (command == "size")
 					{
 						// 10 values eye center up fov
 						isInputValid = readValues(s, 2, values);
@@ -60,8 +62,7 @@ namespace ReadScene
 							imageHeight = (int)values[1];
 						}
 					}
-
-					if (cmd == "camera")
+					else if (command == "camera")
 					{
 						// 10 values eye center up fov
 						isInputValid = readValues(s, 10, values);
@@ -76,8 +77,7 @@ namespace ReadScene
 							camera = Camera(lookFrom, lookAt, up, fovY, imageWidth, imageHeight);
 						}
 					}
-
-					if (cmd == "point_light")
+					else if (command == "point_light")
 					{
 						// 10 values light position x y z, light color r g b, brightness, ambient, diffuse, specular
 						isInputValid = readValues(s, 10, values);
@@ -90,8 +90,7 @@ namespace ReadScene
 								values[6], values[7], values[8], values[9])));
 						}
 					}
-
-					if (cmd == "vertex")
+					else if (command == "vertex")
 					{
 						// 3 values x y z
 						isInputValid = readValues(s, 3, values);
@@ -100,8 +99,7 @@ namespace ReadScene
 							vertices.push_back(Tuple::Vector(values[0], values[1], values[2]));
 						}
 					}
-
-					if (cmd == "material")
+					else if (command == "material")
 					{
 						// 3 values r g b, ambient, diffuse, specular, shininess
 						isInputValid = readValues(s, 7, values);
@@ -112,8 +110,7 @@ namespace ReadScene
 							currentMaterial = m;
 						}
 					}
-
-					if (cmd == "tri")
+					else if (command == "tri")
 					{
 						// 3 values vertex1 vertex2 vertex3
 						isInputValid = readValues(s, 3, values);
@@ -121,20 +118,84 @@ namespace ReadScene
 						{
 							ObjectPtr triangle = std::make_shared<Triangle>(Triangle(vertices[(int)values[0]],
 								vertices[(int)values[1]],
-								vertices[(int)values[2]], currentMaterial));
+								vertices[(int)values[2]],
+								currentMaterial,
+								currentTransformation));
 							objects.push_back(triangle);
 						}
 					}
-
-					if (cmd == "sphere")
+					else if (command == "sphere")
 					{
 						// 4 center: vertex1 vertex2 vertex3 + radius
 						isInputValid = readValues(s, 4, values);
 						if (isInputValid)
 						{
 							ObjectPtr sphere = std::make_shared<Sphere>(Sphere(Tuple::Vector(values[0],
-								values[1], values[2]), values[3], currentMaterial));
+								values[1], values[2]), values[3],
+								currentMaterial, currentTransformation));
 							objects.push_back(sphere);
+						}
+					}
+					// transformations
+					else if (command == "rotatex")
+					{
+						// rotatex angle
+						isInputValid = readValues(s, 1, values);
+						if (isInputValid)
+						{
+							Matrix<4, 4> m = Transformations::RotationX(values[0]);
+							currentTransformation = currentTransformation * m;
+						}
+					}
+					else if (command == "rotatey")
+					{
+						// rotatey angle
+						isInputValid = readValues(s, 1, values);
+						if (isInputValid)
+						{
+							Matrix<4, 4> m = Transformations::RotationY(values[0]);
+							currentTransformation = currentTransformation * m;
+						}
+					}
+					else if (command == "rotatez")
+					{
+						// rotatez angle
+						isInputValid = readValues(s, 1, values);
+						if (isInputValid)
+						{
+							Matrix<4, 4> m = Transformations::RotationZ(values[0]);
+							currentTransformation = currentTransformation * m;
+						}
+					}
+					else if (command == "translate")
+					{
+						// translate x y z
+						isInputValid = readValues(s, 3, values);
+						if (isInputValid)
+						{
+							Matrix<4, 4> m = Transformations::Translation(values[0], values[1], values[2]);
+							currentTransformation = currentTransformation * m;
+						}
+					}
+					else if (command == "scale")
+					{
+						// scale x y z
+						isInputValid = readValues(s, 3, values);
+						if (isInputValid)
+						{
+							Matrix<4, 4> m = Transformations::Scaling(values[0], values[1], values[2]);
+							currentTransformation = currentTransformation * m;
+						}
+					}
+					else if (command == "shear")
+					{
+						// shear a b c d e f
+						isInputValid = readValues(s, 6, values);
+						if (isInputValid)
+						{
+							Matrix<4, 4> m = Transformations::Shearing(values[0], values[1], values[2],
+								values[3], values[4], values[5]);
+							currentTransformation = currentTransformation * m;
 						}
 					}
 

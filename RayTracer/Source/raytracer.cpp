@@ -40,6 +40,7 @@ bool IsInShadow(IntersectionInfo intersection, Tuple lightPosition,
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		ObjectPtr testObject = objects[i];
+
 		IntersectionInfo testIntersection = testObject->Intersect(rayToLightSource);
 		if (testIntersection.getIsHit())
 		{
@@ -61,10 +62,8 @@ Color TraceSingleRay(Ray& ray, Scene& scene)
 	{
 		ObjectPtr testObject = scene.getObjects()[i];
 
-		//Matrix<4, 4> t = Transformations::Shearing(0.3, 0, 0, 0, 0, 0);
-		//Ray ray2 = Ray(t * ray.getOrigin(), t * ray.getDirection());
-
 		IntersectionInfo testIntersection = testObject->Intersect(ray);
+
 		if (testIntersection.getIsHit() && testObject && testIntersection.getDistance() < minDistance)
 		{
 			object = testObject;
@@ -151,8 +150,7 @@ void RayTracePixelChunks(int threadNum, int chunkSize, Scene& scene, Canvas* can
 	{
 		for (int y = heightStart; y < heightEnd; y++)
 		{
-			Ray rayFromCamera = Ray(scene.getCamera().getOrigin(),
-				scene.getCamera().CalculateDirectionRayForPixel(x, y));
+			Ray rayFromCamera = scene.getCamera().CalculateRayForPixel(x, y);
 
 			Color color = TraceSingleRay(rayFromCamera, scene);
 
@@ -166,7 +164,8 @@ Canvas RayTracer::TraceRays(const Scene& scene) const
 	Canvas canvas = Canvas(scene.getImageWidth(), scene.getImageHeight());
 
 	int numThreads = std::thread::hardware_concurrency();
-	int chunkSize = std::ceilf(scene.getImageHeight() / float(numThreads));
+	int chunkSize = scene.getImageHeight() > numThreads ?
+		std::ceilf(scene.getImageHeight() / float(numThreads)) : 1;
 
 	std::vector<std::thread> threads(numThreads);
 

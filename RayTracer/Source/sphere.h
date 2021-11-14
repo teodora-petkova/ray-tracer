@@ -12,25 +12,27 @@
 #include "ray.h"
 #include "object.h"
 
-class Sphere : public virtual Object
+class RAYTRACER_EXPORT Sphere : public virtual Object
 {
 public:
-	Sphere() : Object(material),
+	Sphere() : Object(material, transformation),
 		center(Tuple::Point(0, 0, 0)),
 		radius(1)
 	{}
 
 	Sphere(const Tuple& center, float radius,
-		MaterialPtr material) :
-		Object(material),
+		MaterialPtr material, Matrix<4, 4> transformation) :
+		Object(material, transformation),
 		center(center),
 		radius(radius)
 	{}
+
 
 	IntersectionInfo Intersect(const Ray& ray) const override;
 
 	Tuple getCenter() const { return center; }
 	float getRadius() const { return radius; }
+	Tuple getNormal(Tuple intersectionPoint) const;
 
 private:
 	Tuple center;
