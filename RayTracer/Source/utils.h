@@ -10,6 +10,8 @@
 #include <cmath>
 #pragma warning(pop)
 
+#define degreesToRadians(x) x*(3.141592f/180.0f)
+
 #define MAX(a,b) a < b ? b : a
 
 constexpr float epsilon = 0.0001f;

@@ -223,7 +223,7 @@ TEST_F(SphereTests, The_normal_on_a_transformed_sphere) {
 		this->radius,
 		this->material,
 		Transformations::Scaling(1, 0.5, 1) *
-		Transformations::RotationZ(M_PI / 5));
+		Transformations::RotationZ(36));
 
 	EXPECT_EQ(sphere.getNormal(Tuple::Point(0, sqrt(2) / 2, -sqrt(2) / 2)),
 		Tuple::Vector(0, 0.97014, -0.24254));

@@ -10,9 +10,9 @@ namespace Transformations
 {
 	RAYTRACER_EXPORT Matrix<4, 4> Translation(float x, float y, float z);
 	RAYTRACER_EXPORT Matrix<4, 4> Scaling(float x, float y, float z);
-	RAYTRACER_EXPORT Matrix<4, 4> RotationX(float angle);
-	RAYTRACER_EXPORT Matrix<4, 4> RotationY(float angle);
-	RAYTRACER_EXPORT Matrix<4, 4> RotationZ(float angle);
+	RAYTRACER_EXPORT Matrix<4, 4> RotationX(float angleInDegrees);
+	RAYTRACER_EXPORT Matrix<4, 4> RotationY(float angleInDegrees);
+	RAYTRACER_EXPORT Matrix<4, 4> RotationZ(float angleInDegrees);
 	RAYTRACER_EXPORT Matrix<4, 4> Shearing(float a, float b, float c, float d, float e, float f);
 
 };

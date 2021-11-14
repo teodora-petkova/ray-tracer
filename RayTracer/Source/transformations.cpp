@@ -18,8 +18,9 @@ Matrix<4, 4> Transformations::Scaling(float x, float y, float z)
 		{0, 0, 0, 1} });
 }
 
-Matrix<4, 4> Transformations::RotationX(float angle)
+Matrix<4, 4> Transformations::RotationX(float angleInDegrees)
 {
+	float angle = degreesToRadians(angleInDegrees);
 	return Matrix<4, 4>({
 		{	1,	   		 0,			  0, 0},
 		{	0,  cos(angle), -sin(angle), 0},
@@ -27,8 +28,9 @@ Matrix<4, 4> Transformations::RotationX(float angle)
 		{	0,			 0,	   		  0, 1} });
 }
 
-Matrix<4, 4> Transformations::RotationY(float angle)
+Matrix<4, 4> Transformations::RotationY(float angleInDegrees)
 {
+	float angle = degreesToRadians(angleInDegrees);
 	return Matrix<4, 4>({
 		{	 cos(angle),  0, sin(angle), 0},
 		{	          0,  1,          0, 0},
@@ -36,8 +38,9 @@ Matrix<4, 4> Transformations::RotationY(float angle)
 		{	          0,  0,  		  0, 1} });
 }
 
-Matrix<4, 4> Transformations::RotationZ(float angle)
+Matrix<4, 4> Transformations::RotationZ(float angleInDegrees)
 {
+	float angle = degreesToRadians(angleInDegrees);
 	return Matrix<4, 4>({
 		{	cos(angle),	 -sin(angle), 0, 0},
 		{	sin(angle),   cos(angle), 0, 0},

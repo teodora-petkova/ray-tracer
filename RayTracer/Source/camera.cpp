@@ -29,8 +29,6 @@ std::tuple<Tuple, Tuple, Tuple> calculateWUV(const Tuple& lookAt, const Tuple& l
 	return std::make_tuple(w, u, v);
 }
 
-#define degreesToRadians(x) x*(3.141592f/180.0f)
-
 Camera::Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple& viewUpVector,
 	float fieldOfViewAngleY, int width, int height)
 {

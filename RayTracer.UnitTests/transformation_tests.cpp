@@ -2,10 +2,6 @@
 #include "gtest\gtest.h"
 #pragma warning(pop)
 
-#define _USE_MATH_DEFINES
-
-#include <math.h>
-#include <iostream>
 #include "source\tuple.h"
 #include "source\transformations.h"
 
@@ -46,8 +42,8 @@ TEST(TransformationsTests, InverseScaleAVector) {
 }
 
 TEST(TransformationsTests, RotateAPointByX) {
-	Matrix<4, 4> rotateHalfQuarter = Transformations::RotationX(M_PI / 4);
-	Matrix<4, 4> rotateFullQuarter = Transformations::RotationX(M_PI / 2);
+	Matrix<4, 4> rotateHalfQuarter = Transformations::RotationX(45);
+	Matrix<4, 4> rotateFullQuarter = Transformations::RotationX(90);
 
 	Tuple point = Tuple::Point(0, 1, 0);
 	EXPECT_EQ(rotateHalfQuarter * point, Tuple::Point(0, sqrt(2) / 2, sqrt(2) / 2));
@@ -55,15 +51,15 @@ TEST(TransformationsTests, RotateAPointByX) {
 }
 
 TEST(TransformationsTests, InverseRotateAPointByX) {
-	Matrix<4, 4> inverseRotateHalfQuarter = Transformations::RotationX(M_PI / 4).Inverse();
+	Matrix<4, 4> inverseRotateHalfQuarter = Transformations::RotationX(45).Inverse();
 
 	Tuple point = Tuple::Point(0, 1, 0);
 	EXPECT_EQ(inverseRotateHalfQuarter * point, Tuple::Point(0, sqrt(2) / 2, -sqrt(2) / 2));
 }
 
 TEST(TransformationsTests, RotateAPointByY) {
-	Matrix<4, 4> rotateHalfQuarter = Transformations::RotationY(M_PI / 4);
-	Matrix<4, 4> rotateFullQuarter = Transformations::RotationY(M_PI / 2);
+	Matrix<4, 4> rotateHalfQuarter = Transformations::RotationY(45);
+	Matrix<4, 4> rotateFullQuarter = Transformations::RotationY(90);
 
 	Tuple point = Tuple::Point(0, 0, 1);
 	EXPECT_EQ(rotateHalfQuarter * point, Tuple::Point(sqrt(2) / 2, 0, sqrt(2) / 2));
@@ -71,8 +67,8 @@ TEST(TransformationsTests, RotateAPointByY) {
 }
 
 TEST(TransformationsTests, RotateAPointByZ) {
-	Matrix<4, 4> rotateHalfQuarter = Transformations::RotationZ(M_PI / 4);
-	Matrix<4, 4> rotateFullQuarter = Transformations::RotationZ(M_PI / 2);
+	Matrix<4, 4> rotateHalfQuarter = Transformations::RotationZ(45);
+	Matrix<4, 4> rotateFullQuarter = Transformations::RotationZ(90);
 
 	Tuple point = Tuple::Point(1, 0, 0);
 	EXPECT_EQ(rotateHalfQuarter * point, Tuple::Point(sqrt(2) / 2, sqrt(2) / 2, 0));
@@ -118,7 +114,7 @@ TEST(TransformationsTests, ShearZtoY) {
 TEST(TransformationsTests, RotateScaleAndTranslateAPoint) {
 	Tuple p = Tuple::Point(1, 0, 1);
 
-	Matrix<4, 4> A = Transformations::RotationX(M_PI / 2);
+	Matrix<4, 4> A = Transformations::RotationX(90);
 	Matrix<4, 4> B = Transformations::Scaling(5, 5, 5);
 	Matrix<4, 4> C = Transformations::Translation(10, 5, 7);
 
@@ -134,7 +130,7 @@ TEST(TransformationsTests, RotateScaleAndTranslateAPoint) {
 TEST(TransformationsTests, TranslateScaleAndRotateAPoint) {
 	Tuple p = Tuple::Point(1, 0, 1);
 
-	Matrix<4, 4> A = Transformations::RotationX(M_PI / 2);
+	Matrix<4, 4> A = Transformations::RotationX(90);
 	Matrix<4, 4> B = Transformations::Scaling(5, 5, 5);
 	Matrix<4, 4> C = Transformations::Translation(10, 5, 7);
 
