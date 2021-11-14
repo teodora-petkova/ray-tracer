@@ -1,0 +1,9 @@
+size 600 311
+
+camera 0 0 -2 0 0 0 0 1 0 90
+
+point_light -10 10 -10 1 1 1 1 1 1 1
+
+material 1 0.2 1 0.1 0.9 0.9 200
+
+sphere 0 0 0 1

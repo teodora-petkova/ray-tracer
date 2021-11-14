@@ -2,12 +2,12 @@
 
 Color Light::CalculatePhongColor(const Tuple& intersection_point,
 	const Tuple& unit_normal,
-	const Tuple& unit_camera,
+	const Tuple& camera_position,
 	MaterialPtr material) const
 {
 	Tuple unit_light = (this->position - intersection_point).Normalize();
 	Tuple unit_reflected = (-unit_light).Reflect(unit_normal).Normalize();
-	Tuple unit_view = (unit_camera - intersection_point).Normalize();
+	Tuple unit_view = (camera_position - intersection_point).Normalize();
 
 	float ldotN = unit_light.Dot(unit_normal);
 	float rdotV = unit_reflected.Dot(unit_view);
