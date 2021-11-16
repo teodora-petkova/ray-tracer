@@ -42,7 +42,7 @@ void UpdateWindow(SDLApp& window,
 {
 	clock_t begin = clock();
 
-	scene.getModifiableCamera().UpdateLookAt(x, y);
+	scene.getModifiableCamera().setTransform(Transformations::Translation(x, y, 0));
 
 	RayTracer rayTracer = RayTracer();
 	Canvas canvas = rayTracer.TraceRays(scene);

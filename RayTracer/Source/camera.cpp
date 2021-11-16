@@ -3,30 +3,22 @@
 //---------------------------------------------------------------------
 #include "camera.h"
 
-std::tuple<Tuple, Tuple, Tuple> calculateWUV(const Tuple& lookAt, const Tuple& lookFrom, const Tuple& viewUp)
+Camera::Camera()
 {
-	// Calculating the new coordinate system - u, v, w, that the camera defines i.e. determine the three orthogonal vectors that are the 
-	//		axes of the coordinate system, U, V, and W
+	this->transform = Transformations::ViewTransform(
+		Tuple::Point(0, 0, 0),
+		Tuple::Vector(0, 0, -1),
+		Tuple::Point(0, 1, 0)
+	);
 
-	//3.1. W is the viewing direction:
-	//            LA-LF
-	//     W = -----------
-	//         || LA-LF ||
-	Tuple w = (lookAt - lookFrom).Normalize();
+	this->fovx = 0.5f;
+	this->fovy = 0.5f;
 
-	//3.2. U corresponds to the "X" axis
-	//            W x UP
-	//     U = -------------
-	//         || W x UP ||
-	Tuple u = w.Cross(viewUp.Normalize()).Normalize();
+	this->width = 100;
+	this->height = 100;
 
-	//2.3. V is the "Up" vector
-	//          W x U
-	//    V = -----------
-	//       || W x U ||
-	Tuple v = u.Cross(w).Normalize();
-
-	return std::make_tuple(w, u, v);
+	this->halfHeight = this->height / 2.0f;
+	this->halfWidth = this->width / 2.0f;
 }
 
 Camera::Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple& viewUpVector,
@@ -35,25 +27,75 @@ Camera::Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple
 	this->width = width;
 	this->height = height;
 
-	this->lookFrom = lookFromPoint;
-	this->lookAt = lookAtPoint;
-	this->viewUp = viewUpVector;
-
 	//Calculating fovx, fovy
 	float aspectRatio = (float)this->width / (float)this->height;
 	this->fovy = degreesToRadians(fieldOfViewAngleY);
 	this->fovx = 2 * atan(tan(this->fovy / 2) * aspectRatio);
 
-	auto t = calculateWUV(this->lookAt, this->lookFrom, this->viewUp);
-	this->w = std::get<0>(t);
-	this->u = std::get<1>(t);
-	this->v = std::get<2>(t);
+
+	//The canvas is one unit away (z=-1)
+	float halfView = tan(fovy / 2.f);
+
+	// the field of view is on the larger part - width or height
+	// aspectRatio = width / height
+	// width = aspectRatio * height
+	// height = width / aspectRatio
+	if (aspectRatio >= 1) // width >= height
+	{
+		this->halfWidth = halfView;
+		this->halfHeight = halfView / aspectRatio;
+	}
+	else // height > width
+	{
+		this->halfWidth = halfView * aspectRatio;
+		this->halfHeight = halfView;
+	}
+	this->pixelSize = std::make_pair(
+		this->halfWidth * 2.f / this->width,
+		this->halfHeight * 2.f / this->height);
+
+
+	this->transform = Transformations::ViewTransform(
+		lookFromPoint,
+		lookAtPoint,
+		viewUpVector).Inverse();
+
+	this->origin = this->transform * Tuple::Point(0, 0, 0);
 }
 
-Ray Camera::CalculateRayForPixel(int x, int y) const
-{
-	Tuple direction = Tuple();
+Ray Camera::CalculateRayForPixel(int x, int y) const {
+	// summary:
+	// 1.) (x, y) - the point/pixel coordinates on the screen
+	// 2.) (xWorld, yWorld, -1) - the point in the world (we want to look into z = -1 direction by default!)
+	// 3.) (xCamera, yCamera, zCamera) - the same point in the camera coordinate system
 
+	// 1. Raster space - add 0.5 to centralize in the middle of the pixel
+	// (x, y) are the upper left corner of the pixel, so we centralize in the middle of the pixel
+	// we consider the pixel to be 1 unit
+	float xRasterCentralized = x + 0.5f;
+	float yRasterCentralized = y + 0.5f;
+
+	//the offset from the edge of the canvas to the pixel's center
+	float xOffset = xRasterCentralized * this->pixelSize.first;
+	float yOffset = yRasterCentralized * this->pixelSize.second;
+
+	//2. World space - the untransformed coordinates of the pixel in world space.
+	// (remember that the camera looks toward -z, so +x is to the *left*.)
+	float xWorld = this->halfWidth - xOffset;
+	float yWorld = this->halfHeight - yOffset;
+
+	//3. Camera space with the viewing transformation
+	// transform the canvas point and the origin using the camera matrix
+	// and then compute the ray's direction vector
+	// (the camera is looking at the center (0, 0, 0) and the canvas is at z=-1)
+	Tuple pixel = this->transform * Tuple::Point(xWorld, yWorld, -1);
+	Tuple direction = (pixel - this->origin).Normalize();
+
+	return Ray(this->origin, direction);
+}
+
+Ray Camera::CalculateRayForPixel2(int x, int y) const
+{
 	// 1. Raster space
 	// add 0.5 to centralize in the middle of the pixel
 	float xRasterCentralized = x + 0.5f;
@@ -67,35 +109,15 @@ Ray Camera::CalculateRayForPixel(int x, int y) const
 	float xScreen = (2 * xNDC - 1) * tan(this->fovx / 2);
 	float yScreen = (-2 * yNDC + 1) * tan(this->fovy / 2);
 
-	direction = (this->u * xScreen + this->v * yScreen + this->w).Normalize();
+	Tuple pixel = this->transform * Tuple::Point(xScreen, yScreen, -1);
+	Tuple direction = (pixel - this->origin).Normalize();
 
-	return Ray(this->lookFrom, direction);
+	return Ray(this->origin, direction);
 }
 
-Tuple Camera::getOrigin() const
+void Camera::setTransform(const Matrix<4, 4>& matrix)
 {
-	return this->lookFrom;
-}
+	this->transform = (this->transform * matrix).Inverse();
 
-void Camera::UpdateLookAt(int x, int y)
-{
-	Tuple updatedLookAt = Tuple::Vector(this->lookAt.X() + x, this->lookAt.Y() + y, this->lookAt.Z());
-
-	auto t = calculateWUV(updatedLookAt, this->lookFrom, this->viewUp);
-	this->w = std::get<0>(t);
-	this->u = std::get<1>(t);
-	this->v = std::get<2>(t);
-}
-
-Camera::Camera()
-{
-	this->w = Tuple();
-	this->u = Tuple();
-	this->v = Tuple();
-
-	this->fovx = 0.5f;
-	this->fovy = 0.5f;
-
-	this->width = width;
-	this->height = height;
+	this->origin = this->transform * Tuple::Point(0, 0, 0);
 }

@@ -24,19 +24,27 @@ public:
 		float fieldOfViewAngleY, int width, int height);
 
 	Ray CalculateRayForPixel(int x, int y) const;
-	void UpdateLookAt(int x, int y);
+	Ray CalculateRayForPixel2(int x, int y) const;
 
-	Tuple getOrigin() const;
+	void setTransform(const Matrix<4, 4>& matrix);
+
+	int getWidth() const { return width; }
+	int getHeight() const { return height; }
+	float getFOV() const { return fovy; }
+	Tuple getOrigin() const { return origin; }
+	std::pair<float, float> getPixelSize() const { return pixelSize; }
+
 private:
-	Tuple lookAt;
-	Tuple lookFrom;
-	Tuple viewUp;
-	Tuple w;
-	Tuple u;
-	Tuple v;
 	float fovx;
 	float fovy;
 	int width;
 	int height;
+
+	std::pair<float, float> pixelSize;
+	float halfWidth;
+	float halfHeight;
+
+	Matrix<4, 4> transform;
+	Tuple origin;
 };
 #endif

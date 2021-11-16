@@ -52,7 +52,7 @@ bool IsInShadow(IntersectionInfo intersection, Tuple lightPosition,
 	return isInShadow;
 }
 
-Color TraceSingleRay(Ray& ray, Scene& scene)
+Color TraceSingleRay(const Ray& ray, const Scene& scene)
 {
 	ObjectPtr object = NULL;
 	IntersectionInfo intersection = IntersectionInfo();
@@ -138,7 +138,7 @@ Color TraceSingleRay(Ray& ray, Scene& scene)
 //  Main Function
 //------------------------------------------------------------
 
-void RayTracePixelChunks(int threadNum, int chunkSize, Scene& scene, Canvas* canvas)
+void RayTracePixelChunks(int threadNum, int chunkSize, const Scene& scene, Canvas* canvas)
 {
 	int width = scene.getImageWidth();
 
