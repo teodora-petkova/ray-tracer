@@ -23,18 +23,8 @@ public:
 		this->width = 600;
 		this->height = 400;
 
-		// Camera
-		Tuple lookFrom = Tuple::Vector(0.0, 0.0, 5.0); // initial eye position, also for resets
-		Tuple lookAt = Tuple::Vector(0.0, 1.0, 0.0); // initial up position, also for resets
-		Tuple up = Tuple::Vector(0.0, 0.0, 0.0); // center look at point 
-		float fovY = 90.0; // field of view
-		this->camera = Camera::Camera(lookFrom, lookAt, up, fovY,
-			this->width, this->height);
-
-		// Objects
+		this->camera = Camera::Camera(this->width, this->height);
 		this->objects = std::vector<ObjectPtr>();
-
-		// lights
 		this->lights = std::vector<LightPtr>();
 	}
 
@@ -62,6 +52,50 @@ public:
 	const Camera& getCamera() const { return camera; }
 	Camera& getModifiableCamera() { return camera; }
 
+
+	Color TraceSingleRay(const Ray& ray) const
+	{
+		Scene scene = *this;
+
+		ObjectPtr object = NULL;
+		IntersectionInfo intersection = IntersectionInfo();
+
+		float minDistance = INFINITY;
+		for (unsigned int i = 0; i < scene.getObjects().size(); i++)
+		{
+			ObjectPtr testObject = scene.getObjects()[i];
+
+			IntersectionInfo testIntersection = testObject->Intersect(ray);
+
+			if (testIntersection.getIsHit() && testObject && testIntersection.getDistance() < minDistance)
+			{
+				object = testObject;
+				intersection = testIntersection;
+				minDistance = intersection.getDistance();
+			}
+		}
+
+		Color color = Color::Black();
+		if (intersection.getIsHit())
+		{
+			for (LightPtr light : scene.getLights())
+			{
+				if (IsInShadow(intersection, light->getPosition(), scene.getObjects()))
+				{
+					color += Color::Black();
+				}
+				else
+				{
+					color += light->CalculatePhongColor(intersection.getIntersectionPoint(),
+						intersection.getNormal(),
+						scene.getCamera().getOrigin(),
+						object->getMaterial());
+				}
+			}
+		}
+		return color;
+	}
+
 private:
 	int width;
 	int height;
@@ -69,6 +103,33 @@ private:
 	Camera camera;
 	std::vector<ObjectPtr> objects;
 	std::vector<LightPtr> lights;
+
+	static bool IsInShadow(IntersectionInfo intersection, Tuple lightPosition,
+		std::vector<ObjectPtr> objects)
+	{
+		// P - Lp = lightDirection
+		Tuple rayFromLightToIntersection = intersection.getIntersectionPoint() - lightPosition;
+
+		Tuple rayFromIntersectionToLight = -rayFromLightToIntersection;
+
+		float bias = 0.001f;
+		Ray rayToLightSource = Ray(intersection.getIntersectionPoint() + intersection.getNormal() * bias, rayFromIntersectionToLight);
+		bool isInShadow = false;
+		for (unsigned int i = 0; i < objects.size(); i++)
+		{
+			ObjectPtr testObject = objects[i];
+
+			IntersectionInfo testIntersection = testObject->Intersect(rayToLightSource);
+			if (testIntersection.getIsHit())
+			{
+				isInShadow = true;
+				break;
+			}
+		}
+
+		return isInShadow;
+	}
+
 };
 
 #endif

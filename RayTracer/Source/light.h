@@ -16,12 +16,17 @@ class RAYTRACER_EXPORT Light
 public:
 	Light() :
 		position(Tuple::Point(0, 0, 0)),
-		color(Color(0.2f, 0.2f, 0.2f)),
-		brightness(0.9f),
-		ambient(0.9f),
-		diffuse(0.9f),
-		specular(0.9f)
+		color(Color::White()),
+		ambient(1),
+		diffuse(1),
+		specular(1),
+		brightness(1)
 	{}
+
+	Light(Tuple pos) : Light()
+	{
+		this->position = pos;
+	}
 
 	Light(const Tuple& position,
 		const Color& colour,

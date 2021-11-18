@@ -11,11 +11,21 @@ Camera::Camera()
 		Tuple::Point(0, 1, 0)
 	);
 
-	this->fovx = 0.5f;
-	this->fovy = 0.5f;
+	this->fovx = 90;
+	this->fovy = 90;
 
 	this->width = 100;
 	this->height = 100;
+
+	this->halfHeight = this->height / 2.0f;
+	this->halfWidth = this->width / 2.0f;
+}
+
+Camera::Camera(int width, int height)
+	:Camera()
+{
+	this->width = width;
+	this->height = height;
 
 	this->halfHeight = this->height / 2.0f;
 	this->halfWidth = this->width / 2.0f;

@@ -26,72 +26,6 @@ using namespace ReadScene;
 // Main Ray Tracing Function
 //------------------------------------------------------------
 
-bool IsInShadow(IntersectionInfo intersection, Tuple lightPosition,
-	std::vector<ObjectPtr> objects)
-{
-	// P - Lp = lightDirection
-	Tuple rayFromLightToIntersection = intersection.getIntersectionPoint() - lightPosition;
-
-	Tuple rayFromIntersectionToLight = -rayFromLightToIntersection;
-
-	float bias = 0.001f;
-	Ray rayToLightSource = Ray(intersection.getIntersectionPoint() + intersection.getNormal() * bias, rayFromIntersectionToLight);
-	bool isInShadow = false;
-	for (unsigned int i = 0; i < objects.size(); i++)
-	{
-		ObjectPtr testObject = objects[i];
-
-		IntersectionInfo testIntersection = testObject->Intersect(rayToLightSource);
-		if (testIntersection.getIsHit())
-		{
-			isInShadow = true;
-			break;
-		}
-	}
-
-	return isInShadow;
-}
-
-Color TraceSingleRay(const Ray& ray, const Scene& scene)
-{
-	ObjectPtr object = NULL;
-	IntersectionInfo intersection = IntersectionInfo();
-
-	float minDistance = INFINITY;
-	for (unsigned int i = 0; i < scene.getObjects().size(); i++)
-	{
-		ObjectPtr testObject = scene.getObjects()[i];
-
-		IntersectionInfo testIntersection = testObject->Intersect(ray);
-
-		if (testIntersection.getIsHit() && testObject && testIntersection.getDistance() < minDistance)
-		{
-			object = testObject;
-			intersection = testIntersection;
-			minDistance = intersection.getDistance();
-		}
-	}
-
-	Color color = Color(0, 0, 0);
-	if (intersection.getIsHit())
-	{
-		for (LightPtr light : scene.getLights())
-		{
-			if (IsInShadow(intersection, light->getPosition(), scene.getObjects()))
-			{
-				color += Color(0, 0, 0);
-			}
-			else
-			{
-				color += light->CalculatePhongColor(intersection.getIntersectionPoint(),
-					intersection.getNormal(),
-					scene.getCamera().getOrigin(),
-					object->getMaterial());
-			}
-		}
-	}
-	return color;
-}
 
 //Canvas RayTracer::TraceRays(Scene& scene)
 //{
@@ -152,7 +86,7 @@ void RayTracePixelChunks(int threadNum, int chunkSize, const Scene& scene, Canva
 		{
 			Ray rayFromCamera = scene.getCamera().CalculateRayForPixel(x, y);
 
-			Color color = TraceSingleRay(rayFromCamera, scene);
+			Color color = scene.TraceSingleRay(rayFromCamera);
 
 			canvas->WritePixel(x, y, color);
 		}

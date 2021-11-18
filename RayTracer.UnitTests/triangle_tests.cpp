@@ -16,11 +16,10 @@ protected:
 
 protected:
 	void SetUp() override {
-		this->material = std::make_shared<Material>(Material(Color(1, 1, 1), 0.1f, 0.9f, 0.9f, 200.0f));
+		this->material = std::make_shared<Material>(Material());
 		this->transformation = Matrix<4, 4>::IdentityMatrix();
 	}
 };
-
 
 TEST_F(TriangleTests, The_ray_is_parallel_to_the_triangle) {
 	Triangle t = Triangle(

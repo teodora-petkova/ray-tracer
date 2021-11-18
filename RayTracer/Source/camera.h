@@ -20,6 +20,7 @@ class RAYTRACER_EXPORT Camera
 {
 public:
 	Camera();
+	Camera(int width, int height);
 	Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple& viewUpVector,
 		float fieldOfViewAngleY, int width, int height);
 

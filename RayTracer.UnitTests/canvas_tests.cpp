@@ -7,7 +7,7 @@ TEST(CanvasTests, CorrectlyInitializeCanvas) {
 	Canvas canvas = Canvas(20, 10);
 	EXPECT_EQ(canvas.getWidth(), 20);
 	EXPECT_EQ(canvas.getHeight(), 10);
-	EXPECT_EQ(canvas.PixelAt(0, 0), Color(0, 0, 0));
+	EXPECT_EQ(canvas.PixelAt(0, 0), Color::White());
 
 	for (int i = 0; i < canvas.getWidth(); i++)
 	{

@@ -26,7 +26,7 @@ protected:
 	void SetUp() override {
 		this->origin = Tuple::Point(0, 0, 0);
 		this->radius = 1;
-		this->material = std::make_shared<Material>(Material(Color(1, 1, 1), 0.1f, 0.9f, 0.9f, 200.0f));
+		this->material = std::make_shared<Material>(Material());
 		this->transformation = Matrix<4, 4>::IdentityMatrix();
 	}
 };

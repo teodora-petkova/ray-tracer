@@ -5,7 +5,7 @@
 
 Material::Material()
 {
-	this->color = Color(0.2f, 0.2f, 0.2f);
+	this->color = Color::White();
 	this->ambient = 0.1f;
 	this->diffuse = 0.9f;
 	this->specular = 0.9f;
