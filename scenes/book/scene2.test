@@ -1,0 +1,46 @@
+# to add normal at in object!!
+# to add local normal for triangle & sphere!
+
+size 1000 500
+
+camera 0 1 -5 0 1 0 0 1 0 60
+
+point_light -10 10 -10 1 1 1 1 1 1 1
+
+# the floor
+material 1 0.9 0.9 0.1 0.9 0 200 
+scale 10 0.01 10
+sphere 0 0 0 1
+
+# the left wall
+material 1 0.9 0.9 0.1 0.9 0 200
+translate 0 0 5
+rotatey -45
+rotatex 90
+scale 10 0.01 10
+sphere 0 0 0 1
+
+# the right wall
+material 1 0.9 0.9 0.1 0.9 0 200
+translate 0 0 5
+rotatey 45
+rotatex 90
+scale 10 0.01 10
+sphere 0 0 0 1
+
+# the large green sphere in the middle 
+material 0.1 1 0.5 0.1 0.7 0.3 200
+translate -0.5 1 0.5
+sphere 0 0 0 1
+
+# the smaller green sphere on the right
+material 0.5 1 0.1 0.1 0.7 0.3 200
+translate 1.5 0.5 -0.5 
+scale 0.5 0.5 0.5
+sphere 0 0 0 1
+
+# the smallest sphere 
+material 1 0.8 0.1 0.1 0.7 0.3 200
+translate -1.5 0.33 -0.75
+scale 0.33 0.33 0.33
+sphere 0 0 0 1

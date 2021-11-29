@@ -5,10 +5,10 @@
 
 static std::pair<bool, float> AlgebraicIntersect(const Sphere& sphere, const Ray& ray)
 {
-	Tuple originMinusSphereCenter = ray.getOrigin() - sphere.getCenter();
+	Tuple sphereCenterToRay = ray.getOrigin() - sphere.getCenter();
 	float a = ray.getDirection().Dot(ray.getDirection());
-	float b = 2 * ray.getDirection().Dot(originMinusSphereCenter);
-	float c = originMinusSphereCenter.Dot(originMinusSphereCenter) - sphere.getRadius() * sphere.getRadius();
+	float b = 2 * ray.getDirection().Dot(sphereCenterToRay);
+	float c = sphereCenterToRay.Dot(sphereCenterToRay) - sphere.getRadius() * sphere.getRadius();
 
 	float discriminant = b * b - 4 * a * c;
 	bool isHit = false;
@@ -63,23 +63,28 @@ static std::pair<bool, float> GeometricIntersect(const Sphere& sphere, const Ray
 
 Tuple Sphere::getNormal(Tuple intersectionPoint) const
 {
+	// world to local sphere space
 	Tuple objectPoint = this->getTransformation() * intersectionPoint;
 	Tuple objectNormal = (objectPoint - this->getCenter());
+	// normal vector back to world
 	Tuple worldNormal = this->getTransposedTransformation() * objectNormal;
 	worldNormal = Tuple::Vector(worldNormal.X(), worldNormal.Y(), worldNormal.Z());
 	return worldNormal.Normalize();
 }
 
-IntersectionInfo Sphere::Intersect(const Ray& initialRay) const
+IntersectionInfo Sphere::Intersect(const Ray& ray) const
 {
-	Ray ray = initialRay * this->getTransformation();
-
-	auto pair = GeometricIntersect(*this, ray);
+	// use a transformed ray to find the distance to the intersection of the object
+	// simulating the transformation of the object itself
+	Ray rayToTransformedObject = ray * this->getTransformation();
+	auto pair = GeometricIntersect(*this, rayToTransformedObject);
 	bool isHit = pair.first;
 	float distance = pair.second;
 
+	// STILL TO PROCESS???
+	// to find the intersection point we use the initial ray and the calculated distance???
 	Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
-	Tuple normal = this->getNormal(intersectionPoint);
 
+	Tuple normal = this->getNormal(intersectionPoint);
 	return IntersectionInfo(isHit, intersectionPoint, distance, normal);
 }

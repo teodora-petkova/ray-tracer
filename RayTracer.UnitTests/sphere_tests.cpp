@@ -127,29 +127,60 @@ TEST_F(SphereTests, The_ray_intersects_a_scaled_sphere) {
 	IntersectionInfo intersection = sphere.Intersect(ray);
 
 	EXPECT_EQ(intersection.getIsHit(), true);
-	//TODO: to investigate why it is not (0, 0, -2)
-	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0, -1));
+	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0, -2));
 	EXPECT_EQ(intersection.getDistance(), 3);
 	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(0, 0, -1));
 }
 
 TEST_F(SphereTests, The_ray_intersects_a_translated_sphere) {
 	// again on the tangent
-	Ray ray = Ray(Tuple::Point(5, 0, -1), Tuple::Vector(0, 0, 1));
+	Ray ray = Ray(Tuple::Point(5, 1, -1), Tuple::Vector(0, 0, 1));
 
 	Sphere sphere = Sphere(this->origin,
 		this->radius,
 		this->material,
-		Transformations::Translation(4, 0, 0));
+		Transformations::Translation(4, 1, 0));
 
 	IntersectionInfo intersection = sphere.Intersect(ray);
 
 	EXPECT_EQ(intersection.getIsHit(), true);
-	//TODO: to investigate why it is not (5, 0, 0)
-	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(1, 0, 0));
+	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(5, 1, 0));
 	EXPECT_EQ(intersection.getDistance(), 1);
-	//TODO: to investigate why it is not (5, 0, 0)
-	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(-1, 0, 0));
+	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(1, 0, 0));
+}
+
+TEST_F(SphereTests, The_ray_intersects_a_translated_and_then_scaled_sphere) {
+	Ray ray = Ray(Tuple::Point(4, 0, -1), Tuple::Vector(0, 0, 1));
+
+	Sphere sphere = Sphere(this->origin,
+		this->radius,
+		this->material,
+		Transformations::Translation(2, 0, 0) *
+		Transformations::Scaling(2, 2, 2));
+
+	IntersectionInfo intersection = sphere.Intersect(ray);
+
+	EXPECT_EQ(intersection.getIsHit(), true);
+	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(4, 0, 0));
+	EXPECT_EQ(intersection.getDistance(), 1);
+	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(1, 0, 0));
+}
+
+TEST_F(SphereTests, The_ray_intersects_a_scaled_and_then_translated_sphere) {
+	Ray ray = Ray(Tuple::Point(6, 0, -1), Tuple::Vector(0, 0, 1));
+
+	Sphere sphere = Sphere(this->origin,
+		this->radius,
+		this->material,
+		Transformations::Scaling(2, 2, 2) *
+		Transformations::Translation(2, 0, 0));
+
+	IntersectionInfo intersection = sphere.Intersect(ray);
+
+	EXPECT_EQ(intersection.getIsHit(), true);
+	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(6, 0, 0));
+	EXPECT_EQ(intersection.getDistance(), 1);
+	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(1, 0, 0));
 }
 
 TEST_F(SphereTests, The_ray_misses_a_translated_sphere) {

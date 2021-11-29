@@ -19,10 +19,12 @@ public:
 	{}
 
 	Object(MaterialPtr material, Matrix<4, 4> matrix) :
-		material(material),
-		transformation(matrix.Inverse()),
-		transposedTransformation(this->transformation.Transpose())
-	{}
+		material(material)
+	{
+		Matrix<4, 4> inverse = matrix.Inverse();
+		this->transformation = inverse;
+		transposedTransformation = inverse.Transpose();
+	}
 
 	virtual IntersectionInfo Intersect(const Ray& ray) const = 0;
 

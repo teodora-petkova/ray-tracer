@@ -122,6 +122,7 @@ namespace ReadScene
 								currentMaterial,
 								currentTransformation));
 							objects.push_back(triangle);
+							currentTransformation = Matrix<4, 4>::IdentityMatrix();
 						}
 					}
 					else if (command == "sphere")
@@ -134,6 +135,7 @@ namespace ReadScene
 								values[1], values[2]), values[3],
 								currentMaterial, currentTransformation));
 							objects.push_back(sphere);
+							currentTransformation = Matrix<4, 4>::IdentityMatrix();
 						}
 					}
 					// transformations
