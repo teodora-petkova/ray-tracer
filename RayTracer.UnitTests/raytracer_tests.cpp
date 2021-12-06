@@ -3,9 +3,9 @@
 #pragma warning(pop)
 
 #include <math.h>
+#include <vector>
 
 #include "source\raytracer.h"
-
 
 class RaytracerTests : public ::testing::Test
 {
@@ -69,4 +69,45 @@ TEST_F(RaytracerTests, The_color_when_the_ray_misses_the_sphere_in_the_default_w
 	Color color = this->scene.TraceSingleRay(ray);
 
 	EXPECT_EQ(color, Color::Black());
+}
+
+TEST_F(RaytracerTests, NO_shadow_when_there_is_nothing_between_the_intersection_point_and_the_light) {
+	IntersectionInfo intersection = IntersectionInfo(true,
+		Tuple::Point(0, 10, 0), 10, Tuple::Vector(0, 1, 0));
+
+	LightPtr light = this->scene.getLights()[0];
+	bool isInShadow = this->scene.IsInShadow(intersection, light->getPosition());
+
+	EXPECT_EQ(isInShadow, false);
+}
+
+TEST_F(RaytracerTests, Shadow_when_there_is_an_object_between_the_intersection_point_and_the_light) {
+	IntersectionInfo intersection = IntersectionInfo(true,
+		Tuple::Point(10, -10, 10), 10, Tuple::Vector(0, 1, 0));
+
+	LightPtr light = this->scene.getLights()[0];
+	bool isInShadow = this->scene.IsInShadow(intersection, light->getPosition());
+
+	EXPECT_EQ(isInShadow, true);
+}
+
+TEST_F(RaytracerTests, NO_shadow_when_an_object_is_behind_the_light) {
+	IntersectionInfo intersection = IntersectionInfo(true,
+		Tuple::Point(-20, 20, -20), 20, Tuple::Vector(0, 1, 0));
+
+	LightPtr light = this->scene.getLights()[0];
+	bool isInShadow = this->scene.IsInShadow(intersection, light->getPosition());
+
+	EXPECT_EQ(isInShadow, false);
+}
+
+
+TEST_F(RaytracerTests, NO_shadow_when_an_object_is_behind_the_intersection_point) {
+	IntersectionInfo intersection = IntersectionInfo(true,
+		Tuple::Point(-2, 2, -2), 2, Tuple::Vector(0, 1, 0));
+
+	LightPtr light = this->scene.getLights()[0];
+	bool isInShadow = this->scene.IsInShadow(intersection, light->getPosition());
+
+	EXPECT_EQ(isInShadow, false);
 }

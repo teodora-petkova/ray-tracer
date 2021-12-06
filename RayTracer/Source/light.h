@@ -42,10 +42,11 @@ public:
 		specular(specularIntensity)
 	{}
 
-	Color CalculatePhongColor(const Tuple& intersection_point,
-		const Tuple& unit_normal,
-		const Tuple& unit_camera,
-		MaterialPtr material) const;
+	Color CalculatePhongColor(const Tuple& intersectionPoint,
+		const Tuple& unitNormal,
+		const Tuple& unitCamera,
+		MaterialPtr material,
+		bool isInShadow) const;
 
 	Tuple getPosition() const { return position; }
 	Color getColor() const { return color; }

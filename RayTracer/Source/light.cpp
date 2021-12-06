@@ -1,31 +1,42 @@
 #include "light.h"
 
-Color Light::CalculatePhongColor(const Tuple& intersection_point,
-	const Tuple& unit_normal,
-	const Tuple& camera_position,
-	MaterialPtr material) const
+Color Light::CalculatePhongColor(const Tuple& intersectionPoint,
+	const Tuple& unitNormal,
+	const Tuple& cameraPosition,
+	MaterialPtr material,
+	bool isInShadow) const
 {
-	Tuple unit_light = (this->position - intersection_point).Normalize();
-	Tuple unit_reflected = (-unit_light).Reflect(unit_normal).Normalize();
-	Tuple unit_view = (camera_position - intersection_point).Normalize();
+	Color phongIntensity = Color::Black();
 
-	float ldotN = unit_light.Dot(unit_normal);
-	float rdotV = unit_reflected.Dot(unit_view);
-	Color light_color = this->color * this->brightness;
+	Color lightColor = this->color * this->brightness;
 
 	// ambient
 	float ambientness = material->getAmbient() * this->ambient;
-	Color ambient_color = light_color * ambientness;
+	Color ambientColor = lightColor * ambientness;
 
-	// diffuse
-	float diffuseness = material->getDiffuse() * this->diffuse;
-	Color diffuse_color = light_color * diffuseness * fmax(ldotN, 0.0f);
+	if (isInShadow)
+	{
+		phongIntensity = ambientColor;
+	}
+	else
+	{
+		Tuple unitLight = (this->position - intersectionPoint).Normalize();
+		Tuple unitReflected = (-unitLight).Reflect(unitNormal).Normalize();
+		Tuple unitView = (cameraPosition - intersectionPoint).Normalize();
 
-	// specular
-	float specularness = material->getSpecular() * this->specular;
-	Color specular_color = light_color * powf(fmax(rdotV, 0.0f), material->getShininess()) * specularness;
+		float ldotN = unitLight.Dot(unitNormal);
+		float rdotV = unitReflected.Dot(unitView);
 
-	Color phong_intensity = ambient_color + diffuse_color + specular_color;
+		// diffuse
+		float diffuseness = material->getDiffuse() * this->diffuse;
+		Color diffuseColor = lightColor * diffuseness * fmax(ldotN, 0.0f);
 
-	return material->getColor() * phong_intensity;
+		// specular
+		float specularness = material->getSpecular() * this->specular;
+		Color specularColor = lightColor * powf(fmax(rdotV, 0.0f), material->getShininess()) * specularness;
+
+		phongIntensity = ambientColor + diffuseColor + specularColor;
+	}
+
+	return material->getColor() * phongIntensity;
 }

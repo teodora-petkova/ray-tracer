@@ -40,7 +40,8 @@ Color Canvas::PixelAt(int x, int y) const
 
 void Canvas::WritePixel(int x, int y, Color const& color)
 {
-	if (x >= this->width || y >= this->height)
+	if (x < 0 || x >= this->width ||
+		y < 0 || y >= this->height)
 		return;
 	this->pixels[x + y * this->width] = color;
 }
