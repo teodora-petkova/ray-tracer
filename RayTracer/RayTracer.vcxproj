@@ -38,6 +38,7 @@
     <ClCompile Include="Source\material.cpp" />
     <ClCompile Include="Source\ray.cpp" />
     <ClCompile Include="Source\readfile.cpp" />
+    <ClCompile Include="Source\scene.cpp" />
     <ClCompile Include="Source\sphere.cpp" />
     <ClCompile Include="Source\transformations.cpp" />
     <ClCompile Include="Source\triangle.cpp" />

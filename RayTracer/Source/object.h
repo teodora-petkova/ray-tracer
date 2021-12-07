@@ -14,7 +14,7 @@ class RAYTRACER_EXPORT Object
 {
 public:
 	Object() :
-		material(nullptr),
+		material(std::make_shared<Material>(Material())),
 		transformation(Matrix<4, 4>::IdentityMatrix())
 	{}
 

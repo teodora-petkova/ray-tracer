@@ -15,7 +15,7 @@
 class RAYTRACER_EXPORT Sphere : public virtual Object
 {
 public:
-	Sphere() : Object(material, transformation),
+	Sphere() : Object(),
 		center(Tuple::Point(0, 0, 0)),
 		radius(1)
 	{}
