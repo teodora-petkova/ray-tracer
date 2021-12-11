@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\objects">
+      <UniqueIdentifier>{e3430c56-af75-4706-a881-0955af2ca96c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\objects">
+      <UniqueIdentifier>{726d45b1-f0ce-487f-872f-3b01bbc6c12e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\camera.h">
@@ -21,19 +27,10 @@
     <ClInclude Include="Source\material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\readfile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\sphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\intersectioninfo.h">
@@ -69,6 +66,15 @@
     <ClInclude Include="Source\transformations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\object.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\sphere.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\triangle.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
@@ -81,12 +87,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\readfile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\sphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\raytracer.cpp">
@@ -106,6 +106,12 @@
     </ClCompile>
     <ClCompile Include="Source\scene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\sphere.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\triangle.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

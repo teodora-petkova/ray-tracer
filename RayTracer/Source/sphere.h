@@ -27,16 +27,15 @@ public:
 		radius(radius)
 	{}
 
-
-	IntersectionInfo Intersect(const Ray& ray) const override;
-
 	Tuple getCenter() const { return center; }
 	float getRadius() const { return radius; }
-	Tuple getNormal(Tuple intersectionPoint) const;
 
 private:
 	Tuple center;
 	float radius;
+
+	std::pair<bool, float> LocalIntersect(const Ray& ray) const override;
+	Tuple getLocalNormal(const Tuple& ray) const override;
 };
 
 #endif

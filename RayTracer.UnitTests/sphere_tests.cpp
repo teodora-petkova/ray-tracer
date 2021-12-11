@@ -112,7 +112,7 @@ TEST_F(SphereTests, The_sphere_transformation_is_modified) {
 		this->material,
 		Transformations::Translation(2, 3, 4));
 
-	EXPECT_EQ(sphere.getTransformation(), Transformations::Translation(2, 3, 4).Inverse());
+	EXPECT_EQ(sphere.getInverseTransformation(), Transformations::Translation(2, 3, 4).Inverse());
 }
 
 TEST_F(SphereTests, The_ray_intersects_a_scaled_sphere) {

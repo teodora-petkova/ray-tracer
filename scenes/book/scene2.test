@@ -1,6 +1,3 @@
-# to add normal at in object!!
-# to add local normal for triangle & sphere!
-
 size 1000 500
 
 camera 0 1 -5 0 1 0 0 1 0 60

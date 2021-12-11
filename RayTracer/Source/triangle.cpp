@@ -16,6 +16,11 @@ void Triangle::Initialize()
 	normal = AB.Cross(AC).Normalize();
 }
 
+Tuple Triangle::getLocalNormal(const Tuple& point)const
+{
+	return this->normal;
+}
+
 bool Triangle::IsPointInTriangleByBarycentricCoordinates(const Tuple& P) const
 {
 	// compute dot products in advance
@@ -79,16 +84,14 @@ Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3
 	Initialize();
 }
 
-IntersectionInfo Triangle::Intersect(const Ray& initialRay) const
+std::pair<bool, float> Triangle::LocalIntersect(const Ray& ray) const
 {
-	Ray ray = initialRay * this->getTransformation();
-
-	IntersectionInfo info = IntersectionInfo();
+	std::pair<bool, float> isHitWithDistance = std::make_pair(false, 0.0f);
 
 	// the triangle is degenerate(a segment or a point)
 	if (this->normal == Tuple::Vector(0, 0, 0))
 	{
-		return info;
+		return isHitWithDistance;
 	}
 
 	// ray: P = Po + t.v
@@ -105,7 +108,7 @@ IntersectionInfo Triangle::Intersect(const Ray& initialRay) const
 	{
 		// if (a == 0) then the ray lies in the triangle plane
 		// otherwise disjoint from the plane
-		return info;
+		return isHitWithDistance;
 	}
 
 	// get intersection point of ray with triangle plane
@@ -113,7 +116,7 @@ IntersectionInfo Triangle::Intersect(const Ray& initialRay) const
 	// ray goes away from triangle => no intersect
 	if (t < 0.0) // TODO: ??? t>1.0 is it possible
 	{
-		return info;
+		return isHitWithDistance;
 	}
 
 	// the intersection point of the ray and the plane
@@ -122,8 +125,8 @@ IntersectionInfo Triangle::Intersect(const Ray& initialRay) const
 	if (Triangle::IsPointInTriangleByBarycentricCoordinates(P))
 		//if (Triangle::isPointInTriangleByHalfPlanes(P))
 	{
-		return IntersectionInfo(true, P, t, this->normal);
+		return std::make_pair(true, t);
 	}
 
-	return info;
+	return isHitWithDistance;
 }

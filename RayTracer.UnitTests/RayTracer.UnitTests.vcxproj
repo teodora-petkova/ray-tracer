@@ -37,6 +37,7 @@
     <ClCompile Include="canvas_tests.cpp" />
     <ClCompile Include="light_tests.cpp" />
     <ClCompile Include="matrix_tests.cpp" />
+    <ClCompile Include="object_tests.cpp" />
     <ClCompile Include="raytracer_tests.cpp" />
     <ClCompile Include="ray_tests.cpp" />
     <ClCompile Include="sphere_tests.cpp" />

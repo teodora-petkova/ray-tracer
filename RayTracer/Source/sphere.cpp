@@ -61,30 +61,12 @@ static std::pair<bool, float> GeometricIntersect(const Sphere& sphere, const Ray
 	return std::make_pair(isHit, distance);
 }
 
-Tuple Sphere::getNormal(Tuple intersectionPoint) const
+Tuple Sphere::getLocalNormal(const Tuple& intersectionPoint) const
 {
-	// world to local sphere space
-	Tuple objectPoint = this->getTransformation() * intersectionPoint;
-	Tuple objectNormal = (objectPoint - this->getCenter());
-	// normal vector back to world
-	Tuple worldNormal = this->getTransposedTransformation() * objectNormal;
-	worldNormal = Tuple::Vector(worldNormal.X(), worldNormal.Y(), worldNormal.Z());
-	return worldNormal.Normalize();
+	return (intersectionPoint - this->getCenter());
 }
 
-IntersectionInfo Sphere::Intersect(const Ray& ray) const
+std::pair<bool, float> Sphere::LocalIntersect(const Ray& ray) const
 {
-	// use a transformed ray to find the distance to the intersection of the object
-	// simulating the transformation of the object itself
-	Ray rayToTransformedObject = ray * this->getTransformation();
-	auto pair = GeometricIntersect(*this, rayToTransformedObject);
-	bool isHit = pair.first;
-	float distance = pair.second;
-
-	// STILL TO PROCESS???
-	// to find the intersection point we use the initial ray and the calculated distance???
-	Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
-
-	Tuple normal = this->getNormal(intersectionPoint);
-	return IntersectionInfo(isHit, intersectionPoint, distance, normal);
+	return GeometricIntersect(*this, ray);
 }
