@@ -138,6 +138,14 @@ namespace ReadScene
 							currentTransformation = Matrix<4, 4>::IdentityMatrix();
 						}
 					}
+					else if (command == "plane")
+					{
+						// no values
+						ObjectPtr plane = std::make_shared<Plane>(
+							Plane(currentMaterial, currentTransformation));
+						objects.push_back(plane);
+						currentTransformation = Matrix<4, 4>::IdentityMatrix();
+					}
 					// transformations
 					else if (command == "rotatex")
 					{

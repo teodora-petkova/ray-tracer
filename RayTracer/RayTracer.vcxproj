@@ -19,6 +19,7 @@
     <ClInclude Include="Source\material.h" />
     <ClInclude Include="Source\matrix.h" />
     <ClInclude Include="Source\object.h" />
+    <ClInclude Include="Source\plane.h" />
     <ClInclude Include="Source\ray.h" />
     <ClInclude Include="Source\raytracer.h" />
     <ClInclude Include="Source\raytracer_exports.h" />
@@ -34,6 +35,7 @@
     <ClCompile Include="Source\camera.cpp" />
     <ClCompile Include="Source\canvas.cpp" />
     <ClCompile Include="Source\light.cpp" />
+    <ClCompile Include="Source\plane.cpp" />
     <ClCompile Include="Source\raytracer.cpp" />
     <ClCompile Include="Source\material.cpp" />
     <ClCompile Include="Source\ray.cpp" />

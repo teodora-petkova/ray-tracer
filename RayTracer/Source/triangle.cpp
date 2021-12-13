@@ -104,7 +104,7 @@ std::pair<bool, float> Triangle::LocalIntersect(const Ray& ray) const
 	float b = (ray.getDirection()).Dot(this->normal);
 
 	// ray is  parallel to triangle plane
-	if (fabs(b) < epsilon)
+	if (isCloseToZero(b))
 	{
 		// if (a == 0) then the ray lies in the triangle plane
 		// otherwise disjoint from the plane

@@ -15,7 +15,8 @@ class RAYTRACER_EXPORT Object
 public:
 	Object() :
 		material(std::make_shared<Material>(Material())),
-		invTransformation(Matrix<4, 4>::IdentityMatrix())
+		invTransformation(Matrix<4, 4>::IdentityMatrix()),
+		transposedInvTransformation(Matrix<4, 4>::IdentityMatrix())
 	{}
 
 	Object(MaterialPtr material, Matrix<4, 4> matrix) :
@@ -23,7 +24,7 @@ public:
 	{
 		Matrix<4, 4> inverseTransformation = matrix.Inverse();
 		this->invTransformation = inverseTransformation;
-		transposedInvTransformation = inverseTransformation.Transpose();
+		this->transposedInvTransformation = inverseTransformation.Transpose();
 	}
 
 	IntersectionInfo Intersect(const Ray& ray) const

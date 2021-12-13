@@ -13,6 +13,7 @@
 #include "light.h"
 #include "sphere.h"
 #include "triangle.h"
+#include "plane.h"
 #include "camera.h"
 
 class RAYTRACER_EXPORT Scene

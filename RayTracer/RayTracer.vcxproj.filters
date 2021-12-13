@@ -75,6 +75,9 @@
     <ClInclude Include="Source\triangle.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\plane.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="Source\triangle.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\plane.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

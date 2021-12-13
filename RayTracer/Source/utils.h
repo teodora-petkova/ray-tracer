@@ -15,6 +15,10 @@
 #define MAX(a,b) a < b ? b : a
 
 constexpr float epsilon = 0.0001f;
+inline bool isCloseToZero(float num)
+{
+	return std::fabs(num) < epsilon;
+}
 
 inline bool equals(float a, float b)
 {
@@ -23,6 +27,7 @@ inline bool equals(float a, float b)
 		return a == b;
 	}
 
-	return std::fabs(a - b) < epsilon;
+	return isCloseToZero(a - b);
 }
+
 #endif
