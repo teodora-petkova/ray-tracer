@@ -36,6 +36,7 @@ namespace ReadScene
 		{
 			getline(in, str);
 
+			PatternPtr currentPattern;
 			MaterialPtr currentMaterial;
 			Matrix<4, 4> currentTransformation = Matrix<4, 4>::IdentityMatrix();
 
@@ -99,14 +100,79 @@ namespace ReadScene
 							vertices.push_back(Tuple::Vector(values[0], values[1], values[2]));
 						}
 					}
-					else if (command == "material")
+					else if (command == "color")
 					{
-						// 3 values r g b, ambient, diffuse, specular, shininess
-						isInputValid = readValues(s, 7, values);
+						// 3 values r g b
+						isInputValid = readValues(s, 3, values);
 						if (isInputValid)
 						{
-							MaterialPtr m = std::make_shared<Material>(Material(Color(values[0], values[1], values[2]),
-								values[3], values[4], values[5], values[6]));
+							PatternPtr pattern = std::make_shared<FlatColor>(
+								Color(values[0], values[1], values[2]),
+								Matrix<4, 4>::IdentityMatrix());
+							currentPattern = pattern;
+						}
+					}
+					else if (command == "stripepattern")
+					{
+						// 6 values c1.r c1.g c1.b c2.r c2.g c2.b
+						isInputValid = readValues(s, 6, values);
+						if (isInputValid)
+						{
+							PatternPtr pattern = std::make_shared<StripePattern>(
+								Color(values[0], values[1], values[2]),
+								Color(values[3], values[4], values[5]),
+								Matrix<4, 4>::IdentityMatrix());
+							currentPattern = pattern;
+						}
+					}
+					else if (command == "gradient")
+					{
+						// 6 values c1.r c1.g c1.b c2.r c2.g c2.b
+						isInputValid = readValues(s, 6, values);
+						if (isInputValid)
+						{
+							PatternPtr pattern = std::make_shared<Gradient>(
+								Color(values[0], values[1], values[2]),
+								Color(values[3], values[4], values[5]),
+								Matrix<4, 4>::IdentityMatrix());
+							currentPattern = pattern;
+						}
+					}
+					else if (command == "ringpattern")
+					{
+						// 6 values c1.r c1.g c1.b c2.r c2.g c2.b
+						isInputValid = readValues(s, 6, values);
+						if (isInputValid)
+						{
+							PatternPtr pattern = std::make_shared<RingPattern>(
+								Color(values[0], values[1], values[2]),
+								Color(values[3], values[4], values[5]),
+								Matrix<4, 4>::IdentityMatrix());
+							currentPattern = pattern;
+						}
+					}
+
+					else if (command == "checkerpattern")
+					{
+						// 6 values c1.r c1.g c1.b c2.r c2.g c2.b
+						isInputValid = readValues(s, 6, values);
+						if (isInputValid)
+						{
+							PatternPtr pattern = std::make_shared<CheckerPattern>(
+								Color(values[0], values[1], values[2]),
+								Color(values[3], values[4], values[5]),
+								Matrix<4, 4>::IdentityMatrix());
+							currentPattern = pattern;
+						}
+					}
+					else if (command == "material")
+					{
+						// ambient, diffuse, specular, shininess
+						isInputValid = readValues(s, 4, values);
+						if (isInputValid)
+						{
+							MaterialPtr m = std::make_shared<Material>(Material(
+								currentPattern, values[0], values[1], values[2], values[3]));
 							currentMaterial = m;
 						}
 					}

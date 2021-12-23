@@ -31,12 +31,16 @@ protected:
 		LightPtr l = std::make_shared<Light>(Light(Tuple::Point(-10, 10, -10),
 			Color::White(), 1, 1, 1, 1));
 
-		MaterialPtr m1 = std::make_shared<Material>(Material(Color(0.8, 1.0, 0.6),
+		MaterialPtr m1 = std::make_shared<Material>(Material(
+			std::make_shared<FlatColor>(Color(0.8, 1.0, 0.6),
+				Matrix<4, 4>::IdentityMatrix()),
 			0.1, 0.7, 0.2, 200));
 		ObjectPtr s1 = std::make_shared<Sphere>(Sphere(Tuple::Point(0, 0, 0), 1,
 			m1, Matrix<4, 4>::IdentityMatrix()));
 
-		MaterialPtr m2 = std::make_shared<Material>(Material(Color::White(),
+		MaterialPtr m2 = std::make_shared<Material>(Material(
+			std::make_shared<FlatColor>(Color::White(),
+				Matrix<4, 4>::IdentityMatrix()),
 			1, 1, 1, 1));
 		ObjectPtr s2 = std::make_shared<Sphere>(Sphere(Tuple::Point(0, 0, 0), 1,
 			m2, Transformations::Scaling(0.5, 0.5, 0.5)));

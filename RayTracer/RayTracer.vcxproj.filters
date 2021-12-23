@@ -16,6 +16,12 @@
     <Filter Include="Header Files\objects">
       <UniqueIdentifier>{e3430c56-af75-4706-a881-0955af2ca96c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\patterns">
+      <UniqueIdentifier>{9161cb47-88e2-4386-8f75-a44a9a346dd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\patterns">
+      <UniqueIdentifier>{44ad89f5-7f25-4973-a892-0fa520ee33d8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\objects">
       <UniqueIdentifier>{726d45b1-f0ce-487f-872f-3b01bbc6c12e}</UniqueIdentifier>
     </Filter>
@@ -78,12 +84,33 @@
     <ClInclude Include="Source\plane.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\pattern.h">
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stripepattern.h">
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\flatcolor.h">
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gradient.h">
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ringpattern.h">
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\checkerpattern.h">
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\binarypattern.h">
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\ray.cpp">
@@ -118,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="Source\plane.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\pattern.cpp">
+      <Filter>Source Files\patterns</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

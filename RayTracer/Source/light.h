@@ -45,7 +45,7 @@ public:
 	Color CalculatePhongColor(const Tuple& intersectionPoint,
 		const Tuple& unitNormal,
 		const Tuple& unitCamera,
-		MaterialPtr material,
+		const ObjectPtr& object,
 		bool isInShadow) const;
 
 	Tuple getPosition() const { return position; }

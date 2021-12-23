@@ -1,9 +1,10 @@
 #include "light.h"
+#include "object.h"
 
 Color Light::CalculatePhongColor(const Tuple& intersectionPoint,
 	const Tuple& unitNormal,
 	const Tuple& cameraPosition,
-	MaterialPtr material,
+	const ObjectPtr& object,
 	bool isInShadow) const
 {
 	Color phongIntensity = Color::Black();
@@ -11,7 +12,7 @@ Color Light::CalculatePhongColor(const Tuple& intersectionPoint,
 	Color lightColor = this->color * this->brightness;
 
 	// ambient
-	float ambientness = material->getAmbient() * this->ambient;
+	float ambientness = object->getMaterial()->getAmbient() * this->ambient;
 	Color ambientColor = lightColor * ambientness;
 
 	if (isInShadow)
@@ -28,15 +29,15 @@ Color Light::CalculatePhongColor(const Tuple& intersectionPoint,
 		float rdotV = unitReflected.Dot(unitView);
 
 		// diffuse
-		float diffuseness = material->getDiffuse() * this->diffuse;
+		float diffuseness = object->getMaterial()->getDiffuse() * this->diffuse;
 		Color diffuseColor = lightColor * diffuseness * fmax(ldotN, 0.0f);
 
 		// specular
-		float specularness = material->getSpecular() * this->specular;
-		Color specularColor = lightColor * powf(fmax(rdotV, 0.0f), material->getShininess()) * specularness;
+		float specularness = object->getMaterial()->getSpecular() * this->specular;
+		Color specularColor = lightColor * powf(fmax(rdotV, 0.0f), object->getMaterial()->getShininess()) * specularness;
 
 		phongIntensity = ambientColor + diffuseColor + specularColor;
 	}
 
-	return material->getColor() * phongIntensity;
+	return object->getMaterial()->getPattern()->getColorAtObject(object, intersectionPoint) * phongIntensity;
 }

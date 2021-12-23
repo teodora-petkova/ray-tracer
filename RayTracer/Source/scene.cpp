@@ -33,7 +33,7 @@ Color Scene::TraceSingleRay(const Ray& ray) const
 			color += light->CalculatePhongColor(intersection.getIntersectionPoint(),
 				intersection.getNormal(),
 				scene.getCamera().getOrigin(),
-				object->getMaterial(),
+				object,
 				IsInShadow(intersection, light->getPosition()));
 		}
 	}
