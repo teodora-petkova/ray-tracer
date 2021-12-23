@@ -1,9 +1,3 @@
-//---------------------------------------------------------------------
-// utils.h Header
-//---------------------------------------------------------------------
-#ifndef UTILS_H
-#define UTILS_H
-
 #pragma once
 
 #pragma warning(push, 0)
@@ -29,5 +23,3 @@ inline bool equals(float a, float b)
 
 	return isCloseToZero(a - b);
 }
-
-#endif

@@ -1,7 +1,3 @@
-//------------------------------------------------------------
-// RayTracer.cpp
-//------------------------------------------------------------
-
 #pragma warning(push, 0)
 #include <math.h>
 #include <future>
@@ -99,7 +95,7 @@ Canvas RayTracer::TraceRays(const Scene& scene) const
 
 	int numThreads = std::thread::hardware_concurrency();
 	int chunkSize = scene.getImageHeight() > numThreads ?
-		std::ceilf(scene.getImageHeight() / float(numThreads)) : 1;
+		(int)std::ceilf(scene.getImageHeight() / (float)numThreads) : 1;
 
 	std::vector<std::thread> threads(numThreads);
 

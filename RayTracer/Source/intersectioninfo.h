@@ -1,8 +1,4 @@
-//---------------------------------------------------------------------
-// intersectioninfo.h Header
-//---------------------------------------------------------------------
-#ifndef INTERSECTIONINFO_H
-#define INTERSECTIONINFO_H
+#pragma once
 
 #include "tuple.h"
 
@@ -36,5 +32,3 @@ private:
 	float distance;
 	Tuple normal;
 };
-
-#endif

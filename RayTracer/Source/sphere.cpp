@@ -1,6 +1,3 @@
-//------------------------------------------------------------
-// Sphere Class
-//------------------------------------------------------------
 #include "sphere.h"
 
 static std::pair<bool, float> AlgebraicIntersect(const Sphere& sphere, const Ray& ray)

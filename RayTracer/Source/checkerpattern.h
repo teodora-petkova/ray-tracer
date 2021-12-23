@@ -1,9 +1,3 @@
-//------------------------------------------------------------
-// checkerpattern.h Header
-//------------------------------------------------------------
-#ifndef CHECKERPATTERN_H
-#define CHECKERPATTERN_H
-
 #pragma once
 
 #include "binarypattern.h"
@@ -22,7 +16,7 @@ public:
 
 	Color getColorAt(const Tuple& point) const
 	{
-		int sum = floor(point.X()) + floor(point.Y()) + floor(point.Z());
+		int sum = (int)floor(point.X()) + (int)floor(point.Y()) + (int)floor(point.Z());
 		if (sum % 2 == 0)
 		{
 			return this->color1;
@@ -33,5 +27,3 @@ public:
 		}
 	}
 };
-
-#endif

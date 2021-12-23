@@ -1,9 +1,3 @@
-//------------------------------------------------------------
-// flatcolor.h Header
-//------------------------------------------------------------
-#ifndef FLATCOLOR_H
-#define FLATCOLOR_H
-
 #pragma once
 
 #include "pattern.h"
@@ -24,7 +18,7 @@ public:
 
 	Color getColor() const { return color; }
 
-	Color getColorAt(const Tuple& point) const
+	Color getColorAt(const Tuple& /*point*/) const
 	{
 		return this->color;
 	}
@@ -32,5 +26,3 @@ public:
 private:
 	Color color;
 };
-
-#endif

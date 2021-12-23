@@ -1,6 +1,3 @@
-#ifndef TRANSFORMATION_H
-#define TRANSFORMATION_H
-
 #pragma once
 
 #pragma warning(push, 0)
@@ -21,5 +18,3 @@ namespace Transformations
 	RAYTRACER_EXPORT Matrix<4, 4> ViewTransform(Tuple from, Tuple to, Tuple up);
 	RAYTRACER_EXPORT Matrix<4, 4> PerspectiveMatrix(float d, float apsectRatio, float near, float far);
 };
-
-#endif

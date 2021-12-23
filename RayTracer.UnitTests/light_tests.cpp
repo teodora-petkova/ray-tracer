@@ -20,10 +20,10 @@ protected:
 	void SetUp() override {
 		PatternPtr pattern = std::make_shared<FlatColor>(Color::White(),
 			Matrix<4, 4>::IdentityMatrix());
-		MaterialPtr material = std::make_shared<Material>(Material(pattern,
-			0.1f, 0.9f, 0.9f, 200.0f));
-		this->object = std::make_shared<Sphere>(Sphere(Tuple::Point(0, 0, 0), 1,
-			material, Matrix<4, 4>::IdentityMatrix()));
+		MaterialPtr material = std::make_shared<Material>(pattern,
+			0.1f, 0.9f, 0.9f, 200.0f);
+		this->object = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+			material, Matrix<4, 4>::IdentityMatrix());
 	}
 };
 
@@ -128,8 +128,8 @@ TEST_F(LightTests, Lightning_with_an_applied_pattern) {
 		std::make_shared<StripePattern>(Color::White(), Color::Black(),
 			Matrix<4, 4>::IdentityMatrix()),
 		1, 0, 0, 0);
-	ObjectPtr object = std::make_shared<Sphere>(Sphere(Tuple::Point(0, 0, 0), 1,
-		material, Matrix<4, 4>::IdentityMatrix()));
+	ObjectPtr obj = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		material, Matrix<4, 4>::IdentityMatrix());
 
 	Tuple eyev = Tuple::Vector(0, 0, -1);
 	Tuple normalv = Tuple::Vector(0, 0, -1);
@@ -138,14 +138,14 @@ TEST_F(LightTests, Lightning_with_an_applied_pattern) {
 		Color::White(), 1, 1, 1, 1);
 
 	Color c1 = light.CalculatePhongColor(
-		Tuple::Point(0.9, 0, 0),
+		Tuple::Point(0.9f, 0.f, 0.f),
 		eyev, normalv,
-		object, false);
+		obj, false);
 
 	Color c2 = light.CalculatePhongColor(
-		Tuple::Point(1.1, 0, 0),
+		Tuple::Point(1.1f, 0.f, 0.f),
 		eyev, normalv,
-		object, false);
+		obj, false);
 
 	EXPECT_EQ(c1, Color::White());
 	EXPECT_EQ(c2, Color::Black());

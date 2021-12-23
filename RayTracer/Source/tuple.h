@@ -1,9 +1,3 @@
-//---------------------------------------------------------------------
-// tuple.h Header
-//---------------------------------------------------------------------
-#ifndef TUPLE_H
-#define TUPLE_H
-
 #pragma once
 
 #pragma warning(push, 0)
@@ -70,4 +64,3 @@ protected:
 };
 
 RAYTRACER_EXPORT std::ostream& operator<<(std::ostream& os, const Tuple& v);
-#endif

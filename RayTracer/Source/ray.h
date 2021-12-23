@@ -1,8 +1,4 @@
-//------------------------------------------------------------
-// ray.h Header
-//------------------------------------------------------------
-#ifndef RAY_H
-#define RAY_H
+#pragma once
 
 #include "raytracer_exports.h"
 #include "tuple.h"
@@ -23,5 +19,3 @@ private:
 	Tuple rayOrigin;
 	Tuple rayDirection;
 };
-
-#endif

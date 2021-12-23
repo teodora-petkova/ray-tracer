@@ -1,8 +1,4 @@
-//------------------------------------------------------------
-// sphere.h Header
-//------------------------------------------------------------
-#ifndef SPHERE_H
-#define SPHERE_H
+#pragma once
 
 #pragma warning(push, 0)
 #include <cmath>
@@ -37,5 +33,3 @@ private:
 	std::pair<bool, float> LocalIntersect(const Ray& ray) const override;
 	Tuple getLocalNormal(const Tuple& ray) const override;
 };
-
-#endif

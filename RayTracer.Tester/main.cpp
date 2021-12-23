@@ -64,7 +64,7 @@ void UpdateWindow(SDLApp& window,
 //------------------------------------------------------------
 //  Main Function
 //------------------------------------------------------------
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	const char* sceneFile = argv[1];
 	Scene scene = ReadScene::ReadSceneFile(sceneFile);

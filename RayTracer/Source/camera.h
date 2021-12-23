@@ -1,9 +1,3 @@
-//---------------------------------------------------------------------
-// camera.h Header
-//---------------------------------------------------------------------
-#ifndef CAMERA_H
-#define CAMERA_H
-
 #pragma once
 
 #pragma warning(push, 0)
@@ -48,4 +42,3 @@ private:
 	Matrix<4, 4> transform;
 	Tuple origin;
 };
-#endif

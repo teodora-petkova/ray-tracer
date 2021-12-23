@@ -1,8 +1,4 @@
-//------------------------------------------------------------
-// triangle.h Header
-//------------------------------------------------------------
-#ifndef TRIANGLE_H
-#define TRIANGLE_H
+#pragma once
 
 #pragma warning(push, 0)
 #include <cmath>
@@ -33,5 +29,3 @@ private:
 	std::pair<bool, float> LocalIntersect(const Ray& ray) const override;
 	Tuple getLocalNormal(const Tuple& ray) const override;
 };
-
-#endif

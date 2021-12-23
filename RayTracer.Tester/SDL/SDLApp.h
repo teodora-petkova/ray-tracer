@@ -1,6 +1,4 @@
 #pragma once
-#ifndef SDLWINDOW_H
-#define SDLWINDOW_H
 
 #pragma warning(push, 0)
 #include "SDL.h"
@@ -30,5 +28,3 @@ private:
 	// use SDL_CreateRenderer in order for draw calls to affect this window.
 	SDL_Renderer* renderer;
 };
-
-#endif

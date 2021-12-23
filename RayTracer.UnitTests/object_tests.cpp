@@ -38,7 +38,7 @@ TEST(ObjectTests, Intersecting_a_scaled_shape_with_a_ray)
 {
 	Ray ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 
-	CustomObject o = CustomObject(std::make_shared<Material>(Material()),
+	CustomObject o = CustomObject(std::make_shared<Material>(),
 		Transformations::Scaling(2, 2, 2));
 
 	IntersectionInfo intersection = o.Intersect(ray);
@@ -54,7 +54,7 @@ TEST(ObjectTests, Intersecting_a_translated_shape_with_a_ray)
 {
 	Ray ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 
-	CustomObject o = CustomObject(std::make_shared<Material>(Material()),
+	CustomObject o = CustomObject(std::make_shared<Material>(),
 		Transformations::Translation(5, 0, 0));
 
 	IntersectionInfo intersection = o.Intersect(ray);
@@ -68,22 +68,22 @@ TEST(ObjectTests, Intersecting_a_translated_shape_with_a_ray)
 TEST(ObjectTests, Computing_the_normal_on_a_translated_shape)
 {
 	CustomObject o = CustomObject(
-		std::make_shared<Material>(Material()),
+		std::make_shared<Material>(),
 		Transformations::Translation(0, 1, 0));
 
-	Tuple normal = o.getNormal(Tuple::Point(0, 1.70711, -0.70711));
+	Tuple normal = o.getNormal(Tuple::Point(0, 1.70711f, -0.70711f));
 
-	EXPECT_EQ(normal, Tuple::Vector(0, 0.70711, -0.70711));
+	EXPECT_EQ(normal, Tuple::Vector(0, 0.70711f, -0.70711f));
 }
 
 TEST(ObjectTests, Computing_the_normal_on_a_transformed_shape)
 {
-	CustomObject o = CustomObject(std::make_shared<Material>(Material()),
+	CustomObject o = CustomObject(std::make_shared<Material>(),
 		Transformations::Scaling(1, 0.5, 1) *
 		Transformations::RotationZ(float(80 / 5)));
 
-	float sqrt2over2 = sqrt(2) / 2;
+	float sqrt2over2 = sqrtf(2) / 2;
 	Tuple normal = o.getNormal(Tuple::Point(0, sqrt2over2, -sqrt2over2));
 
-	EXPECT_EQ(normal, Tuple::Vector(0, 0.97014, -0.24254));
+	EXPECT_EQ(normal, Tuple::Vector(0, 0.97014f, -0.24254f));
 }

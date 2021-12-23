@@ -1,8 +1,4 @@
-//------------------------------------------------------------
-// object.h Header
-//------------------------------------------------------------
-#ifndef OBJECT_H
-#define OBJECT_H
+#pragma once
 
 #include "raytracer_exports.h"
 #include "tuple.h"
@@ -14,7 +10,7 @@ class RAYTRACER_EXPORT Object
 {
 public:
 	Object() :
-		material(std::make_shared<Material>(Material())),
+		material(std::make_shared<Material>()),
 		invTransformation(Matrix<4, 4>::IdentityMatrix()),
 		transposedInvTransformation(Matrix<4, 4>::IdentityMatrix())
 	{}
@@ -80,5 +76,3 @@ protected:
 };
 
 using ObjectPtr = std::shared_ptr<Object>;
-
-#endif

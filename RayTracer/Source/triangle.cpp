@@ -1,6 +1,3 @@
-//------------------------------------------------------------
-// Triangle Class
-//------------------------------------------------------------
 #include "triangle.h"
 
 void Triangle::Initialize()
@@ -16,7 +13,7 @@ void Triangle::Initialize()
 	normal = AB.Cross(AC).Normalize();
 }
 
-Tuple Triangle::getLocalNormal(const Tuple& point)const
+Tuple Triangle::getLocalNormal(const Tuple& /*point*/)const
 {
 	return this->normal;
 }

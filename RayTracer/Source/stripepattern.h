@@ -1,9 +1,3 @@
-//------------------------------------------------------------
-// stripepattern.h Header
-//------------------------------------------------------------
-#ifndef STRIPEPATTERN_H
-#define STRIPEPATTERN_H
-
 #pragma once
 
 #include "binarypattern.h"
@@ -32,5 +26,3 @@ public:
 		}
 	}
 };
-
-#endif

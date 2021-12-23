@@ -1,9 +1,3 @@
-//---------------------------------------------------------------------
-// material.h Header
-//---------------------------------------------------------------------
-#ifndef MATERIAL_H
-#define MATERIAL_H
-
 #pragma once
 
 #include "raytracer_exports.h"
@@ -52,5 +46,3 @@ private:
 };
 
 using MaterialPtr = std::shared_ptr<Material>;
-
-#endif

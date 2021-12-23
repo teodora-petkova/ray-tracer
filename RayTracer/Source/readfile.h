@@ -1,6 +1,3 @@
-#ifndef READFILE_H
-#define READFILE_H
-
 #pragma once
 
 #pragma warning(push, 0)
@@ -17,4 +14,3 @@ namespace ReadScene
 {
 	Scene RAYTRACER_EXPORT ReadSceneFile(const std::string& filename);
 }
-#endif

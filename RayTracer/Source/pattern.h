@@ -1,9 +1,3 @@
-//------------------------------------------------------------
-// pattern.h Header
-//------------------------------------------------------------
-#ifndef PATTERN_H
-#define PATTERN_H
-
 #pragma once
 
 #pragma warning(push, 0)
@@ -36,5 +30,3 @@ protected:
 };
 
 using PatternPtr = std::shared_ptr<Pattern>;
-
-#endif

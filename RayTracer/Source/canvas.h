@@ -1,6 +1,3 @@
-#ifndef CANVAS_H
-#define CANVAS_H
-
 #pragma once
 
 #pragma warning(push, 0)
@@ -32,5 +29,3 @@ private:
 	// the (0,0) point is at bottom-left!
 	Color* pixels;
 };
-
-#endif

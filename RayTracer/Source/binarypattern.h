@@ -1,9 +1,3 @@
-//------------------------------------------------------------
-// binarypattern.h Header
-//------------------------------------------------------------
-#ifndef BINARYPATTERN_H
-#define BINARYPATTERN_H
-
 #pragma once
 
 #include "pattern.h"
@@ -31,5 +25,3 @@ protected:
 	Color color1;
 	Color color2;
 };
-
-#endif

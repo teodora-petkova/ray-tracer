@@ -1,9 +1,3 @@
-//------------------------------------------------------------
-// ringpattern.h Header
-//------------------------------------------------------------
-#ifndef RINGPATTERN_H
-#define RINGPATTERN_H
-
 #pragma once
 
 #include "binarypattern.h"
@@ -34,5 +28,3 @@ public:
 		}
 	}
 };
-
-#endif

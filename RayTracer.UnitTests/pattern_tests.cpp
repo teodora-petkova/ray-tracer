@@ -38,12 +38,12 @@ TEST(PatternTests, A_stripe_pattern_is_constant_in_z)
 TEST(PatternTests, A_stripe_pattern_alternates_in_x)
 {
 	StripePattern p = StripePattern();
-	EXPECT_EQ(p.getColorAt(Tuple::Point(0, 0, 0)), Color::White());
-	EXPECT_EQ(p.getColorAt(Tuple::Point(0.9, 0, 0)), Color::White());
-	EXPECT_EQ(p.getColorAt(Tuple::Point(1, 0, 0)), Color::Black());
-	EXPECT_EQ(p.getColorAt(Tuple::Point(-0.1, 0, 0)), Color::Black());
-	EXPECT_EQ(p.getColorAt(Tuple::Point(-1, 0, 0)), Color::Black());
-	EXPECT_EQ(p.getColorAt(Tuple::Point(-1.1, 0, 0)), Color::White());
+	EXPECT_EQ(p.getColorAt(Tuple::Point(0.f, 0.f, 0.f)), Color::White());
+	EXPECT_EQ(p.getColorAt(Tuple::Point(0.9f, 0.f, 0.f)), Color::White());
+	EXPECT_EQ(p.getColorAt(Tuple::Point(1.f, 0.f, 0.f)), Color::Black());
+	EXPECT_EQ(p.getColorAt(Tuple::Point(-0.1f, 0.f, 0.f)), Color::Black());
+	EXPECT_EQ(p.getColorAt(Tuple::Point(-1.f, 0.f, 0.f)), Color::Black());
+	EXPECT_EQ(p.getColorAt(Tuple::Point(-1.1f, 0.f, 0.f)), Color::White());
 }
 
 TEST(PatternTests, Stripes_with_an_object_transformation)
@@ -91,10 +91,10 @@ TEST(PatternTests, A_gradient_linearly_interpolates_between_colors)
 {
 	Gradient gradient = Gradient(Color::White(), Color::Black(),
 		Matrix<4, 4>::IdentityMatrix());
-	EXPECT_EQ(gradient.getColorAt(Tuple::Point(0, 0, 0)), Color::White());
-	EXPECT_EQ(gradient.getColorAt(Tuple::Point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
-	EXPECT_EQ(gradient.getColorAt(Tuple::Point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
-	EXPECT_EQ(gradient.getColorAt(Tuple::Point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
+	EXPECT_EQ(gradient.getColorAt(Tuple::Point(0.f, 0.f, 0.f)), Color::White());
+	EXPECT_EQ(gradient.getColorAt(Tuple::Point(0.25f, 0.f, 0.f)), Color(0.75, 0.75, 0.75));
+	EXPECT_EQ(gradient.getColorAt(Tuple::Point(0.5f, 0.f, 0.f)), Color(0.5, 0.5, 0.5));
+	EXPECT_EQ(gradient.getColorAt(Tuple::Point(0.75f, 0.f, 0.f)), Color(0.25, 0.25, 0.25));
 }
 
 TEST(PatternTests, A_ring_should_extend_on_both_x_and_z)
@@ -105,32 +105,32 @@ TEST(PatternTests, A_ring_should_extend_on_both_x_and_z)
 	EXPECT_EQ(ringPattern.getColorAt(Tuple::Point(1, 0, 0)), Color::Black());
 	EXPECT_EQ(ringPattern.getColorAt(Tuple::Point(0, 0, 1)), Color::Black());
 	// 0.708 = just slightly more than √2 / 2
-	EXPECT_EQ(ringPattern.getColorAt(Tuple::Point(0.708, 0, 0.708)), Color::Black());
+	EXPECT_EQ(ringPattern.getColorAt(Tuple::Point(0.708f, 0.f, 0.708f)), Color::Black());
 }
 
 TEST(PatternTests, Checkers_should_repeat_in_x)
 {
 	CheckerPattern checkers = CheckerPattern(Color::White(), Color::Black(),
 		Matrix<4, 4>::IdentityMatrix());
-	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0, 0, 0)), Color::White());
-	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0.99, 0, 0)), Color::White());
-	EXPECT_EQ(checkers.getColorAt(Tuple::Point(1.01, 0, 0)), Color::Black());
+	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0.f, 0.f, 0.f)), Color::White());
+	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0.99f, 0.f, 0.f)), Color::White());
+	EXPECT_EQ(checkers.getColorAt(Tuple::Point(1.01f, 0.f, 0.f)), Color::Black());
 }
 
 TEST(PatternTests, Checkers_should_repeat_in_y)
 {
 	CheckerPattern checkers = CheckerPattern(Color::White(), Color::Black(),
 		Matrix<4, 4>::IdentityMatrix());
-	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0, 0, 0)), Color::White());
-	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0, 0.99, 0)), Color::White());
-	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0, 1.01, 0)), Color::Black());
+	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0.f, 0.f, 0.f)), Color::White());
+	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0.f, 0.99f, 0.f)), Color::White());
+	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0.f, 1.01f, 0.f)), Color::Black());
 }
 
 TEST(PatternTests, Checkers_should_repeat_in_z)
 {
 	CheckerPattern checkers = CheckerPattern(Color::White(), Color::Black(),
 		Matrix<4, 4>::IdentityMatrix());
-	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0, 0, 0)), Color::White());
-	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0, 0, 0.99)), Color::White());
-	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0, 0, 1.01)), Color::Black());
+	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0.f, 0.f, 0.f)), Color::White());
+	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0.f, 0.f, 0.99f)), Color::White());
+	EXPECT_EQ(checkers.getColorAt(Tuple::Point(0.f, 0.f, 1.01f)), Color::Black());
 }

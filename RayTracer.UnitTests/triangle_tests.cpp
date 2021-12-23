@@ -16,7 +16,7 @@ protected:
 
 protected:
 	void SetUp() override {
-		this->material = std::make_shared<Material>(Material());
+		this->material = std::make_shared<Material>();
 		this->transformation = Matrix<4, 4>::IdentityMatrix();
 	}
 };

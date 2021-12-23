@@ -46,7 +46,7 @@ TEST(TransformationsTests, RotateAPointByX) {
 	Matrix<4, 4> rotateFullQuarter = Transformations::RotationX(90);
 
 	Tuple point = Tuple::Point(0, 1, 0);
-	EXPECT_EQ(rotateHalfQuarter * point, Tuple::Point(0, sqrt(2) / 2, sqrt(2) / 2));
+	EXPECT_EQ(rotateHalfQuarter * point, Tuple::Point(0, sqrtf(2) / 2, sqrtf(2) / 2));
 	EXPECT_EQ(rotateFullQuarter * point, Tuple::Point(0, 0, 1));
 }
 
@@ -54,7 +54,7 @@ TEST(TransformationsTests, InverseRotateAPointByX) {
 	Matrix<4, 4> inverseRotateHalfQuarter = Transformations::RotationX(45).Inverse();
 
 	Tuple point = Tuple::Point(0, 1, 0);
-	EXPECT_EQ(inverseRotateHalfQuarter * point, Tuple::Point(0, sqrt(2) / 2, -sqrt(2) / 2));
+	EXPECT_EQ(inverseRotateHalfQuarter * point, Tuple::Point(0, sqrtf(2) / 2, -sqrtf(2) / 2));
 }
 
 TEST(TransformationsTests, RotateAPointByY) {
@@ -62,7 +62,7 @@ TEST(TransformationsTests, RotateAPointByY) {
 	Matrix<4, 4> rotateFullQuarter = Transformations::RotationY(90);
 
 	Tuple point = Tuple::Point(0, 0, 1);
-	EXPECT_EQ(rotateHalfQuarter * point, Tuple::Point(sqrt(2) / 2, 0, sqrt(2) / 2));
+	EXPECT_EQ(rotateHalfQuarter * point, Tuple::Point(sqrtf(2) / 2, 0, sqrtf(2) / 2));
 	EXPECT_EQ(rotateFullQuarter * point, Tuple::Point(1, 0, 0));
 }
 
@@ -71,7 +71,7 @@ TEST(TransformationsTests, RotateAPointByZ) {
 	Matrix<4, 4> rotateFullQuarter = Transformations::RotationZ(90);
 
 	Tuple point = Tuple::Point(1, 0, 0);
-	EXPECT_EQ(rotateHalfQuarter * point, Tuple::Point(sqrt(2) / 2, sqrt(2) / 2, 0));
+	EXPECT_EQ(rotateHalfQuarter * point, Tuple::Point(sqrtf(2) / 2, sqrtf(2) / 2, 0));
 	EXPECT_EQ(rotateFullQuarter * point, Tuple::Point(0, 1, 0));
 }
 

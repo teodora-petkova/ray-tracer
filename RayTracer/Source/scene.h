@@ -1,8 +1,4 @@
-//------------------------------------------------------------
-// Cscene.h Header
-//------------------------------------------------------------
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
 #pragma warning(push, 0)
 #include <vector>
@@ -65,5 +61,3 @@ private:
 	std::vector<ObjectPtr> objects;
 	std::vector<LightPtr> lights;
 };
-
-#endif

@@ -87,8 +87,8 @@ namespace ReadScene
 							Tuple lightPosition = Tuple::Point(values[0], values[1], values[2]);
 							Tuple lightColour = Color::Color(values[3], values[4], values[5]);
 
-							lights.push_back(std::make_shared<Light>(Light(lightPosition, lightColour,
-								values[6], values[7], values[8], values[9])));
+							lights.push_back(std::make_shared<Light>(lightPosition, lightColour,
+								values[6], values[7], values[8], values[9]));
 						}
 					}
 					else if (command == "vertex")
@@ -171,8 +171,9 @@ namespace ReadScene
 						isInputValid = readValues(s, 4, values);
 						if (isInputValid)
 						{
-							MaterialPtr m = std::make_shared<Material>(Material(
-								currentPattern, values[0], values[1], values[2], values[3]));
+							MaterialPtr m = std::make_shared<Material>(
+								currentPattern, values[0], values[1],
+								values[2], values[3]);
 							currentMaterial = m;
 						}
 					}
@@ -182,11 +183,12 @@ namespace ReadScene
 						isInputValid = readValues(s, 3, values);
 						if (isInputValid)
 						{
-							ObjectPtr triangle = std::make_shared<Triangle>(Triangle(vertices[(int)values[0]],
+							ObjectPtr triangle = std::make_shared<Triangle>(
+								vertices[(int)values[0]],
 								vertices[(int)values[1]],
 								vertices[(int)values[2]],
 								currentMaterial,
-								currentTransformation));
+								currentTransformation);
 							objects.push_back(triangle);
 							currentTransformation = Matrix<4, 4>::IdentityMatrix();
 						}
@@ -197,9 +199,10 @@ namespace ReadScene
 						isInputValid = readValues(s, 4, values);
 						if (isInputValid)
 						{
-							ObjectPtr sphere = std::make_shared<Sphere>(Sphere(Tuple::Vector(values[0],
-								values[1], values[2]), values[3],
-								currentMaterial, currentTransformation));
+							ObjectPtr sphere = std::make_shared<Sphere>(
+								Tuple::Vector(values[0], values[1], values[2]),
+								values[3],
+								currentMaterial, currentTransformation);
 							objects.push_back(sphere);
 							currentTransformation = Matrix<4, 4>::IdentityMatrix();
 						}
@@ -207,8 +210,7 @@ namespace ReadScene
 					else if (command == "plane")
 					{
 						// no values
-						ObjectPtr plane = std::make_shared<Plane>(
-							Plane(currentMaterial, currentTransformation));
+						ObjectPtr plane = std::make_shared<Plane>(currentMaterial, currentTransformation);
 						objects.push_back(plane);
 						currentTransformation = Matrix<4, 4>::IdentityMatrix();
 					}

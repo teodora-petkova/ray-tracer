@@ -1,9 +1,3 @@
-//---------------------------------------------------------------------
-// color.h Header
-//---------------------------------------------------------------------
-#ifndef COLOR_H
-#define COLOR_H
-
 #pragma once
 
 #pragma warning(push, 0)
@@ -27,5 +21,3 @@ public:
 	static Color Black() { return Color(0.0f, 0.0f, 0.0f); }
 	static Color White() { return Color(1.0f, 1.0f, 1.0f); }
 };
-
-#endif

@@ -1,9 +1,4 @@
 #pragma once
-//------------------------------------------------------------
-// plane.h Header
-//------------------------------------------------------------
-#ifndef PLANE_H
-#define PLANE_H
 
 #include "tuple.h"
 #include "ray.h"
@@ -24,5 +19,3 @@ private:
 	std::pair<bool, float> LocalIntersect(const Ray& ray) const override;
 	Tuple getLocalNormal(const Tuple& ray) const override;
 };
-
-#endif

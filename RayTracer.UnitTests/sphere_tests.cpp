@@ -26,7 +26,7 @@ protected:
 	void SetUp() override {
 		this->origin = Tuple::Point(0, 0, 0);
 		this->radius = 1;
-		this->material = std::make_shared<Material>(Material());
+		this->material = std::make_shared<Material>();
 		this->transformation = Matrix<4, 4>::IdentityMatrix();
 	}
 };
@@ -229,7 +229,7 @@ TEST_F(SphereTests, The_normal_on_a_sphere_at_a_point_on_the_z_axis) {
 
 TEST_F(SphereTests, The_normal_on_a_sphere_at_a_point_on_nonaxial_point) {
 
-	float sqrt3_3 = sqrt(3) / 3;
+	float sqrt3_3 = sqrtf(3) / 3;
 	Sphere sphere = Sphere(this->origin,
 		this->radius,
 		this->material,
@@ -245,8 +245,8 @@ TEST_F(SphereTests, The_normal_on_a_translated_sphere) {
 		this->material,
 		Transformations::Translation(0, 1, 0));
 
-	EXPECT_EQ(sphere.getNormal(Tuple::Point(0, 1.70711, -0.70711)),
-		Tuple::Vector(0, 0.70711, -0.70711));
+	EXPECT_EQ(sphere.getNormal(Tuple::Point(0, 1.70711f, -0.70711f)),
+		Tuple::Vector(0, 0.70711f, -0.70711f));
 }
 
 TEST_F(SphereTests, The_normal_on_a_transformed_sphere) {
@@ -256,6 +256,6 @@ TEST_F(SphereTests, The_normal_on_a_transformed_sphere) {
 		Transformations::Scaling(1, 0.5, 1) *
 		Transformations::RotationZ(36));
 
-	EXPECT_EQ(sphere.getNormal(Tuple::Point(0, sqrt(2) / 2, -sqrt(2) / 2)),
-		Tuple::Vector(0, 0.97014, -0.24254));
+	EXPECT_EQ(sphere.getNormal(Tuple::Point(0, sqrtf(2) / 2, -sqrtf(2) / 2)),
+		Tuple::Vector(0, 0.97014f, -0.24254f));
 }

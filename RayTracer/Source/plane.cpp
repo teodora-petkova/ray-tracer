@@ -1,9 +1,6 @@
-//------------------------------------------------------------
-// Plane Class
-//------------------------------------------------------------
 #include "plane.h"
 
-Tuple Plane::getLocalNormal(const Tuple& intersectionPoint) const
+Tuple Plane::getLocalNormal(const Tuple& /*intersectionPoint*/) const
 {
 	// the plane is XZ plane
 	return Tuple::Vector(0, 1, 0);

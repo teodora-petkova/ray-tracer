@@ -1,9 +1,3 @@
-//---------------------------------------------------------------------
-// light.h Header
-//---------------------------------------------------------------------
-#ifndef LIGHT_H
-#define LIGHT_H
-
 #pragma once
 
 #include "raytracer_exports.h"
@@ -65,5 +59,3 @@ private:
 };
 
 using LightPtr = std::shared_ptr<Light>;
-
-#endif

@@ -1,9 +1,3 @@
-//------------------------------------------------------------
-// gradient.h Header
-//------------------------------------------------------------
-#ifndef GRADIENT_H
-#define GRADIENT_H
-
 #pragma once
 
 #include "binarypattern.h"
@@ -27,5 +21,3 @@ public:
 		return this->color1 + distance * fraction;
 	}
 };
-
-#endif

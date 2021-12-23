@@ -1,6 +1,3 @@
-#ifndef MATRIX_H
-#define MATRIX_H
-
 #pragma once
 
 #include "raytracer_exports.h"
@@ -210,5 +207,3 @@ private:
 	// the (0,0) point is at bottom-left!
 	float data[ROWS][COLUMNS]{};
 };
-
-#endif
