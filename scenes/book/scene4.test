@@ -4,14 +4,25 @@ camera 0 1 -5 0 1 0 0 1 0 60
 
 point_light -5 10 -5 1 1 1 1 1 1 1
 
-ringpattern 1 0.9 0.9 1 0.5 0.5
-
 # the floor
+rotatey 45
+scale 0.25 1 1
+color 0.2 0.4 0.2
+color 0 0.2 0
+stripepattern
+rotatey -45
+scale 0.25 1 1
+color 0.4 0.4 0.2 
+color 0.2 0.2 0
+stripepattern
+checkerpattern
 material 0.1 0.9 0 200 
 plane
 
 # the back wall
-stripepattern 1 0.9 0.9 1 0.5 0.5
+color 1 0.9 0.9
+color 1 0.5 0.5
+ringpattern
 material 0.1 0.9 0 200
 translate 0 0 10
 rotatey 15
@@ -19,21 +30,31 @@ rotatex 90
 plane
 
 # the large green sphere in the middle
-stripepattern 0.9 0.9 0.3 0.5 1 0.5
+scale 0.2 0.2 0.2
+rotatez 90
+color 0.9 0.9 0.3
+color 0.5 1 0.5
+stripepattern
 material 0.1 0.7 0.3 200
 translate -0.5 1 0.5
 sphere 0 0 0 1
 
 # the smaller green sphere on the right
-
-checkerpattern 0.8 0.6 0.1 0.7 1 0.5
+scale 0.3 0.3 0.3
+color 0.8 0.6 0.1
+color 0.7 1 0.5
+checkerpattern
 material 0.1 0.7 0.3 200
 translate 1.5 0.5 -0.5 
 scale 0.5 0.5 0.5
 sphere 0 0 0 1
 
 # the smallest sphere 
-gradient 0.8 0.5 0.1 0.8 0.5 0.5
+translate -1 0 0
+scale 2 1 1
+color 0.9 0.5 0.1
+color 0.5 0.8 0.5
+gradient
 material 0.1 0.7 0.3 200
 translate -1.5 0.33 -0.75
 scale 0.33 0.33 0.33

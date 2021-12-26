@@ -9,9 +9,9 @@ public:
 		BinaryPattern()
 	{}
 
-	RingPattern(const Color& c1, const Color& c2,
+	RingPattern(PatternPtr p1, PatternPtr p2,
 		Matrix<4, 4> transformation) :
-		BinaryPattern(c1, c2, transformation)
+		BinaryPattern(p1, p2, transformation)
 	{}
 
 	Color getColorAt(const Tuple& point) const
@@ -20,11 +20,11 @@ public:
 		float z2 = point.Z() * point.Z();
 		if ((int)floor(sqrt(x2 + z2)) % 2 == 0)
 		{
-			return this->color1;
+			return getColor1At(point);
 		}
 		else
 		{
-			return this->color2;
+			return getColor2At(point);
 		}
 	}
 };

@@ -10,9 +10,8 @@ public:
 		color(Color::White())
 	{}
 
-	FlatColor(const Color& c,
-		Matrix<4, 4> transformation) :
-		Pattern(transformation),
+	FlatColor(const Color& c) :
+		Pattern(Matrix<4, 4>::IdentityMatrix()),
 		color(c)
 	{}
 

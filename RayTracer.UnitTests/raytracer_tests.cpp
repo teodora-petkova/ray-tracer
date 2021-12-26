@@ -32,15 +32,13 @@ protected:
 			Color::White(), 1, 1, 1, 1);
 
 		MaterialPtr m1 = std::make_shared<Material>(
-			std::make_shared<FlatColor>(Color(0.8f, 1.0f, 0.6f),
-				Matrix<4, 4>::IdentityMatrix()),
+			std::make_shared<FlatColor>(Color(0.8f, 1.0f, 0.6f)),
 			0.1f, 0.7f, 0.2f, 200.f);
 		ObjectPtr s1 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
 			m1, Matrix<4, 4>::IdentityMatrix());
 
 		MaterialPtr m2 = std::make_shared<Material>(
-			std::make_shared<FlatColor>(Color::White(),
-				Matrix<4, 4>::IdentityMatrix()),
+			std::make_shared<FlatColor>(Color::White()),
 			1, 1, 1, 1);
 		ObjectPtr s2 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
 			m2, Transformations::Scaling(0.5, 0.5, 0.5));

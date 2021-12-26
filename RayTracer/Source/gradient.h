@@ -9,15 +9,19 @@ public:
 		BinaryPattern()
 	{}
 
-	Gradient(const Color& c1, const Color& c2,
+	Gradient(PatternPtr p1, PatternPtr p2,
 		Matrix<4, 4> transformation) :
-		BinaryPattern(c1, c2, transformation)
+		BinaryPattern(p1, p2, transformation)
 	{}
 
 	Color getColorAt(const Tuple& point) const
 	{
-		Color distance = this->color2 - this->color1;
+		Color color1 = getColor1At(point);
+		Color color2 = getColor2At(point);
+
+		Color distance = color2 - color1;
+
 		float fraction = point.X() - floor(point.X());
-		return this->color1 + distance * fraction;
+		return color1 + distance * fraction;
 	}
 };

@@ -9,20 +9,20 @@ public:
 		BinaryPattern()
 	{}
 
-	StripePattern(const Color& c1, const Color& c2,
+	StripePattern(PatternPtr p1, PatternPtr p2,
 		Matrix<4, 4> transformation) :
-		BinaryPattern(c1, c2, transformation)
+		BinaryPattern(p1, p2, transformation)
 	{}
 
 	Color getColorAt(const Tuple& point) const
 	{
 		if (int(floor(point.X())) % 2 == 0)
 		{
-			return this->color1;
+			return getColor1At(point);
 		}
 		else
 		{
-			return this->color2;
+			return getColor2At(point);
 		}
 	}
 };

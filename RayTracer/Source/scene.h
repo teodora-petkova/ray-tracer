@@ -2,6 +2,7 @@
 
 #pragma warning(push, 0)
 #include <vector>
+#include <stack>
 #pragma warning(pop)
 
 #include "raytracer_exports.h"

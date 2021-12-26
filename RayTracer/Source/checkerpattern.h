@@ -9,21 +9,24 @@ public:
 		BinaryPattern()
 	{}
 
-	CheckerPattern(const Color& c1, const Color& c2,
+	CheckerPattern(PatternPtr p1, PatternPtr p2,
 		Matrix<4, 4> transformation) :
-		BinaryPattern(c1, c2, transformation)
+		BinaryPattern(p1, p2, transformation)
 	{}
 
 	Color getColorAt(const Tuple& point) const
 	{
-		int sum = (int)floor(point.X()) + (int)floor(point.Y()) + (int)floor(point.Z());
+		int sum =
+			static_cast<int>(floor(point.X())) +
+			static_cast<int>(floor(point.Y())) +
+			static_cast<int>(floor(point.Z()));
 		if (sum % 2 == 0)
 		{
-			return this->color1;
+			return getColor1At(point);
 		}
 		else
 		{
-			return this->color2;
+			return getColor2At(point);
 		}
 	}
 };

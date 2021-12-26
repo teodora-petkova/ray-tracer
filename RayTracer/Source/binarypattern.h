@@ -7,21 +7,31 @@ class RAYTRACER_EXPORT BinaryPattern : public Pattern
 public:
 	BinaryPattern() :
 		Pattern(),
-		color1(Color::White()),
-		color2(Color::Black())
+		pattern1(std::make_shared<FlatColor>(Color::White())),
+		pattern2(std::make_shared<FlatColor>(Color::Black()))
 	{}
 
-	BinaryPattern(const Color& c1, const Color& c2,
+	BinaryPattern(PatternPtr p1, PatternPtr p2,
 		Matrix<4, 4> transformation) :
 		Pattern(transformation),
-		color1(c1),
-		color2(c2)
+		pattern1(p1),
+		pattern2(p2)
 	{}
 
-	Color getColor1() const { return color1; }
-	Color getColor2() const { return color2; }
+	Color getColor1At(const Tuple& point) const
+	{
+		return this->pattern1->getColorAt(this->pattern1->getInverseTransformation() * point);
+	}
+
+	Color getColor2At(const Tuple& point) const
+	{
+		return this->pattern2->getColorAt(this->pattern2->getInverseTransformation() * point);
+	}
+
+	PatternPtr getPattern1() const { return pattern1; }
+	PatternPtr getPattern2() const { return pattern2; }
 
 protected:
-	Color color1;
-	Color color2;
+	PatternPtr pattern1;
+	PatternPtr pattern2;
 };

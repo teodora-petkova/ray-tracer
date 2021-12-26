@@ -16,6 +16,22 @@ namespace ReadScene
 		return true;
 	}
 
+	template<class PatternType>
+	PatternPtr processPattern(std::stack<PatternPtr>& patterns, const Matrix<4, 4>& transformation)
+	{
+		PatternPtr pattern = nullptr;
+		if (patterns.size() >= 2) // a valid definition with 2 preceding patterns
+		{
+			PatternPtr pattern2 = patterns.top();
+			patterns.pop();
+			PatternPtr pattern1 = patterns.top();
+			patterns.pop();
+			pattern = std::make_shared<PatternType>(pattern1, pattern2,
+				transformation);
+		}
+		return pattern;
+	}
+
 	Scene ReadSceneFile(const std::string& filename)
 	{
 		// image size
@@ -28,6 +44,8 @@ namespace ReadScene
 		std::vector<ObjectPtr> objects = std::vector<ObjectPtr>();
 		// lights
 		std::vector<LightPtr> lights = std::vector<LightPtr>();
+		// patterns
+		std::stack<PatternPtr> patterns = std::stack<PatternPtr>();
 
 		std::string str, command;
 		std::ifstream in;
@@ -36,7 +54,6 @@ namespace ReadScene
 		{
 			getline(in, str);
 
-			PatternPtr currentPattern;
 			MaterialPtr currentMaterial;
 			Matrix<4, 4> currentTransformation = Matrix<4, 4>::IdentityMatrix();
 
@@ -107,63 +124,37 @@ namespace ReadScene
 						if (isInputValid)
 						{
 							PatternPtr pattern = std::make_shared<FlatColor>(
-								Color(values[0], values[1], values[2]),
-								Matrix<4, 4>::IdentityMatrix());
-							currentPattern = pattern;
+								Color(values[0], values[1], values[2]));
+							patterns.push(pattern);
 						}
 					}
 					else if (command == "stripepattern")
 					{
-						// 6 values c1.r c1.g c1.b c2.r c2.g c2.b
-						isInputValid = readValues(s, 6, values);
-						if (isInputValid)
-						{
-							PatternPtr pattern = std::make_shared<StripePattern>(
-								Color(values[0], values[1], values[2]),
-								Color(values[3], values[4], values[5]),
-								Matrix<4, 4>::IdentityMatrix());
-							currentPattern = pattern;
-						}
+						auto pattern = processPattern<StripePattern>(
+							patterns, currentTransformation);
+						patterns.push(pattern);
+						currentTransformation = Matrix<4, 4>::IdentityMatrix();
 					}
 					else if (command == "gradient")
 					{
-						// 6 values c1.r c1.g c1.b c2.r c2.g c2.b
-						isInputValid = readValues(s, 6, values);
-						if (isInputValid)
-						{
-							PatternPtr pattern = std::make_shared<Gradient>(
-								Color(values[0], values[1], values[2]),
-								Color(values[3], values[4], values[5]),
-								Matrix<4, 4>::IdentityMatrix());
-							currentPattern = pattern;
-						}
+						auto pattern = processPattern<Gradient>(
+							patterns, currentTransformation);
+						patterns.push(pattern);
+						currentTransformation = Matrix<4, 4>::IdentityMatrix();
 					}
 					else if (command == "ringpattern")
 					{
-						// 6 values c1.r c1.g c1.b c2.r c2.g c2.b
-						isInputValid = readValues(s, 6, values);
-						if (isInputValid)
-						{
-							PatternPtr pattern = std::make_shared<RingPattern>(
-								Color(values[0], values[1], values[2]),
-								Color(values[3], values[4], values[5]),
-								Matrix<4, 4>::IdentityMatrix());
-							currentPattern = pattern;
-						}
+						auto pattern = processPattern<RingPattern>(
+							patterns, currentTransformation);
+						patterns.push(pattern);
+						currentTransformation = Matrix<4, 4>::IdentityMatrix();
 					}
-
 					else if (command == "checkerpattern")
 					{
-						// 6 values c1.r c1.g c1.b c2.r c2.g c2.b
-						isInputValid = readValues(s, 6, values);
-						if (isInputValid)
-						{
-							PatternPtr pattern = std::make_shared<CheckerPattern>(
-								Color(values[0], values[1], values[2]),
-								Color(values[3], values[4], values[5]),
-								Matrix<4, 4>::IdentityMatrix());
-							currentPattern = pattern;
-						}
+						auto pattern = processPattern<CheckerPattern>(
+							patterns, currentTransformation);
+						patterns.push(pattern);
+						currentTransformation = Matrix<4, 4>::IdentityMatrix();
 					}
 					else if (command == "material")
 					{
@@ -171,10 +162,15 @@ namespace ReadScene
 						isInputValid = readValues(s, 4, values);
 						if (isInputValid)
 						{
-							MaterialPtr m = std::make_shared<Material>(
-								currentPattern, values[0], values[1],
-								values[2], values[3]);
-							currentMaterial = m;
+							auto rootPattern = patterns.top();
+							patterns.pop();
+							if (patterns.empty()) // a valid definition
+							{
+								MaterialPtr m = std::make_shared<Material>(
+									rootPattern, values[0], values[1],
+									values[2], values[3]);
+								currentMaterial = m;
+							}
 						}
 					}
 					else if (command == "tri")
