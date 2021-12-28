@@ -9,6 +9,8 @@
 #include "gradient.h"
 #include "ringpattern.h"
 #include "checkerpattern.h"
+#include "radialgradient.h"
+#include "blendingpattern.h"
 
 class RAYTRACER_EXPORT Material
 {

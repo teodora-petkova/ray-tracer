@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\blendingpattern.h" />
     <ClInclude Include="Source\camera.h" />
     <ClInclude Include="Source\canvas.h" />
     <ClInclude Include="Source\checkerpattern.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="Source\object.h" />
     <ClInclude Include="Source\pattern.h" />
     <ClInclude Include="Source\plane.h" />
+    <ClInclude Include="Source\radialgradient.h" />
     <ClInclude Include="Source\ray.h" />
     <ClInclude Include="Source\raytracer.h" />
     <ClInclude Include="Source\raytracer_exports.h" />

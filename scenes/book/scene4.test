@@ -16,6 +16,7 @@ color 0.4 0.4 0.2
 color 0.2 0.2 0
 stripepattern
 checkerpattern
+#blendingpattern
 material 0.1 0.9 0 200 
 plane
 
@@ -50,11 +51,13 @@ scale 0.5 0.5 0.5
 sphere 0 0 0 1
 
 # the smallest sphere 
-translate -1 0 0
-scale 2 1 1
+#translate -1 0 0
+#scale 2 1 1
+rotatex 90
 color 0.9 0.5 0.1
 color 0.5 0.8 0.5
-gradient
+#gradient
+radialgradient
 material 0.1 0.7 0.3 200
 translate -1.5 0.33 -0.75
 scale 0.33 0.33 0.33

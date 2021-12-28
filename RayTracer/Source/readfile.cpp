@@ -156,6 +156,20 @@ namespace ReadScene
 						patterns.push(pattern);
 						currentTransformation = Matrix<4, 4>::IdentityMatrix();
 					}
+					else if (command == "blendingpattern")
+					{
+						auto pattern = processPattern<BlendingPattern>(
+							patterns, currentTransformation);
+						patterns.push(pattern);
+						currentTransformation = Matrix<4, 4>::IdentityMatrix();
+					}
+					else if (command == "radialgradient")
+					{
+						auto pattern = processPattern<RadialGradient>(
+							patterns, currentTransformation);
+						patterns.push(pattern);
+						currentTransformation = Matrix<4, 4>::IdentityMatrix();
+					}
 					else if (command == "material")
 					{
 						// ambient, diffuse, specular, shininess
