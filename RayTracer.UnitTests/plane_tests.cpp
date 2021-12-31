@@ -62,5 +62,5 @@ TEST(PlaneTests, A_ray_intersecting_a_plane_from_below) {
 	EXPECT_EQ(info.getIsHit(), true);
 	EXPECT_EQ(info.getDistance(), 1);
 	EXPECT_EQ(info.getIntersectionPoint(), Tuple::Point(0, 0, 0));
-	EXPECT_EQ(info.getNormal(), Tuple::Vector(0, 1, 0));
+	EXPECT_EQ(info.getNormal(), Tuple::Vector(0, -1, 0));
 }

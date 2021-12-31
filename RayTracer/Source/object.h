@@ -46,6 +46,13 @@ public:
 		Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
 
 		Tuple normal = this->getNormal(intersectionPoint);
+		// check whether the ray comes from inside
+		// the angle between the eye vector and the normal will be b/w 90 & 180
+		// so the cos(angle) will be negative
+		if (normal.Dot(-ray.getDirection()) < 0)
+		{
+			normal = -normal;
+		}
 
 		return IntersectionInfo(isHit, intersectionPoint, distance, normal);
 	}

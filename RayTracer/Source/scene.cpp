@@ -14,7 +14,9 @@ Color Scene::TraceSingleRay(const Ray& ray) const
 
 		IntersectionInfo testIntersection = testObject->Intersect(ray);
 
-		if (testIntersection.getIsHit() && testObject && testIntersection.getDistance() < minDistance)
+		if (testIntersection.getIsHit() &&
+			testObject &&
+			testIntersection.getDistance() < minDistance)
 		{
 			object = testObject;
 			intersection = testIntersection;
@@ -27,23 +29,20 @@ Color Scene::TraceSingleRay(const Ray& ray) const
 	{
 		for (LightPtr light : scene.getLights())
 		{
-			color += light->CalculatePhongColor(intersection.getIntersectionPoint(),
+			color += light->CalculatePhongColor(intersection.getOverPoint(),
 				intersection.getNormal(),
 				scene.getCamera().getOrigin(),
 				object,
-				IsInShadow(intersection, light->getPosition()));
+				IsInShadow(intersection.getOverPoint(), light->getPosition()));
 		}
 	}
 	return color;
 }
 
-bool Scene::IsInShadow(IntersectionInfo intersection, Tuple lightPosition) const
+bool Scene::IsInShadow(Tuple intersectionPoint, Tuple lightPosition) const
 {
-	float bias = 0.001f;
-	Tuple vectorFromIntersectionToLight = lightPosition - intersection.getIntersectionPoint();
-	Ray rayFromIntersectionToLight = Ray(
-		intersection.getIntersectionPoint() + intersection.getNormal() * bias,
-		// TODO: to check why it does not cause acne without the bias in the normal direction!!
+	Tuple vectorFromIntersectionToLight = lightPosition - intersectionPoint;
+	Ray rayFromIntersectionToLight = Ray(intersectionPoint,
 		vectorFromIntersectionToLight.Normalize());
 
 	bool isInShadow = false;

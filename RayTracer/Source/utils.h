@@ -8,10 +8,11 @@
 
 #define MAX(a,b) a < b ? b : a
 
-constexpr float epsilon = 0.0001f;
+constexpr float EPSILON = 0.0001f;
+
 inline bool isCloseToZero(float num)
 {
-	return std::fabs(num) < epsilon;
+	return std::fabs(num) < EPSILON;
 }
 
 inline bool equals(float a, float b)

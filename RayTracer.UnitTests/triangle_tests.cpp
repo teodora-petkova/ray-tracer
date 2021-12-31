@@ -81,5 +81,5 @@ TEST_F(TriangleTests, The_ray_intersects_the_triangle) {
 	EXPECT_EQ(intersection.getIsHit(), true);
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0.5, 0));
 	EXPECT_EQ(intersection.getDistance(), 2);
-	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(0, 0, 1));
+	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(0, 0, -1));
 }

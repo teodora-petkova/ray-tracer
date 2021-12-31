@@ -52,7 +52,7 @@ public:
 
 	Color TraceSingleRay(const Ray& ray) const;
 
-	bool IsInShadow(IntersectionInfo intersection, Tuple lightPosition) const;
+	bool IsInShadow(Tuple intersectionPoint, Tuple lightPosition) const;
 
 private:
 	int width;
