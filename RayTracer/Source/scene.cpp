@@ -1,6 +1,6 @@
 #include "scene.h"
 
-Color Scene::TraceSingleRay(const Ray& ray) const
+Color Scene::TraceSingleRay(const Ray& ray, int remaining) const
 {
 	Scene scene = *this;
 
@@ -35,8 +35,29 @@ Color Scene::TraceSingleRay(const Ray& ray) const
 				object,
 				IsInShadow(intersection.getOverPoint(), light->getPosition()));
 		}
+
+		Color reflected = ReflectRay(ray, object, intersection, remaining);
+		color += reflected;
 	}
 	return color;
+}
+
+Color Scene::ReflectRay(const Ray& ray, ObjectPtr object,
+	IntersectionInfo intersection, int remaining) const
+{
+	if (remaining <= 0 ||
+		object->getMaterial()->getReflective() == 0.0f)
+	{
+		return Color::Black();
+	}
+	else
+	{
+		Tuple reflectedVector = ray.getDirection().Reflect(intersection.getNormal());
+
+		Ray reflectedRay = Ray(intersection.getOverPoint(), reflectedVector);
+		Color color = TraceSingleRay(reflectedRay, remaining - 1);
+		return color * object->getMaterial()->getReflective();
+	}
 }
 
 bool Scene::IsInShadow(Tuple intersectionPoint, Tuple lightPosition) const

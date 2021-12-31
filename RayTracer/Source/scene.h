@@ -50,7 +50,9 @@ public:
 	const Camera& getCamera() const { return camera; }
 	Camera& getModifiableCamera() { return camera; }
 
-	Color TraceSingleRay(const Ray& ray) const;
+	Color TraceSingleRay(const Ray& ray, int remaining = 4) const;
+
+	Color ReflectRay(const Ray& ray, ObjectPtr object, IntersectionInfo intersection, int remaining = 4) const;
 
 	bool IsInShadow(Tuple intersectionPoint, Tuple lightPosition) const;
 

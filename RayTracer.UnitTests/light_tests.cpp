@@ -20,7 +20,7 @@ protected:
 	void SetUp() override {
 		PatternPtr pattern = std::make_shared<FlatColor>(Color::White());
 		MaterialPtr material = std::make_shared<Material>(pattern,
-			0.1f, 0.9f, 0.9f, 200.0f);
+			0.1f, 0.9f, 0.9f, 200.0f, 0);
 		this->object = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
 			material, Matrix<4, 4>::IdentityMatrix());
 	}
@@ -128,7 +128,7 @@ TEST_F(LightTests, Lightning_with_an_applied_pattern) {
 			std::make_shared<FlatColor>(Color::White()),
 			std::make_shared<FlatColor>(Color::Black()),
 			Matrix<4, 4>::IdentityMatrix()),
-		1, 0, 0, 0);
+		1, 0, 0, 0, 0);
 	ObjectPtr obj = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
 		material, Matrix<4, 4>::IdentityMatrix());
 

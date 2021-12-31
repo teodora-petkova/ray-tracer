@@ -17,14 +17,15 @@ color 0.2 0.2 0
 stripepattern
 checkerpattern
 #blendingpattern
-material 0.1 0.9 0 200 
+material 0.1 0.9 0 200 1
 plane
 
 # the back wall
-color 1 0.9 0.9
-color 1 0.5 0.5
-ringpattern
-material 0.1 0.9 0 200
+color 0.9 1 0.9
+#color 0.5 1 0.5
+#scale 20 1 1
+#gradient
+material 0.1 0.9 0 200 0
 translate 0 0 10
 rotatey 15
 rotatex 90
@@ -36,7 +37,7 @@ rotatez 90
 color 0.9 0.9 0.3
 color 0.5 1 0.5
 stripepattern
-material 0.1 0.7 0.3 200
+material 0.1 0.7 0.3 200 0
 translate -0.5 1 0.5
 sphere 0 0 0 1
 
@@ -45,7 +46,7 @@ scale 0.3 0.3 0.3
 color 0.8 0.6 0.1
 color 0.7 1 0.5
 checkerpattern
-material 0.1 0.7 0.3 200
+material 0.1 0.7 0.3 200 0
 translate 1.5 0.5 -0.5 
 scale 0.5 0.5 0.5
 sphere 0 0 0 1
@@ -58,7 +59,7 @@ color 0.9 0.5 0.1
 color 0.5 0.8 0.5
 #gradient
 radialgradient
-material 0.1 0.7 0.3 200
+material 0.1 0.7 0.3 200 0
 translate -1.5 0.33 -0.75
 scale 0.33 0.33 0.33
 sphere 0 0 0 1

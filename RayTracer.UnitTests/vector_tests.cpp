@@ -42,3 +42,11 @@ TEST(VectorTests, CrossProductWithNegativeCoordinatesIsCorrect) {
 
 	EXPECT_EQ(v1.Cross(v2), Tuple::Vector(0, 0, -1));
 }
+
+TEST(VectorTests, Reflect_a_vector) {
+	float sqrt2over2 = sqrt(2) / 2;
+	Tuple v1 = Tuple::Vector(0, -sqrt2over2, sqrt2over2);
+	Tuple normal = Tuple::Vector(0, 1, 0);
+
+	EXPECT_EQ(v1.Reflect(normal), Tuple::Vector(0, sqrt2over2, sqrt2over2));
+}

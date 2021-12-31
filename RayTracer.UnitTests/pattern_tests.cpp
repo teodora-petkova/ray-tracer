@@ -70,7 +70,7 @@ TEST_F(PatternTests, Stripes_with_an_object_transformation)
 {
 	MaterialPtr material = std::make_shared<Material>(
 		std::make_shared<StripePattern>(),
-		1, 0, 0, 0);
+		1, 0, 0, 0, 0);
 
 	ObjectPtr sphere = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
 		material, Transformations::Scaling(2, 2, 2));
@@ -83,7 +83,7 @@ TEST_F(PatternTests, Stripes_with_a_pattern_transformation)
 {
 	MaterialPtr material = std::make_shared<Material>(
 		std::make_shared<StripePattern>(),
-		1, 0, 0, 0);
+		1, 0, 0, 0, 0);
 
 	ObjectPtr sphere = std::make_shared<Sphere>();
 
@@ -98,7 +98,7 @@ TEST_F(PatternTests, Stripes_with_a_pattern_transformation2)
 {
 	MaterialPtr material = std::make_shared<Material>(
 		std::make_shared<StripePattern>(),
-		1, 0, 0, 0);
+		1, 0, 0, 0, 0);
 
 	ObjectPtr sphere = std::make_shared<Sphere>();
 
@@ -115,7 +115,7 @@ TEST_F(PatternTests, Stripes_with_both_an_object_and_pattern_transformation)
 {
 	MaterialPtr material = std::make_shared<Material>(
 		std::make_shared<StripePattern>(),
-		1, 0, 0, 0);
+		1, 0, 0, 0, 0);
 
 	ObjectPtr sphere = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
 		material, Transformations::Scaling(2, 2, 2));
