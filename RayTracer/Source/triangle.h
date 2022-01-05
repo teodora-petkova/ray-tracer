@@ -26,6 +26,7 @@ private:
 	bool IsPointInTriangleByBarycentricCoordinates(const Tuple& P) const;
 	bool IsPointInTriangleByHalfPlanes(const Tuple& P) const;
 
-	std::pair<bool, float> LocalIntersect(const Ray& ray) const override;
+	float LocalIntersect(const Ray& ray,
+		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const override;
 	Tuple getLocalNormal(const Tuple& ray) const override;
 };

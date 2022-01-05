@@ -34,14 +34,19 @@ protected:
 TEST_F(SphereTests, The_ray_intersects_the_sphere_at_two_points) {
 	Ray ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), true);
+	//EXPECT_EQ(intersection.getDistances().size(), 2);
+	//EXPECT_EQ(intersection.getDistances()[0], 4);
+	//EXPECT_EQ(intersection.getDistances()[1], 6);
+
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0, -1));
 	EXPECT_EQ(intersection.getDistance(), 4);
 	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(0, 0, -1));
@@ -50,14 +55,19 @@ TEST_F(SphereTests, The_ray_intersects_the_sphere_at_two_points) {
 TEST_F(SphereTests, The_ray_intersects_the_sphere_at_a_tangent) {
 	Ray ray = Ray(Tuple::Point(0, 1, -5), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), true);
+	//EXPECT_EQ(intersection.getDistances().size(), 2);
+	//EXPECT_EQ(intersection.getDistances()[0], 5);
+	//EXPECT_EQ(intersection.getDistances()[1], 5);
+
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 1, 0));
 	EXPECT_EQ(intersection.getDistance(), 5);
 	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(0, 1, 0));
@@ -66,44 +76,55 @@ TEST_F(SphereTests, The_ray_intersects_the_sphere_at_a_tangent) {
 TEST_F(SphereTests, The_ray_misses_the_sphere) {
 	Ray ray = Ray(Tuple::Point(0, 2, -5), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), false);
+	//EXPECT_EQ(intersection.getDistances().size(), 0);
 }
 
 TEST_F(SphereTests, The_ray_originates_inside_the_sphere) {
-	//TODO: to look through and correct!
 	Ray ray = Ray(Tuple::Point(0, 0, 0), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), true);
-	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0, -1));
-	EXPECT_EQ(intersection.getDistance(), -1);
+	//EXPECT_EQ(intersection.getDistances().size(), 2);
+	//EXPECT_EQ(intersection.getDistances()[0], -1);
+	//EXPECT_EQ(intersection.getDistances()[1], 1);
+
+	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0, 1));
+	EXPECT_EQ(intersection.getDistance(), 1);
 	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(0, 0, -1));
 }
-
 TEST_F(SphereTests, The_sphere_is_behind_the_ray) {
 	Ray ray = Ray(Tuple::Point(0, 0, 5), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), false);
+	/*TODO!!!!
+	EXPECT_EQ(intersection.getDistances().size(), 2);
+	EXPECT_EQ(intersection.getDistances()[0], -6);
+	EXPECT_EQ(intersection.getDistances()[1], -4);
+	*/
 }
 
 TEST_F(SphereTests, The_sphere_transformation_is_modified) {
@@ -119,12 +140,13 @@ TEST_F(SphereTests, The_ray_intersects_a_scaled_sphere) {
 
 	Ray ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		Transformations::Scaling(2, 2, 2));
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), true);
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0, -2));
@@ -136,12 +158,13 @@ TEST_F(SphereTests, The_ray_intersects_a_translated_sphere) {
 	// again on the tangent
 	Ray ray = Ray(Tuple::Point(5, 1, -1), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		Transformations::Translation(4, 1, 0));
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), true);
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(5, 1, 0));
@@ -152,13 +175,14 @@ TEST_F(SphereTests, The_ray_intersects_a_translated_sphere) {
 TEST_F(SphereTests, The_ray_intersects_a_translated_and_then_scaled_sphere) {
 	Ray ray = Ray(Tuple::Point(4, 0, -1), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		Transformations::Translation(2, 0, 0) *
 		Transformations::Scaling(2, 2, 2));
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), true);
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(4, 0, 0));
@@ -169,13 +193,14 @@ TEST_F(SphereTests, The_ray_intersects_a_translated_and_then_scaled_sphere) {
 TEST_F(SphereTests, The_ray_intersects_a_scaled_and_then_translated_sphere) {
 	Ray ray = Ray(Tuple::Point(6, 0, -1), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		Transformations::Scaling(2, 2, 2) *
 		Transformations::Translation(2, 0, 0));
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), true);
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(6, 0, 0));
@@ -187,12 +212,13 @@ TEST_F(SphereTests, The_ray_misses_a_translated_sphere) {
 
 	Ray ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 
-	Sphere sphere = Sphere(this->origin,
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
 		this->radius,
 		this->material,
 		Transformations::Translation(5, 0, 0));
 
-	IntersectionInfo intersection = sphere.Intersect(ray);
+	IntersectionInfo intersection = sphere->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
 	EXPECT_EQ(intersection.getIsHit(), false);
 }

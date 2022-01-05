@@ -6,7 +6,8 @@ Tuple Plane::getLocalNormal(const Tuple& /*intersectionPoint*/) const
 	return Tuple::Vector(0, 1, 0);
 }
 
-std::pair<bool, float> Plane::LocalIntersect(const Ray& ray) const
+float Plane::LocalIntersect(const Ray& ray,
+	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
 	// the plane is described as the XZ plane, with the normal pointing in the
 	// positive y direction.
@@ -20,18 +21,19 @@ std::pair<bool, float> Plane::LocalIntersect(const Ray& ray) const
 	// parallel or coplanar ray to the XZ plane
 	if (isCloseToZero(yDirection))
 	{
-		return std::make_pair(false, 0.0f);
+		return -1.f;
 	}
 	else
 	{
 		float t = -ray.getOrigin().Y() / yDirection;
 		if (t > 0)
 		{
-			return std::make_pair(true, t);
+			intersectionDistances.emplace_back(std::make_pair(t, shared_from_this()));
+			return t;
 		}
 		else
 		{
-			return std::make_pair(false, 0.0f);
+			return -1.f;
 		}
 	}
 }

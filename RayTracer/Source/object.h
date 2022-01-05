@@ -1,12 +1,18 @@
 #pragma once
 
+#pragma warning(push, 0)
+#include <memory>
+#include <vector>
+#include <algorithm>
+#pragma warning(pop)
+
 #include "raytracer_exports.h"
 #include "tuple.h"
 #include "ray.h"
 #include "material.h"
 #include "intersectioninfo.h"
 
-class RAYTRACER_EXPORT Object
+class RAYTRACER_EXPORT Object : public std::enable_shared_from_this<Object>
 {
 public:
 	Object() :
@@ -23,7 +29,8 @@ public:
 		this->transposedInvTransformation = inverseTransformation.Transpose();
 	}
 
-	IntersectionInfo Intersect(const Ray& ray) const
+	IntersectionInfo Intersect(const Ray& ray,
+		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 	{
 		Ray transformedRay = ray * this->getInverseTransformation();
 
@@ -37,9 +44,7 @@ public:
 		// world space—scaling it, translating, rotating it, or whatever.
 		// * Multiplying a point in world space by the inverse of the transformation matrix 
 		// converts that point back to object space.
-		auto pair = LocalIntersect(transformedRay);
-		bool isHit = pair.first;
-		float distance = pair.second;
+		float distance = LocalIntersect(transformedRay, intersectionDistances);
 
 		// To find the intersection point we use the initial untransformed ray in the world space
 		// to calculate locations in the world space using the calculated distance in the object space
@@ -54,7 +59,10 @@ public:
 			normal = -normal;
 		}
 
-		return IntersectionInfo(isHit, intersectionPoint, distance, normal);
+		return IntersectionInfo(distance >= 0,
+			intersectionPoint,
+			distance,
+			normal);
 	}
 
 	Tuple getNormal(Tuple intersectionPoint) const
@@ -78,8 +86,7 @@ protected:
 	Matrix<4, 4> invTransformation;
 	Matrix<4, 4> transposedInvTransformation;
 
-	virtual std::pair<bool, float> LocalIntersect(const Ray& ray) const = 0;
+	virtual float LocalIntersect(const Ray& ray,
+		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const = 0;
 	virtual Tuple getLocalNormal(const Tuple& point) const = 0;
 };
-
-using ObjectPtr = std::shared_ptr<Object>;

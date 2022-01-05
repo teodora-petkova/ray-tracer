@@ -30,32 +30,48 @@ static std::pair<bool, float> AlgebraicIntersect(const Sphere& sphere, const Ray
 	return std::make_pair(isHit, distance);
 }
 
-static std::pair<bool, float> GeometricIntersect(const Sphere& sphere, const Ray& ray)
+float Sphere::GeometricIntersect(const Ray& ray,
+	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
-	bool isHit = true;
-	float distance = INFINITY;
-
-	Tuple l = sphere.getCenter() - ray.getOrigin();
+	Tuple l = this->getCenter() - ray.getOrigin();
 	float t0 = l.Dot(ray.getDirection().Normalize());
 	if (t0 < 0)
 	{
-		return std::make_pair(false, distance);
+		return  -1.f;
 	}
 	float d2 = l.Dot(l) - t0 * t0;
-	float r2 = sphere.getRadius() * sphere.getRadius();
+	float r2 = this->getRadius() * this->getRadius();
 	if (d2 > r2)
 	{
-		return std::make_pair(false, distance);
+		return -1.f;
 	}
 
 	float th0 = sqrt(r2 - d2);
 
-	float t1 = t0 - th0;
-	float t2 = t0 + th0;
+	float magnitude = ray.getDirection().Magnitude();;
 
-	distance = ((t2 > t1) ? t1 : t2) / ray.getDirection().Magnitude();
+	float t1 = (t0 - th0) / magnitude;
+	float t2 = (t0 + th0) / magnitude;
 
-	return std::make_pair(isHit, distance);
+	intersectionDistances.emplace_back(std::make_pair(t1, shared_from_this()));
+	intersectionDistances.emplace_back(std::make_pair(t2, shared_from_this()));
+
+	if (t1 >= 0 && t2 >= 0)
+	{
+		return ((t2 > t1) ? t1 : t2);
+	}
+	else if (t1 >= 0)
+	{
+		return t1;
+	}
+	else if (t2 >= 0)
+	{
+		return t2;
+	}
+	else
+	{
+		return -1;
+	}
 }
 
 Tuple Sphere::getLocalNormal(const Tuple& intersectionPoint) const
@@ -63,7 +79,8 @@ Tuple Sphere::getLocalNormal(const Tuple& intersectionPoint) const
 	return (intersectionPoint - this->getCenter());
 }
 
-std::pair<bool, float> Sphere::LocalIntersect(const Ray& ray) const
+float Sphere::LocalIntersect(const Ray& ray,
+	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
-	return GeometricIntersect(*this, ray);
+	return GeometricIntersect(ray, intersectionDistances);
 }

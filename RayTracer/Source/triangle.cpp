@@ -81,14 +81,13 @@ Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3
 	Initialize();
 }
 
-std::pair<bool, float> Triangle::LocalIntersect(const Ray& ray) const
+float Triangle::LocalIntersect(const Ray& ray,
+	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances)const
 {
-	std::pair<bool, float> isHitWithDistance = std::make_pair(false, 0.0f);
-
 	// the triangle is degenerate(a segment or a point)
 	if (this->normal == Tuple::Vector(0, 0, 0))
 	{
-		return isHitWithDistance;
+		return -1;
 	}
 
 	// ray: P = Po + t.v
@@ -105,7 +104,7 @@ std::pair<bool, float> Triangle::LocalIntersect(const Ray& ray) const
 	{
 		// if (a == 0) then the ray lies in the triangle plane
 		// otherwise disjoint from the plane
-		return isHitWithDistance;
+		return -1;
 	}
 
 	// get intersection point of ray with triangle plane
@@ -113,7 +112,7 @@ std::pair<bool, float> Triangle::LocalIntersect(const Ray& ray) const
 	// ray goes away from triangle => no intersect
 	if (t < 0.0) // TODO: ??? t>1.0 is it possible
 	{
-		return isHitWithDistance;
+		return -1;
 	}
 
 	// the intersection point of the ray and the plane
@@ -122,8 +121,9 @@ std::pair<bool, float> Triangle::LocalIntersect(const Ray& ray) const
 	if (Triangle::IsPointInTriangleByBarycentricCoordinates(P))
 		//if (Triangle::isPointInTriangleByHalfPlanes(P))
 	{
-		return std::make_pair(true, t);
+		intersectionDistances.emplace_back(std::make_pair(t, shared_from_this()));
+		return t;
 	}
 
-	return isHitWithDistance;
+	return -1;
 }

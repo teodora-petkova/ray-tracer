@@ -6,13 +6,14 @@ Color Scene::TraceSingleRay(const Ray& ray, int remaining) const
 
 	ObjectPtr object = NULL;
 	IntersectionInfo intersection = IntersectionInfo();
+	std::vector<std::pair<float, ObjectConstPtr>> allIntersectionDistances;
 
 	float minDistance = INFINITY;
 	for (unsigned int i = 0; i < scene.getObjects().size(); i++)
 	{
 		ObjectPtr testObject = scene.getObjects()[i];
 
-		IntersectionInfo testIntersection = testObject->Intersect(ray);
+		IntersectionInfo testIntersection = testObject->Intersect(ray, allIntersectionDistances);
 
 		if (testIntersection.getIsHit() &&
 			testObject &&
@@ -23,6 +24,7 @@ Color Scene::TraceSingleRay(const Ray& ray, int remaining) const
 			minDistance = intersection.getDistance();
 		}
 	}
+	sort(allIntersectionDistances.begin(), allIntersectionDistances.end());
 
 	Color color = Color::Black();
 	if (intersection.getIsHit())
@@ -71,7 +73,8 @@ bool Scene::IsInShadow(Tuple intersectionPoint, Tuple lightPosition) const
 	{
 		ObjectPtr testObject = objects[i];
 
-		IntersectionInfo testIntersection = testObject->Intersect(rayFromIntersectionToLight);
+		IntersectionInfo testIntersection = testObject->Intersect(rayFromIntersectionToLight,
+			std::vector<std::pair<float, ObjectConstPtr>>());
 		if (testIntersection.getIsHit() &&
 			testIntersection.getDistance() < vectorFromIntersectionToLight.Magnitude())
 		{

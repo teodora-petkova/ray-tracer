@@ -16,6 +16,7 @@ public:
 	{}
 
 private:
-	std::pair<bool, float> LocalIntersect(const Ray& ray) const override;
+	float LocalIntersect(const Ray& ray,
+		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const override;
 	Tuple getLocalNormal(const Tuple& ray) const override;
 };

@@ -20,10 +20,11 @@ public:
 		return this->transformedRay;
 	}
 private:
-	std::pair<bool, float> LocalIntersect(const Ray& ray) const
+	float LocalIntersect(const Ray& ray,
+		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 	{
 		const_cast<CustomObject*>(this)->transformedRay = ray;
-		return std::make_pair(false, 0.0f);
+		return -1;
 	}
 
 	Tuple getLocalNormal(const Tuple& point) const
@@ -38,28 +39,28 @@ TEST(ObjectTests, Intersecting_a_scaled_shape_with_a_ray)
 {
 	Ray ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 
-	CustomObject o = CustomObject(std::make_shared<Material>(),
+	ObjectPtr o = std::make_shared<CustomObject>(std::make_shared<Material>(),
 		Transformations::Scaling(2, 2, 2));
 
-	IntersectionInfo intersection = o.Intersect(ray);
+	IntersectionInfo intersection = o->Intersect(ray, std::vector<std::pair<float, ObjectConstPtr>>());
 
-	Ray transformedRay = o.getTransformedRay();
+	Ray transformedRay = std::static_pointer_cast<CustomObject>(o)->getTransformedRay();
 
 	EXPECT_EQ(transformedRay.getOrigin(), Tuple::Point(0, 0, -2.5));
 	EXPECT_EQ(transformedRay.getDirection(), Tuple::Vector(0, 0, 0.5));
 }
 
-
 TEST(ObjectTests, Intersecting_a_translated_shape_with_a_ray)
 {
 	Ray ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 
-	CustomObject o = CustomObject(std::make_shared<Material>(),
+	ObjectPtr o = std::make_shared<CustomObject>(std::make_shared<Material>(),
 		Transformations::Translation(5, 0, 0));
 
-	IntersectionInfo intersection = o.Intersect(ray);
+	IntersectionInfo intersection = o->Intersect(ray,
+		std::vector<std::pair<float, ObjectConstPtr>>());
 
-	Ray transformedRay = o.getTransformedRay();
+	Ray transformedRay = std::static_pointer_cast<CustomObject>(o)->getTransformedRay();
 
 	EXPECT_EQ(transformedRay.getOrigin(), Tuple::Point(-5, 0, -5));
 	EXPECT_EQ(transformedRay.getDirection(), Tuple::Vector(0, 0, 1));
