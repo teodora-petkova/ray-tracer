@@ -34,6 +34,12 @@ private:
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const override;
 	Tuple getLocalNormal(const Tuple& ray) const override;
 
+	float AlgebraicIntersect(const Ray& ray,
+		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const;
+
 	float GeometricIntersect(const Ray& ray,
+		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const;
+
+	float getIntersectionResult(const float& t1, const float& t2,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const;
 };

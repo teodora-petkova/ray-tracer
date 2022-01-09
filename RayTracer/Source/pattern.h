@@ -28,5 +28,3 @@ public:
 protected:
 	Matrix<4, 4> invTransformation;
 };
-
-using PatternPtr = std::shared_ptr<Pattern>;

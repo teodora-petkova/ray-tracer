@@ -57,5 +57,3 @@ private:
 	float diffuse;
 	float specular;
 };
-
-using LightPtr = std::shared_ptr<Light>;

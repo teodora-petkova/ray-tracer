@@ -12,16 +12,15 @@ public:
 	IntersectionInfo() :
 		isObjectHit(false),
 		intersectionPoint(Tuple()),
-		distance(0),
+		distance(INFINITY),
 		normal(Tuple()),
 		overPoint(Tuple())
 	{}
 
-	IntersectionInfo(bool isHit,
-		const Tuple& intersectionPoint,
+	IntersectionInfo(const Tuple& intersectionPoint,
 		float distance,
 		const Tuple& normal) :
-		isObjectHit(isHit),
+		isObjectHit(distance != INFINITY && distance >= 0),
 		intersectionPoint(intersectionPoint),
 		distance(distance),
 		normal(normal),

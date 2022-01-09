@@ -20,20 +20,28 @@ public:
 		ambient(0.1f),
 		diffuse(0.9f),
 		specular(0.9f),
-		shininess(200),
-		reflective(0)
+		shininess(200.f),
+		reflective(0.f),
+		transparency(0.f),
+		refractiveIndex(1.f)
 	{}
 
 	Material(PatternPtr pattern,
-		float ambient, float diffuse,
-		float specular, float shininess,
-		float reflective) :
+		float ambient = 0.1f,
+		float diffuse = 0.9f,
+		float specular = 0.9f,
+		float shininess = 200.f,
+		float reflective = 0.f,
+		float transparency = 0.f,
+		float refractiveIndex = 1.f) :
 		pattern(pattern),
 		ambient(ambient),
 		diffuse(diffuse),
 		specular(specular),
 		shininess(shininess),
-		reflective(reflective)
+		reflective(reflective),
+		transparency(transparency),
+		refractiveIndex(refractiveIndex)
 	{}
 
 	PatternPtr getPattern() const { return pattern; }
@@ -42,6 +50,8 @@ public:
 	float getShininess() const { return shininess; }
 	float getSpecular() const { return specular; }
 	float getReflective() const { return reflective; }
+	float getTransparency() const { return transparency; }
+	float getRefractiveIndex() const { return refractiveIndex; }
 
 private:
 	PatternPtr pattern;
@@ -50,6 +60,6 @@ private:
 	float specular;
 	float shininess;
 	float reflective;
+	float transparency;
+	float refractiveIndex;
 };
-
-using MaterialPtr = std::shared_ptr<Material>;

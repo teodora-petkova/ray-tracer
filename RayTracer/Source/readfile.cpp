@@ -172,8 +172,8 @@ namespace ReadScene
 					}
 					else if (command == "material")
 					{
-						// ambient, diffuse, specular, shininess, reflectiveness
-						isInputValid = readValues(s, 5, values);
+						// ambient, diffuse, specular, shininess, reflectiveness, transparency, refractiveIndex
+						isInputValid = readValues(s, 7, values);
 						if (isInputValid)
 						{
 							auto rootPattern = patterns.top();
@@ -182,7 +182,8 @@ namespace ReadScene
 							{
 								MaterialPtr m = std::make_shared<Material>(
 									rootPattern, values[0], values[1],
-									values[2], values[3], values[4]);
+									values[2], values[3], values[4],
+									values[5], values[6]);
 								currentMaterial = m;
 							}
 						}

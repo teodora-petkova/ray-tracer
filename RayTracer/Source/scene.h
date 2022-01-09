@@ -52,7 +52,13 @@ public:
 
 	Color TraceSingleRay(const Ray& ray, int remaining = 4) const;
 
-	Color ReflectRay(const Ray& ray, ObjectPtr object, IntersectionInfo intersection, int remaining = 4) const;
+	Color ReflectRay(const Ray& ray, ObjectPtr object,
+		IntersectionInfo intersection, int remaining = 4) const;
+
+	Color RefractRay(const Ray& ray, ObjectPtr object,
+		IntersectionInfo intersection,
+		const std::vector<std::pair<float, ObjectConstPtr>>& allIntersections,
+		int remaining) const;
 
 	bool IsInShadow(Tuple intersectionPoint, Tuple lightPosition) const;
 

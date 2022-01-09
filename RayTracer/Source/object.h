@@ -8,6 +8,7 @@
 
 #include "raytracer_exports.h"
 #include "tuple.h"
+#include "types.h"
 #include "ray.h"
 #include "material.h"
 #include "intersectioninfo.h"
@@ -59,8 +60,7 @@ public:
 			normal = -normal;
 		}
 
-		return IntersectionInfo(distance >= 0,
-			intersectionPoint,
+		return IntersectionInfo(intersectionPoint,
 			distance,
 			normal);
 	}

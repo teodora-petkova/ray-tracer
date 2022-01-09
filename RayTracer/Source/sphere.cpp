@@ -1,15 +1,19 @@
 #include "sphere.h"
 
-static std::pair<bool, float> AlgebraicIntersect(const Sphere& sphere, const Ray& ray)
+float Sphere::AlgebraicIntersect(const Ray& ray,
+	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
-	Tuple sphereCenterToRay = ray.getOrigin() - sphere.getCenter();
+	Tuple sphereCenterToRay = ray.getOrigin() - this->getCenter();
+
 	float a = ray.getDirection().Dot(ray.getDirection());
 	float b = 2 * ray.getDirection().Dot(sphereCenterToRay);
-	float c = sphereCenterToRay.Dot(sphereCenterToRay) - sphere.getRadius() * sphere.getRadius();
+	float c = sphereCenterToRay.Dot(sphereCenterToRay) - this->getRadius() * this->getRadius();
 
 	float discriminant = b * b - 4 * a * c;
-	bool isHit = false;
 	float distance = INFINITY;
+
+	float root1 = 0.f;
+	float root2 = 0.f;
 
 	if (discriminant >= 0)
 	{
@@ -18,32 +22,33 @@ static std::pair<bool, float> AlgebraicIntersect(const Sphere& sphere, const Ray
 		float root1 = (-b - d) / _2a;
 		float root2 = (-b + d) / _2a;
 
-		isHit = false;
-
-		if (root1 > 0 || root2 > 0)
-		{
-			distance = (root1 < root2) ? root1 : root2;
-			isHit = true;
-		}
+		return getIntersectionResult(root1, root2, intersectionDistances);
 	}
 
-	return std::make_pair(isHit, distance);
+	return  distance;
 }
 
 float Sphere::GeometricIntersect(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
+	float distance = INFINITY;
+
 	Tuple l = this->getCenter() - ray.getOrigin();
 	float t0 = l.Dot(ray.getDirection().Normalize());
-	if (t0 < 0)
+
+	// there will be no intersection as the l vector and the ray vector will point
+	// in opposite directions and even if there is an intersection, it will be behind the ray's origin
+	// however, we need to collect all intersections even behind the ray's origin for the refraction!
+	/*if (t0 < 0)
 	{
-		return  -1.f;
-	}
+		return distance;
+	}*/
+
 	float d2 = l.Dot(l) - t0 * t0;
 	float r2 = this->getRadius() * this->getRadius();
 	if (d2 > r2)
 	{
-		return -1.f;
+		return distance;
 	}
 
 	float th0 = sqrt(r2 - d2);
@@ -53,6 +58,12 @@ float Sphere::GeometricIntersect(const Ray& ray,
 	float t1 = (t0 - th0) / magnitude;
 	float t2 = (t0 + th0) / magnitude;
 
+	return getIntersectionResult(t1, t2, intersectionDistances);
+}
+
+float Sphere::getIntersectionResult(const float& t1, const float& t2,
+	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
+{
 	intersectionDistances.emplace_back(std::make_pair(t1, shared_from_this()));
 	intersectionDistances.emplace_back(std::make_pair(t2, shared_from_this()));
 
@@ -70,7 +81,7 @@ float Sphere::GeometricIntersect(const Ray& ray,
 	}
 	else
 	{
-		return -1;
+		return INFINITY;
 	}
 }
 
