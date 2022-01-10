@@ -39,13 +39,13 @@ TEST_F(SphereTests, The_ray_intersects_the_sphere_at_two_points) {
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere->Intersect(ray,
-		std::vector<std::pair<float, ObjectConstPtr>>());
+	std::vector<std::pair<float, ObjectConstPtr>> intersections;
+	IntersectionInfo intersection = sphere->Intersect(ray, intersections);
 
 	EXPECT_EQ(intersection.getIsHit(), true);
-	//EXPECT_EQ(intersection.getDistances().size(), 2);
-	//EXPECT_EQ(intersection.getDistances()[0], 4);
-	//EXPECT_EQ(intersection.getDistances()[1], 6);
+	EXPECT_EQ(intersections.size(), 2);
+	EXPECT_EQ(intersections[0].first, 4);
+	EXPECT_EQ(intersections[1].first, 6);
 
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0, -1));
 	EXPECT_EQ(intersection.getDistance(), 4);
@@ -60,13 +60,13 @@ TEST_F(SphereTests, The_ray_intersects_the_sphere_at_a_tangent) {
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere->Intersect(ray,
-		std::vector<std::pair<float, ObjectConstPtr>>());
+	std::vector<std::pair<float, ObjectConstPtr>> intersections;
+	IntersectionInfo intersection = sphere->Intersect(ray, intersections);
 
 	EXPECT_EQ(intersection.getIsHit(), true);
-	//EXPECT_EQ(intersection.getDistances().size(), 2);
-	//EXPECT_EQ(intersection.getDistances()[0], 5);
-	//EXPECT_EQ(intersection.getDistances()[1], 5);
+	EXPECT_EQ(intersections.size(), 2);
+	EXPECT_EQ(intersections[0].first, 5);
+	EXPECT_EQ(intersections[1].first, 5);
 
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 1, 0));
 	EXPECT_EQ(intersection.getDistance(), 5);
@@ -81,11 +81,11 @@ TEST_F(SphereTests, The_ray_misses_the_sphere) {
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere->Intersect(ray,
-		std::vector<std::pair<float, ObjectConstPtr>>());
+	std::vector<std::pair<float, ObjectConstPtr>> intersections;
+	IntersectionInfo intersection = sphere->Intersect(ray, intersections);
 
 	EXPECT_EQ(intersection.getIsHit(), false);
-	//EXPECT_EQ(intersection.getDistances().size(), 0);
+	EXPECT_EQ(intersections.size(), 0);
 }
 
 TEST_F(SphereTests, The_ray_originates_inside_the_sphere) {
@@ -96,13 +96,13 @@ TEST_F(SphereTests, The_ray_originates_inside_the_sphere) {
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere->Intersect(ray,
-		std::vector<std::pair<float, ObjectConstPtr>>());
+	std::vector<std::pair<float, ObjectConstPtr>> intersections;
+	IntersectionInfo intersection = sphere->Intersect(ray, intersections);
 
 	EXPECT_EQ(intersection.getIsHit(), true);
-	//EXPECT_EQ(intersection.getDistances().size(), 2);
-	//EXPECT_EQ(intersection.getDistances()[0], -1);
-	//EXPECT_EQ(intersection.getDistances()[1], 1);
+	EXPECT_EQ(intersections.size(), 2);
+	EXPECT_EQ(intersections[0].first, -1);
+	EXPECT_EQ(intersections[1].first, 1);
 
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0, 1));
 	EXPECT_EQ(intersection.getDistance(), 1);
@@ -116,15 +116,14 @@ TEST_F(SphereTests, The_sphere_is_behind_the_ray) {
 		this->material,
 		this->transformation);
 
-	IntersectionInfo intersection = sphere->Intersect(ray,
-		std::vector<std::pair<float, ObjectConstPtr>>());
+	std::vector<std::pair<float, ObjectConstPtr>> intersections;
+	IntersectionInfo intersection = sphere->Intersect(ray, intersections);
 
 	EXPECT_EQ(intersection.getIsHit(), false);
-	/*TODO!!!!
-	EXPECT_EQ(intersection.getDistances().size(), 2);
-	EXPECT_EQ(intersection.getDistances()[0], -6);
-	EXPECT_EQ(intersection.getDistances()[1], -4);
-	*/
+
+	EXPECT_EQ(intersections.size(), 2);
+	EXPECT_EQ(intersections[0].first, -6);
+	EXPECT_EQ(intersections[1].first, -4);
 }
 
 TEST_F(SphereTests, The_sphere_transformation_is_modified) {
