@@ -16,6 +16,8 @@ Camera::Camera()
 
 	this->halfHeight = this->height / 2.0f;
 	this->halfWidth = this->width / 2.0f;
+
+	this->origin = Tuple::Point(0, 0, 0);
 }
 
 Camera::Camera(int width, int height)
@@ -38,7 +40,6 @@ Camera::Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple
 	float aspectRatio = (float)this->width / (float)this->height;
 	this->fovy = degreesToRadians(fieldOfViewAngleY);
 	this->fovx = 2 * atan(tan(this->fovy / 2) * aspectRatio);
-
 
 	//The canvas is one unit away (z=-1)
 	float halfView = tan(fovy / 2.f);

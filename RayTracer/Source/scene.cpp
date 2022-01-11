@@ -1,5 +1,12 @@
 #include "scene.h"
 
+static bool IsHitCloser(IntersectionInfo intersection, float minDistance)
+{
+	return (intersection.getIsHit() &&
+		intersection.getDistance() >= EPSILON &&
+		intersection.getDistance() < minDistance);
+}
+
 Color Scene::TraceSingleRay(const Ray& ray, int remaining) const
 {
 	Scene scene = *this;
@@ -15,35 +22,54 @@ Color Scene::TraceSingleRay(const Ray& ray, int remaining) const
 
 		IntersectionInfo testIntersection = testObject->Intersect(ray, allIntersectionDistances);
 
-		if (testIntersection.getIsHit() &&
-			testObject &&
-			testIntersection.getDistance() >= EPSILON &&
-			testIntersection.getDistance() < minDistance)
+		if (IsHitCloser(testIntersection, minDistance))
 		{
 			object = testObject;
 			intersection = testIntersection;
 			minDistance = intersection.getDistance();
 		}
 	}
+
 	sort(allIntersectionDistances.begin(), allIntersectionDistances.end());
 
+	return CalculateColor(intersection, ray, object, allIntersectionDistances, remaining);
+}
+
+Color Scene::CalculateColor(IntersectionInfo intersection, const Ray& ray, ObjectPtr object,
+	std::vector<std::pair<float, ObjectConstPtr>> allIntersectionDistances, int remaining) const
+{
+	Scene scene = *this;
+
 	Color color = Color::Black();
+
 	if (intersection.getIsHit())
 	{
 		for (LightPtr light : scene.getLights())
 		{
 			color += light->CalculatePhongColor(intersection.getOverPoint(),
-				intersection.getNormal(),
-				scene.getCamera().getOrigin(),
-				object,
+				intersection.getNormal(), scene.getCamera().getOrigin(), object,
 				IsInShadow(intersection.getOverPoint(), light->getPosition()));
 		}
 
 		Color reflected = ReflectRay(ray, object, intersection, remaining);
+
+		auto n1n2 = getRefractiveIndices(intersection, allIntersectionDistances);
+
 		Color refracted = RefractRay(ray, object, intersection,
-			allIntersectionDistances, remaining);
-		color += reflected + refracted;
+			n1n2.first, n1n2.second, remaining);
+
+		if (object->getMaterial()->getReflective() > 0 &&
+			object->getMaterial()->getTransparency() > 0)
+		{
+			float reflectance = Schlick(ray, intersection, n1n2.first, n1n2.second);
+			color += reflected * reflectance + refracted * (1 - reflectance);
+		}
+		else
+		{
+			color += reflected + refracted;
+		}
 	}
+
 	return color;
 }
 
@@ -65,8 +91,8 @@ Color Scene::ReflectRay(const Ray& ray, ObjectPtr object,
 	}
 }
 
-static float getRefractiveIndicesRatio(IntersectionInfo intersection,
-	const std::vector<std::pair<float, ObjectConstPtr>>& allIntersections)
+std::pair<float, float> Scene::getRefractiveIndices(IntersectionInfo intersection,
+	const std::vector<std::pair<float, ObjectConstPtr>>& allIntersections) const
 {
 	float n1 = 1.f;
 	float n2 = 1.f;
@@ -103,13 +129,11 @@ static float getRefractiveIndicesRatio(IntersectionInfo intersection,
 		}
 	}
 
-	// the inverted definition of Snell's Law
-	return n1 / n2;
+	return std::make_pair(n1, n2);
 }
 
 Color Scene::RefractRay(const Ray& ray, ObjectPtr object,
-	IntersectionInfo intersection,
-	const std::vector<std::pair<float, ObjectConstPtr>>& allIntersections,
+	IntersectionInfo intersection, float n1, float n2,
 	int remaining) const
 {
 	if (remaining == 0 ||
@@ -123,7 +147,9 @@ Color Scene::RefractRay(const Ray& ray, ObjectPtr object,
 		Tuple normalv = intersection.getNormal();
 		float cosi = eyev.Dot(normalv);
 
-		float nratio = getRefractiveIndicesRatio(intersection, allIntersections);
+		// the inverted definition of Snell's Law
+		float nratio = n1 / n2;
+
 		float sin2t = pow(nratio, 2) * (1 - pow(cosi, 2));
 
 		if (sin2t > 1)
@@ -145,22 +171,53 @@ Color Scene::RefractRay(const Ray& ray, ObjectPtr object,
 	}
 }
 
+float Scene::Schlick(const Ray& ray, IntersectionInfo intersection,
+	float n1, float n2) const
+{
+	Tuple eyev = -ray.getDirection();
+	Tuple normalv = intersection.getNormal();
+	float cosi = eyev.Dot(normalv);
+
+	// the inverted definition of Snell's Law
+	float nratio = n1 / n2;
+
+	if (n1 > n2)
+	{
+		//“total internal reflection” means all the light is reflected and none is refracted
+		// the fraction of light that is reflected must be 1 in this case => the reflectance
+		float n = n1 / n2;
+		float sin2t = pow(n, 2) * (1 - pow(cosi, 2));
+		if (sin2t > 1)
+		{
+			return 1;
+		}
+		float cost = sqrtf(1.f - sin2t);
+
+		cosi = cost;
+	}
+
+	float r0 = powf(((n1 - n2) / (n1 + n2)), 2);
+
+	return r0 + (1.f - r0) * powf((1 - cosi), 5);
+}
+
 bool Scene::IsInShadow(Tuple intersectionPoint, Tuple lightPosition) const
 {
 	Tuple vectorFromIntersectionToLight = lightPosition - intersectionPoint;
 	Ray rayFromIntersectionToLight = Ray(intersectionPoint,
 		vectorFromIntersectionToLight.Normalize());
+	float minDistanceToLightSource = vectorFromIntersectionToLight.Magnitude();
 
 	bool isInShadow = false;
+
+	std::vector<std::pair<float, ObjectConstPtr>> allIntersectionDistances;
 	for (unsigned int i = 0; i < this->objects.size(); i++)
 	{
 		ObjectPtr testObject = objects[i];
 
 		IntersectionInfo testIntersection = testObject->Intersect(rayFromIntersectionToLight,
-			std::vector<std::pair<float, ObjectConstPtr>>());
-		if (testIntersection.getIsHit() &&
-			testIntersection.getDistance() >= EPSILON &&
-			testIntersection.getDistance() < vectorFromIntersectionToLight.Magnitude())
+			allIntersectionDistances);
+		if (IsHitCloser(testIntersection, minDistanceToLightSource))
 		{
 			isInShadow = true;
 			break;

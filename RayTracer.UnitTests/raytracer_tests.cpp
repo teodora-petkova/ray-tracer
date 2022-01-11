@@ -242,6 +242,19 @@ TEST_F(RaytracerTests, The_reflected_color_at_the_maximum_recursive_depth)
 	EXPECT_EQ(color, Color(0.f, 0.f, 0.f));
 }
 
+static Color getRefractedColorAtRayObjIntersection(const Scene& scene,
+	const Ray& ray, ObjectPtr obj, int remaining = 5)
+{
+	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>();
+
+	IntersectionInfo intersection = obj->Intersect(ray, intersections);
+
+	auto n1n2 = scene.getRefractiveIndices(intersection, intersections);
+
+	Color color = scene.RefractRay(ray, obj, intersection, n1n2.first, n1n2.second, remaining);
+
+	return color;
+}
 TEST_F(RaytracerTests, The_refracted_color_with_an_opaque_surface)
 {
 	Ray ray = Ray(Tuple::Point(0, 0, -5),
@@ -253,7 +266,7 @@ TEST_F(RaytracerTests, The_refracted_color_with_an_opaque_surface)
 
 	IntersectionInfo i = this->sphere1->Intersect(ray, intersections);
 
-	Color color = this->scene.RefractRay(ray, this->sphere1, i, intersections, 5);
+	Color color = getRefractedColorAtRayObjIntersection(this->scene, ray, this->sphere1);
 
 	EXPECT_EQ(color, Color::Black());
 }
@@ -273,13 +286,11 @@ TEST_F(RaytracerTests, The_refracted_color_at_the_maximum_recursive_depth)
 	Ray ray = Ray(Tuple::Point(0, 0, -5),
 		Tuple::Vector(0, 0, 1));
 
-	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>{
-		std::make_pair(4, customSphere1),
-		std::make_pair(6, customSphere1) };
+	//auto intersections = std::vector<std::pair<float, ObjectConstPtr>>{
+	//	std::make_pair(4, customSphere1),
+	//	std::make_pair(6, customSphere1) };
 
-	IntersectionInfo i = customSphere1->Intersect(ray, intersections);
-
-	Color color = this->scene.RefractRay(ray, customSphere1, i, intersections, 0);
+	Color color = getRefractedColorAtRayObjIntersection(this->scene, ray, customSphere1, 0);
 
 	EXPECT_EQ(color, Color::Black());
 }
@@ -300,13 +311,11 @@ TEST_F(RaytracerTests, The_refracted_color_with_total_internal_refraction)
 	Ray ray = Ray(Tuple::Point(0, 0, sqrt2over2),
 		Tuple::Vector(0, 1, 0));
 
-	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>{
-		std::make_pair(-sqrt2over2, customSphere1),
-		std::make_pair(sqrt2over2, customSphere1) };
+	//auto intersections = std::vector<std::pair<float, ObjectConstPtr>>{
+	//	std::make_pair(-sqrt2over2, customSphere1),
+	//	std::make_pair(sqrt2over2, customSphere1) };
 
-	IntersectionInfo i = customSphere1->Intersect(ray, intersections);
-
-	Color color = this->scene.RefractRay(ray, customSphere1, i, intersections, 5);
+	Color color = getRefractedColorAtRayObjIntersection(this->scene, ray, customSphere1);
 
 	EXPECT_EQ(color, Color::Black());
 }
@@ -332,16 +341,14 @@ TEST_F(RaytracerTests, The_refracted_color_with_a_refracted_ray)
 	Ray ray = Ray(Tuple::Point(0, 0, 0.1),
 		Tuple::Vector(0, 1, 0));
 
-	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>{
-		std::make_pair(-0.9949f, customSphere1),
-		std::make_pair(-0.4899f, customSphere2),
-		std::make_pair(0.4899f, customSphere2),
-		std::make_pair(0.9949f, customSphere1) };
+	//auto intersections = std::vector<std::pair<float, ObjectConstPtr>>{
+	//	std::make_pair(-0.9949f, customSphere1),
+	//	std::make_pair(-0.4899f, customSphere2),
+	//	std::make_pair(0.4899f, customSphere2),
+	//	std::make_pair(0.9949f, customSphere1) };
 
-	IntersectionInfo i = customSphere2->Intersect(ray,
-		std::vector<std::pair<float, ObjectConstPtr>>());
+	Color color = getRefractedColorAtRayObjIntersection(customScene, ray, customSphere2);
 
-	Color color = customScene.RefractRay(ray, customSphere2, i, intersections, 5);
 
 	EXPECT_EQ(color, Color(0, 0.9988, 0.04725));
 }
@@ -366,11 +373,114 @@ TEST_F(RaytracerTests, The_accumulated_refracted_color_with_a_refracted_ray)
 	Ray ray = Ray(Tuple::Point(0, 0, -3),
 		Tuple::Vector(0, -sqrt2over2, sqrt2over2));
 
-	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>{
-		std::make_pair(sqrt(2), floor) };
+	Color color = customScene.TraceSingleRay(ray, 5);
+
+	EXPECT_EQ(color, Color(0.93642f, 0.68642f, 0.68642f));
+}
+
+static float schlick(const Scene& scene, const Ray& ray, ObjectConstPtr obj)
+{
+	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>();
+	IntersectionInfo intersection = obj->Intersect(ray, intersections);
+	auto n1n2 = scene.getRefractiveIndices(intersection, intersections);
+	float reflectance = scene.Schlick(ray, intersection, n1n2.first, n1n2.second);
+
+	return reflectance;
+}
+TEST_F(RaytracerTests, The_Schlick_approximation_under_total_internal_reflection)
+{
+	ObjectPtr glassSphere = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(std::make_shared<FlatColor>(Color(1, 0, 0)),
+			0.1, 0.9, 0.9, 200, 0, 1, 1.5),
+		Matrix<4, 4>::IdentityMatrix());
+
+	std::vector<LightPtr> lights{ this->light };
+	std::vector<ObjectPtr> objects{ glassSphere };
+	Scene customScene = Scene(11, 11, this->camera, objects, lights);
+
+	float sqrt2over2 = sqrt(2) / 2;
+	Ray ray = Ray(Tuple::Point(0, 0, sqrt2over2),
+		Tuple::Vector(0, 1, 0));
+
+	// auto intersections = std::vector<std::pair<float, ObjectConstPtr>> {
+	// std::make_pair(-sqrt2over2, glassSphere),
+	// std::make_pair(sqrt2over2, glassSphere) };
+
+	float reflectance = schlick(customScene, ray, glassSphere);
+
+	EXPECT_EQ(reflectance, 1.0);
+}
+
+TEST_F(RaytracerTests, The_Schlick_approximation_with_a_perpendicular_viewing_angle)
+{
+	ObjectPtr glassSphere = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(std::make_shared<FlatColor>(Color(1, 0, 0)),
+			0.1, 0.9, 0.9, 200, 0, 1, 1.5),
+		Matrix<4, 4>::IdentityMatrix());
+
+	std::vector<LightPtr> lights{ this->light };
+	std::vector<ObjectPtr> objects{ glassSphere };
+	Scene customScene = Scene(11, 11, this->camera, objects, lights);
+
+	Ray ray = Ray(Tuple::Point(0, 0, 0),
+		Tuple::Vector(0, 1, 0));
+
+	// auto intersections = std::vector<std::pair<float, ObjectConstPtr>> {
+	// std::make_pair(-1, glassSphere),
+	// std::make_pair(1, glassSphere) };
+
+	float reflectance = schlick(customScene, ray, glassSphere);
+
+	EXPECT_TRUE(equals(reflectance, 0.04));
+}
+
+TEST_F(RaytracerTests, The_Schlick_approximation_with_a_small_angle_and_n2_greated_than_n1)
+{
+	ObjectPtr glassSphere = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(std::make_shared<FlatColor>(Color(1, 0, 0)),
+			0.1, 0.9, 0.9, 200, 0, 1, 1.5),
+		Matrix<4, 4>::IdentityMatrix());
+
+	std::vector<LightPtr> lights{ this->light };
+	std::vector<ObjectPtr> objects{ glassSphere };
+	Scene customScene = Scene(11, 11, this->camera, objects, lights);
+
+	Ray ray = Ray(Tuple::Point(0, 0.99, -2),
+		Tuple::Vector(0, 0, 1));
+
+	// auto intersections = std::vector<std::pair<float, ObjectConstPtr>> {
+	// std::make_pair(1.8589, glassSphere) };
+
+	float reflectance = schlick(customScene, ray, glassSphere);
+
+	EXPECT_TRUE(equals(reflectance, 0.48873));
+}
+
+TEST_F(RaytracerTests, The_accumulated_reflected_and_transparent_color)
+{
+	ObjectPtr floor = std::make_shared<Plane>(
+		std::make_shared<Material>(std::make_shared<FlatColor>(),
+			0.1, 0.9, 0.9, 200, 0.5, 0.5, 1.5),
+		Transformations::Translation(0, -1, 0));
+
+	ObjectPtr ball = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(std::make_shared<FlatColor>(Color(1, 0, 0)),
+			0.5, 0.9, 0.9, 200),
+		Transformations::Translation(0, -3.5, -0.5));
+
+	std::vector<LightPtr> lights{ this->light };
+	std::vector<ObjectPtr> objects{ this->sphere1, this->sphere2, floor, ball };
+	Scene customScene = Scene(11, 11, this->camera, objects, lights);
+
+	float sqrt2over2 = sqrt(2) / 2;
+	Ray ray = Ray(Tuple::Point(0, 0, -3),
+		Tuple::Vector(0, -sqrt2over2, sqrt2over2));
+
+	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>();// {
+	// std::make_pair(sqrt(2), floor) };
 
 	IntersectionInfo i = floor->Intersect(ray, intersections);
 	Color color = customScene.TraceSingleRay(ray, 5);
 
-	EXPECT_EQ(color, Color(0.93642f, 0.68642f, 0.68642f));
+	EXPECT_EQ(color, Color(0.93391f, 0.69643f, 0.69243f));
 }

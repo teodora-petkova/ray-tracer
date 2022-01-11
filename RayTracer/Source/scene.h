@@ -56,11 +56,15 @@ public:
 		IntersectionInfo intersection, int remaining = 4) const;
 
 	Color RefractRay(const Ray& ray, ObjectPtr object,
-		IntersectionInfo intersection,
-		const std::vector<std::pair<float, ObjectConstPtr>>& allIntersections,
+		IntersectionInfo intersection, float n1, float n2,
 		int remaining) const;
 
+	float Schlick(const Ray& ray, IntersectionInfo intersection, float n1, float n2) const;
+
 	bool IsInShadow(Tuple intersectionPoint, Tuple lightPosition) const;
+
+	std::pair<float, float> getRefractiveIndices(IntersectionInfo intersection,
+		const std::vector<std::pair<float, ObjectConstPtr>>& allIntersections) const;
 
 private:
 	int width;
@@ -69,4 +73,7 @@ private:
 	Camera camera;
 	std::vector<ObjectPtr> objects;
 	std::vector<LightPtr> lights;
+
+	Color CalculateColor(IntersectionInfo intersection, const Ray& ray, ObjectPtr object,
+		std::vector<std::pair<float, ObjectConstPtr>> allIntersectionDistances, int remaining) const;
 };
