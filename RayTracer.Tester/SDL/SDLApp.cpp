@@ -20,7 +20,8 @@ SDLApp::SDLApp(const std::string& title, int x, int y, int w, int h,
 	this->renderer = SDL_CreateRenderer(this->window, -1, 0);
 }
 
-void SDLApp::Update(unsigned char* pixels, size_t size)
+void SDLApp::Update(unsigned char* pixels, size_t size,
+	const char* fileToSaveBMP)
 {
 	SDL_Surface* surface = SDL_GetWindowSurface(this->window);
 	SDL_memcpy(surface->pixels, pixels, size);
@@ -37,6 +38,11 @@ void SDLApp::Update(unsigned char* pixels, size_t size)
 	// up until now everything was drawn behind the scenes
 	// now show the new content of the window
 	SDL_RenderPresent(this->renderer);
+
+	if (fileToSaveBMP != "")
+	{
+		SDL_SaveBMP(surface, fileToSaveBMP);
+	}
 
 	// free resources
 	SDL_FreeSurface(surface);

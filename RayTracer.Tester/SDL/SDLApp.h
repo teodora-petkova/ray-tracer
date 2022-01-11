@@ -20,7 +20,8 @@ public:
 	SDLApp(SDLApp&& other) = delete;
 	SDLApp& operator=(SDLApp&& other) = delete;
 
-	void Update(unsigned char* pixels, size_t size);
+	void Update(unsigned char* pixels, size_t size,
+		const char* fileToSaveBMP = "");
 
 private:
 	// Managed SDL2_Window object

@@ -38,7 +38,7 @@ void UpdatePixels(const Canvas& canvas, unsigned char* pixels)
 
 void UpdateWindow(SDLApp& window,
 	Scene& scene, int size,
-	int x, int y)
+	int x, int y, const char* fileToSaveScene)
 {
 	clock_t begin = clock();
 
@@ -50,7 +50,7 @@ void UpdateWindow(SDLApp& window,
 	unsigned char* pixels = new unsigned char[scene.getImageWidth() * scene.getImageHeight() * 4];
 	UpdatePixels(canvas, pixels);
 
-	window.Update(pixels, size);
+	window.Update(pixels, size, fileToSaveScene);
 
 	delete[] pixels;
 	pixels = nullptr;
@@ -64,10 +64,22 @@ void UpdateWindow(SDLApp& window,
 //------------------------------------------------------------
 //  Main Function
 //------------------------------------------------------------
-int main(int, char* argv[])
+int main(int argc, char* argv[])
 {
+	if (argc <= 1)
+	{
+		std::cout << "No input scene file! Cannot load the current scene!" << std::endl;
+		return 1;
+	}
+
 	const char* sceneFile = argv[1];
 	Scene scene = ReadScene::ReadSceneFile(sceneFile);
+
+	const char* fileToSaveScene = "";
+	if (argc == 3)
+	{
+		fileToSaveScene = argv[2];
+	}
 
 	int x = 0;
 	int y = 0;
@@ -82,7 +94,7 @@ int main(int, char* argv[])
 	{
 		SDLApp window("Simple Ray tracer", 10, 25, rows, columns);
 
-		UpdateWindow(window, scene, size, x, y);
+		UpdateWindow(window, scene, size, x, y, fileToSaveScene);
 
 		while (!quit)
 		{
@@ -100,12 +112,18 @@ int main(int, char* argv[])
 				}
 
 				//printf("(x, y) = (%d, %d)\n", x, y);
-				UpdateWindow(window, scene, size, x, y);
+				UpdateWindow(window, scene, size, x, y, fileToSaveScene);
 				break;
 
 			case SDL_QUIT:
 				quit = true;
 				break;
+			}
+
+			// just quickly show the window, when we save the image in a file (used for batch scripts)
+			if (fileToSaveScene != "")
+			{
+				quit = true;
 			}
 		}
 	}
