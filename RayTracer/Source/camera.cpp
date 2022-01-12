@@ -62,7 +62,6 @@ Camera::Camera(const Tuple& lookFromPoint, const Tuple& lookAtPoint, const Tuple
 		this->halfWidth * 2.f / this->width,
 		this->halfHeight * 2.f / this->height);
 
-
 	this->transform = Transformations::ViewTransform(
 		lookFromPoint,
 		lookAtPoint,
@@ -125,7 +124,7 @@ Ray Camera::CalculateRayForPixel2(int x, int y) const
 
 void Camera::setTransform(const Matrix<4, 4>& matrix)
 {
-	this->transform = (this->transform * matrix).Inverse();
-
-	this->origin = this->transform * Tuple::Point(0, 0, 0);
+	//this->transform = (this->transform * matrix).Inverse();
+	// 
+	//this->origin = this->transform * Tuple::Point(0, 0, 0);
 }

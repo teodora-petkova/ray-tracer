@@ -96,8 +96,7 @@ Matrix<4, 4> Transformations::ViewTransform(Tuple from, Tuple to, Tuple up)
 		{-forward.X(), -forward.Y(), -forward.Z(), 0 },
 		{           0,            0,            0, 1 } });
 
-	// a hack??? -from.Y() ?
-	return orientation * Transformations::Translation(-from.X(), from.Y(), -from.Z());
+	return orientation * Transformations::Translation(-from.X(), -from.Y(), -from.Z());
 }
 
 Matrix<4, 4> Transformations::PerspectiveMatrix(float d, float aspectRatio, float near, float far)

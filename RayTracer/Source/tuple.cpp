@@ -125,6 +125,12 @@ Tuple Tuple::Normalize() const
 
 Tuple Tuple::Reflect(const Tuple& normal) const
 {
+	// r = reflective ray, i = incident ray, n = normal
+	// i_perpendicular = (i.n)/|n|2.n (but |n|=1) = (i.n)n // from vector projection of i onto n
+	// r_perpendicular = -i_perpendicular
+	// r_parallel = i_parallel
+	// r = r_parallel + r_perpendicular = i_parallel - i_perpendicular = i - 2*i_perpendicular
+	// r = i - 2(i·n)n
 	return (*this) - normal * 2 * this->Dot(normal);
 }
 

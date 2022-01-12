@@ -94,6 +94,8 @@ Color Scene::ReflectRay(const Ray& ray, ObjectPtr object,
 std::pair<float, float> Scene::getRefractiveIndices(IntersectionInfo intersection,
 	const std::vector<std::pair<float, ObjectConstPtr>>& allIntersections) const
 {
+	// n1 is the refractive index of the material you come from
+	// n2 is the refractive index of the material you go to
 	float n1 = 1.f;
 	float n2 = 1.f;
 
@@ -147,7 +149,9 @@ Color Scene::RefractRay(const Ray& ray, ObjectPtr object,
 		Tuple normalv = intersection.getNormal();
 		float cosi = eyev.Dot(normalv);
 
-		// the inverted definition of Snell's Law
+		// the inverted definition of Snell's Law n1.sin0i = n2.sin0t
+		// if sin0t > n2/n1, sin0t.sin0i > n2/n1*sin0t = sin0i, then sin0i > 1 and it's not possible,
+		// so we have TIR (total internal reflection)
 		float nratio = n1 / n2;
 
 		float sin2t = pow(nratio, 2) * (1 - pow(cosi, 2));
