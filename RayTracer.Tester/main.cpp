@@ -59,7 +59,21 @@ void UpdateWindow(SDLApp& window,
 	clock_t end = clock();
 
 	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
-	std::cout << "Elapsed time in seconds: " << elapsed_secs << " sec\n";
+	std::cout << "Elapsed time for rendering the image in seconds: " << elapsed_secs << " sec\n";
+}
+
+static Scene ReadSceneFromFile(const char* sceneFile)
+{
+	clock_t begin = clock();
+
+	Scene scene = ReadScene::ReadSceneFile(sceneFile);
+
+	clock_t end = clock();
+
+	float elapsed_secs = float(end - begin) / CLOCKS_PER_SEC;
+	std::cout << "Elapsed time for reading the scene in seconds: " << elapsed_secs << " sec\n";
+
+	return scene;
 }
 
 //------------------------------------------------------------
@@ -73,8 +87,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	const char* sceneFile = argv[1];
-	Scene scene = ReadScene::ReadSceneFile(sceneFile);
+	Scene scene = ReadSceneFromFile(argv[1]);
 
 	const char* fileToSaveScene = "";
 	if (argc == 3)

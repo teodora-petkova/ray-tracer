@@ -21,7 +21,7 @@ float Plane::LocalIntersect(const Ray& ray,
 	// parallel or coplanar ray to the XZ plane
 	if (isCloseToZero(yDirection))
 	{
-		return -1.f;
+		return INFINITY;
 	}
 	else
 	{
@@ -33,7 +33,7 @@ float Plane::LocalIntersect(const Ray& ray,
 		}
 		else
 		{
-			return -1.f;
+			return INFINITY;
 		}
 	}
 }

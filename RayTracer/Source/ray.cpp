@@ -20,3 +20,11 @@ Ray Ray::operator*(const Matrix<4, 4>& m) const
 		Tuple::Point(o.X(), o.Y(), o.Z()),
 		Tuple::Vector(d.X(), d.Y(), d.Z()));
 }
+
+
+std::ostream& operator<<(std::ostream& os, const Ray& r)
+{
+	os << "[origin: " << r.getOrigin() << ", " << "dir: " << r.getDirection() << "]";
+	return os;
+
+}

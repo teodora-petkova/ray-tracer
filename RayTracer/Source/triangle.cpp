@@ -87,7 +87,7 @@ float Triangle::LocalIntersect(const Ray& ray,
 	// the triangle is degenerate(a segment or a point)
 	if (this->normal == Tuple::Vector(0, 0, 0))
 	{
-		return -1;
+		return INFINITY;
 	}
 
 	// ray: P = Po + t.v
@@ -104,7 +104,7 @@ float Triangle::LocalIntersect(const Ray& ray,
 	{
 		// if (a == 0) then the ray lies in the triangle plane
 		// otherwise disjoint from the plane
-		return -1;
+		return INFINITY;
 	}
 
 	// get intersection point of ray with triangle plane
@@ -112,7 +112,7 @@ float Triangle::LocalIntersect(const Ray& ray,
 	// ray goes away from triangle => no intersect
 	if (t < 0.0) // TODO: ??? t>1.0 is it possible
 	{
-		return -1;
+		return INFINITY;
 	}
 
 	// the intersection point of the ray and the plane
@@ -125,5 +125,5 @@ float Triangle::LocalIntersect(const Ray& ray,
 		return t;
 	}
 
-	return -1;
+	return INFINITY;
 }

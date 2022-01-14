@@ -19,3 +19,5 @@ private:
 	Tuple rayOrigin;
 	Tuple rayDirection;
 };
+
+RAYTRACER_EXPORT std::ostream& operator<<(std::ostream& os, const Ray& v);

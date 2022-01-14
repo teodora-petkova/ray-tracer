@@ -24,7 +24,7 @@ private:
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 	{
 		const_cast<CustomObject*>(this)->transformedRay = ray;
-		return -1;
+		return INFINITY;
 	}
 
 	Tuple getLocalNormal(const Tuple& point) const
