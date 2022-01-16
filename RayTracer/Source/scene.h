@@ -11,6 +11,7 @@
 #include "sphere.h"
 #include "triangle.h"
 #include "plane.h"
+#include "cube.h"
 #include "camera.h"
 
 class RAYTRACER_EXPORT Scene

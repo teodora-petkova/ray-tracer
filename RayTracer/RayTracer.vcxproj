@@ -16,6 +16,7 @@
     <ClInclude Include="Source\canvas.h" />
     <ClInclude Include="Source\checkerpattern.h" />
     <ClInclude Include="Source\color.h" />
+    <ClInclude Include="Source\cube.h" />
     <ClInclude Include="Source\flatcolor.h" />
     <ClInclude Include="Source\gradient.h" />
     <ClInclude Include="Source\intersectioninfo.h" />
@@ -44,6 +45,7 @@
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
     <ClCompile Include="Source\canvas.cpp" />
+    <ClCompile Include="Source\cube.cpp" />
     <ClCompile Include="Source\light.cpp" />
     <ClCompile Include="Source\pattern.cpp" />
     <ClCompile Include="Source\plane.cpp" />

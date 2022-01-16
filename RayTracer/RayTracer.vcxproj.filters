@@ -114,6 +114,9 @@
     <ClInclude Include="Source\blendingpattern.h">
       <Filter>Header Files\patterns</Filter>
     </ClInclude>
+    <ClInclude Include="Source\cube.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
@@ -154,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="Source\pattern.cpp">
       <Filter>Source Files\patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\cube.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
