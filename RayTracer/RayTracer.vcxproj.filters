@@ -117,6 +117,9 @@
     <ClInclude Include="Source\cube.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\group.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
@@ -159,6 +162,12 @@
       <Filter>Source Files\patterns</Filter>
     </ClCompile>
     <ClCompile Include="Source\cube.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\group.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\object.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

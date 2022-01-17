@@ -6,6 +6,9 @@ class Object;
 using ObjectPtr = std::shared_ptr<Object>;
 using ObjectConstPtr = std::shared_ptr<Object const>;
 
+class Group;
+using GroupPtr = std::shared_ptr<Group>;
+
 class Light;
 using LightPtr = std::shared_ptr<Light>;
 
