@@ -9,8 +9,8 @@ color 0.15 0.15 0.15
 color 0.85 0.85 0.85
 checkerpattern
 material 0.8 0.2 0 200 0 0 1
-rotatex 90
 translate 0 0 10
+rotatex 90
 plane
 
 # the glass ball
