@@ -120,6 +120,9 @@
     <ClInclude Include="Source\group.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\objparser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="Source\object.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\objparser.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -16,10 +16,22 @@ public:
 	Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
 		MaterialPtr material, Matrix<4, 4> transformation);
 
+	Tuple getA() const { return A; }
+	Tuple getB() const { return B; }
+	Tuple getC() const { return C; }
+
+	Tuple getAB() const { return AB; }
+	Tuple getAC() const { return AC; }
+	Tuple getTriangleNormal() const { return normal; }
+
 private:
 	Tuple A;
 	Tuple B;
 	Tuple C;
+
+	Tuple AB;
+	Tuple AC;
+	Tuple BC;
 	Tuple normal;
 
 	void Initialize();

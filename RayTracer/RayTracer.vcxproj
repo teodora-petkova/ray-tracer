@@ -25,6 +25,7 @@
     <ClInclude Include="Source\material.h" />
     <ClInclude Include="Source\matrix.h" />
     <ClInclude Include="Source\object.h" />
+    <ClInclude Include="Source\objparser.h" />
     <ClInclude Include="Source\pattern.h" />
     <ClInclude Include="Source\plane.h" />
     <ClInclude Include="Source\radialgradient.h" />
@@ -50,6 +51,7 @@
     <ClCompile Include="Source\group.cpp" />
     <ClCompile Include="Source\light.cpp" />
     <ClCompile Include="Source\object.cpp" />
+    <ClCompile Include="Source\objparser.cpp" />
     <ClCompile Include="Source\pattern.cpp" />
     <ClCompile Include="Source\plane.cpp" />
     <ClCompile Include="Source\raytracer.cpp" />

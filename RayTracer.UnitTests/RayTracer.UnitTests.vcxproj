@@ -36,6 +36,7 @@
     <ClCompile Include="cube_tests.cpp" />
     <ClCompile Include="customobject.h" />
     <ClCompile Include="group_tests.cpp" />
+    <ClCompile Include="objparser_tests.cpp" />
     <ClCompile Include="pattern_tests.cpp" />
     <ClCompile Include="canvas_tests.cpp" />
     <ClCompile Include="light_tests.cpp" />

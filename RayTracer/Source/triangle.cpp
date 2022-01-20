@@ -6,11 +6,12 @@ void Triangle::Initialize()
 	// the triangle's precomputed normal is used
 	// for every point on the triangle
 
-	Tuple AB = B - A;
-	Tuple AC = C - A;
+	this->AB = B - A;
+	this->AC = C - A;
+	this->BC = C - B;
 
 	// right-handed coordinate system!!!
-	normal = AB.Cross(AC).Normalize();
+	this->normal = AB.Cross(AC).Normalize();
 }
 
 Tuple Triangle::getLocalNormal(const Tuple& /*point*/)const
@@ -22,8 +23,6 @@ bool Triangle::IsPointInTriangleByBarycentricCoordinates(const Tuple& P) const
 {
 	// compute dot products in advance
 	Tuple AP = P - A;
-	Tuple AB = B - A;
-	Tuple AC = C - A;
 
 	float d00 = AB.Dot(AB);
 	float d01 = AB.Dot(AC);
@@ -50,9 +49,9 @@ bool Triangle::IsPointInTriangleByBarycentricCoordinates(const Tuple& P) const
 
 bool Triangle::IsPointInTriangleByHalfPlanes(const Tuple& P) const
 {
-	if ((B - A).Cross(P - A).Dot(normal) >= 0 &&
-		(C - B).Cross(P - B).Dot(normal) >= 0 &&
-		(A - C).Cross(P - C).Dot(normal) >= 0)
+	if ((AB).Cross(P - A).Dot(normal) >= 0 &&
+		(BC).Cross(P - B).Dot(normal) >= 0 &&
+		(-AC).Cross(P - C).Dot(normal) >= 0)
 	{
 		return true;
 	}
