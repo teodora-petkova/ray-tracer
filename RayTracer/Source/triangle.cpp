@@ -80,7 +80,7 @@ Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3
 	Initialize();
 }
 
-float Triangle::LocalIntersect(const Ray& ray,
+float Triangle::LocalIntersect2(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances)const
 {
 	// the triangle is degenerate(a segment or a point)
@@ -98,7 +98,7 @@ float Triangle::LocalIntersect(const Ray& ray,
 	float a = (A - ray.getOrigin()).Dot(this->normal);
 	float b = (ray.getDirection()).Dot(this->normal);
 
-	// ray is  parallel to triangle plane
+	// ray is parallel to triangle plane
 	if (isCloseToZero(b))
 	{
 		// if (a == 0) then the ray lies in the triangle plane
@@ -125,4 +125,64 @@ float Triangle::LocalIntersect(const Ray& ray,
 	}
 
 	return INFINITY;
+}
+
+/*
+//Möller–Trumbore algorithm for ray-triangle intersection
+// a point in barycentric coordinates inside a triangle
+T(u, v) = (1-u-v).A + u.B + v.C
+
+// a ray
+R(t) = O + t.D (O - the origin point, D - the direction vector)
+
+// the intersection
+T(u, v) = R(t)
+
+(1-u-v).A + u.B + v.C = O + t.D
+=>
+[(-D) (B-A) (C-A)] |t| = O - A
+				   |u|
+				   |v|
+
+[(-D) AB AC] |t| = AO
+			 |u|
+			 |v|
+// Cramer's Rule:
+
+det =  [-D AB AC] = AB.(D x AC) // scalar triple product
+
+t = (1 / det) * [AO AB AC] = (1 / det) * AC.(AO x AB)
+u = (1 / det) * [-D AO AC] = (1 / det) * AO.( D x AC)
+v = (1 / det) * [-D AB AO] = (1 / det) * D .(AO x AB)
+
+*/
+float Triangle::LocalIntersect(const Ray& ray,
+	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
+{
+	// triple product = determinant!
+	Tuple dirCrossAC = ray.getDirection().Cross(this->AC);
+	float determinant = this->AB.Dot(dirCrossAC);
+	if (abs(determinant) < EPSILON)
+	{
+		return INFINITY;
+	}
+
+	float f = 1.0 / determinant;
+
+	Tuple AO = ray.getOrigin() - this->A;
+	float u = f * AO.Dot(dirCrossAC);
+	if (u < 0 || u > 1)
+	{
+		return INFINITY;
+	}
+
+	Tuple AOCrossAB = AO.Cross(this->AB);
+	float v = f * ray.getDirection().Dot(AOCrossAB);
+	if (v < 0 || (u + v) > 1)
+	{
+		return INFINITY;
+	}
+
+	float t = f * this->AC.Dot(AOCrossAB);
+	return t;
 }
