@@ -41,8 +41,8 @@ private:
 	std::vector<std::shared_ptr<Object>> children;
 	std::string name;
 
-	float LocalIntersect(const Ray& ray,
+	IntersectionParams LocalIntersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const override;
 
-	Tuple getLocalNormal(const Tuple& ray) const override;
+	Tuple getLocalNormal(const Tuple& point, const IntersectionParams& intersection) const override;
 };

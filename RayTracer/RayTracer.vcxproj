@@ -35,6 +35,7 @@
     <ClInclude Include="Source\readfile.h" />
     <ClInclude Include="Source\ringpattern.h" />
     <ClInclude Include="Source\scene.h" />
+    <ClInclude Include="Source\smoothtriangle.h" />
     <ClInclude Include="Source\sphere.h" />
     <ClInclude Include="Source\stripepattern.h" />
     <ClInclude Include="Source\transformations.h" />

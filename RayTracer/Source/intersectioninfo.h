@@ -6,6 +6,39 @@
 
 #include "tuple.h"
 
+struct IntersectionParams
+{
+public:
+	IntersectionParams() :
+		distance(INFINITY),
+		u(INFINITY),
+		v(INFINITY)
+	{}
+
+	IntersectionParams(float distance) :
+		distance(distance),
+		u(INFINITY),
+		v(INFINITY)
+	{}
+
+	IntersectionParams(float distance,
+		float u, float v) :
+		distance(distance),
+		u(u),
+		v(v)
+	{}
+
+	float getDistance() const { return distance; }
+	float getU() const { return u; }
+	float getV() const { return v; }
+
+private:
+	float distance;
+	float u;
+	float v;
+
+};
+
 struct IntersectionInfo
 {
 public:

@@ -1,6 +1,6 @@
 #include "cube.h"
 
-Tuple Cube::getLocalNormal(const Tuple& point) const
+Tuple Cube::getLocalNormal(const Tuple& point, const IntersectionParams& /*intersection*/) const
 {
 	float px = abs(point.X());
 	float py = abs(point.Y());
@@ -43,7 +43,7 @@ std::pair<float, float> getIntersectionDistancesAtAxis(float rayOrigin, float ra
 	return std::make_pair(tmin, tmax);
 }
 
-float Cube::LocalIntersect(const Ray& ray,
+IntersectionParams Cube::LocalIntersect(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
 	auto xt = getIntersectionDistancesAtAxis(ray.getOrigin().X(), ray.getDirection().X());
@@ -58,10 +58,10 @@ float Cube::LocalIntersect(const Ray& ray,
 		intersectionDistances.emplace_back(std::make_pair(tmin, shared_from_this()));
 		intersectionDistances.emplace_back(std::make_pair(tmax, shared_from_this()));
 
-		return tmin;
+		return IntersectionParams(tmin);
 	}
 	else
 	{
-		return INFINITY;
+		return IntersectionParams();
 	}
 }

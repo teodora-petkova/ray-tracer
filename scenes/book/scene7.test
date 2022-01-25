@@ -1,0 +1,16 @@
+size 300 300
+
+camera 2 1 -3.5 0 0 0 0 1 0 50
+
+point_light -1.5 1.5 -2 1 1 1 1 1 1 1
+
+color 1 0 0
+material 0.1 0.9 0.9 200 0 0 0
+group D:\Repositories\Git-mine\ray-tracer\scenes\wavefront_obj\cube.obj
+
+# the floor
+color 0.4 0.4 0.2 
+color 0.2 0.2 0
+checkerpattern
+material 0.1 0.9 0 200 0 0 0
+plane

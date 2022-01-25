@@ -15,13 +15,13 @@ IntersectionInfo Object::Intersect(const Ray& ray,
 	// world space—scaling it, translating, rotating it, or whatever.
 	// * Multiplying a point in world space by the inverse of the transformation matrix 
 	// converts that point back to object space.
-	float distance = LocalIntersect(transformedRay, intersectionDistances);
+	IntersectionParams intersection = LocalIntersect(transformedRay, intersectionDistances);
 
 	// To find the intersection point we use the initial untransformed ray in the world space
 	// to calculate locations in the world space using the calculated distance in the object space
-	Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * distance;
+	Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * intersection.getDistance();
 
-	Tuple normal = this->getNormal(intersectionPoint);
+	Tuple normal = this->getNormal(intersectionPoint, intersection);
 	// check whether the ray comes from inside
 	// the angle between the eye vector and the normal will be b/w 90 & 180
 	// so the cos(angle) will be negative
@@ -31,7 +31,7 @@ IntersectionInfo Object::Intersect(const Ray& ray,
 	}
 
 	return IntersectionInfo(intersectionPoint,
-		distance,
+		intersection.getDistance(),
 		normal);
 }
 
@@ -70,11 +70,12 @@ Tuple Object::TransformFromObjectToWorldSpace(Tuple vector) const
 	return worldVector;
 }
 
-Tuple Object::getNormal(Tuple intersectionPoint) const
+Tuple Object::getNormal(Tuple intersectionPoint,
+	const IntersectionParams& intersection) const
 {
 	Tuple objectPoint = TransformFromWorldToObjectSpace(intersectionPoint);
 
-	Tuple objectNormal = getLocalNormal(objectPoint);
+	Tuple objectNormal = getLocalNormal(objectPoint, intersection);
 
 	Tuple worldNormal = TransformFromObjectToWorldSpace(objectNormal);
 

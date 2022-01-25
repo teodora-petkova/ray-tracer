@@ -123,6 +123,9 @@
     <ClInclude Include="Source\objparser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\smoothtriangle.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">

@@ -21,14 +21,14 @@ public:
 		return this->transformedRay;
 	}
 private:
-	float LocalIntersect(const Ray& ray,
+	IntersectionParams LocalIntersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 	{
 		const_cast<CustomObject*>(this)->transformedRay = ray;
-		return INFINITY;
+		return IntersectionParams();
 	}
 
-	Tuple getLocalNormal(const Tuple& point) const
+	Tuple getLocalNormal(const Tuple& point, const IntersectionParams& /*intersection*/) const
 	{
 		return Tuple::Vector(point.X(), point.Y(), point.Z());
 	}

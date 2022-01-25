@@ -1,12 +1,12 @@
 #include "plane.h"
 
-Tuple Plane::getLocalNormal(const Tuple& /*intersectionPoint*/) const
+Tuple Plane::getLocalNormal(const Tuple& /*intersectionPoint*/, const IntersectionParams& /*intersection*/) const
 {
 	// the plane is XZ plane
 	return Tuple::Vector(0, 1, 0);
 }
 
-float Plane::LocalIntersect(const Ray& ray,
+IntersectionParams Plane::LocalIntersect(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
 	// the plane is described as the XZ plane, with the normal pointing in the
@@ -21,7 +21,7 @@ float Plane::LocalIntersect(const Ray& ray,
 	// parallel or coplanar ray to the XZ plane
 	if (isCloseToZero(yDirection))
 	{
-		return INFINITY;
+		return IntersectionParams();
 	}
 	else
 	{
@@ -29,11 +29,11 @@ float Plane::LocalIntersect(const Ray& ray,
 		if (t > 0)
 		{
 			intersectionDistances.emplace_back(std::make_pair(t, shared_from_this()));
-			return t;
+			return IntersectionParams(t);
 		}
 		else
 		{
-			return INFINITY;
+			return IntersectionParams();
 		}
 	}
 }

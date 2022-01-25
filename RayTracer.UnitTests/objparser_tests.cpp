@@ -124,3 +124,38 @@ TEST(ObjParserTests, Parse_normals) {
 	EXPECT_EQ(parser.getNormal(1), Tuple::Point(0.707, 0, -0.707));
 	EXPECT_EQ(parser.getNormal(2), Tuple::Point(1, 2, 3));
 }
+
+TEST(ObjParserTests, Parse_faces_with_normals) {
+	std::istringstream fileContent(R"~(
+		v 0 1 0
+		v -1 0 0
+		v 1 0 0
+		vn -1 0 0
+		vn 1 0 0
+		vn 0 1 0
+		f 1//3 2//1 3//2
+		f 1/0/3 2/102/1 3/14/2)~");
+
+	ObjParser parser = ObjParser(fileContent);
+
+	auto gr = parser.getBaseGroup();
+	auto triangle1 = std::dynamic_pointer_cast<SmoothTriangle>(gr->getChild(0));
+	auto triangle2 = std::dynamic_pointer_cast<SmoothTriangle>(gr->getChild(1));
+
+	EXPECT_EQ(triangle1->getA(), parser.getVertex(0));
+	EXPECT_EQ(triangle1->getB(), parser.getVertex(1));
+	EXPECT_EQ(triangle1->getC(), parser.getVertex(2));
+
+	EXPECT_EQ(triangle1->getNormalA(), parser.getNormal(2));
+	EXPECT_EQ(triangle1->getNormalB(), parser.getNormal(0));
+	EXPECT_EQ(triangle1->getNormalC(), parser.getNormal(1));
+
+	EXPECT_EQ(triangle2->getA(), parser.getVertex(0));
+	EXPECT_EQ(triangle2->getB(), parser.getVertex(1));
+	EXPECT_EQ(triangle2->getC(), parser.getVertex(2));
+
+	EXPECT_EQ(triangle2->getNormalA(), parser.getNormal(2));
+	EXPECT_EQ(triangle2->getNormalB(), parser.getNormal(0));
+	EXPECT_EQ(triangle2->getNormalC(), parser.getNormal(1));
+}
+

@@ -2,6 +2,7 @@
 #include "gtest\gtest.h"
 #pragma warning(pop)
 #include "source\triangle.h"
+#include "source\smoothtriangle.h"
 
 class TriangleTests : public ::testing::Test
 {
@@ -102,4 +103,25 @@ TEST_F(TriangleTests, The_ray_intersects_the_triangle) {
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(0, 0.5, 0));
 	EXPECT_EQ(intersection.getDistance(), 2);
 	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(0, 0, -1));
+}
+
+TEST_F(TriangleTests, Preparing_the_normal_on_a_smooth_triangle)
+{
+Background:
+	ObjectPtr t = std::make_shared<SmoothTriangle>(
+		Tuple::Point(0, 1, 0),
+		Tuple::Point(-1, 0, 0),
+		Tuple::Point(1, 0, 0),
+		Tuple::Vector(0, 1, 0),
+		Tuple::Vector(-1, 0, 0),
+		Tuple::Vector(1, 0, 0));
+	Ray ray = Ray(Tuple::Point(-0.2, 0.3, -2), Tuple::Vector(0, 0, 1));
+
+	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>();
+	auto intersection = t->Intersect(ray, intersections);
+
+	EXPECT_EQ(intersection.getIsHit(), true);
+	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(-0.2, 0.3, 0));
+	EXPECT_EQ(intersection.getDistance(), 2);
+	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(-0.5547, 0.83205, 0));
 }

@@ -9,6 +9,8 @@
 
 #include "raytracer_exports.h"
 #include "scene.h"
+#include "objparser.h"
+#include "matrix.h"
 
 namespace ReadScene
 {

@@ -1,6 +1,6 @@
 #include "group.h"
 
-Tuple Group::getLocalNormal(const Tuple& point) const
+Tuple Group::getLocalNormal(const Tuple& point, const IntersectionParams& /*intersection*/) const
 {
 	/*
 	// TODO: to add an exception in this case but now getNormal is called in Intersect(...) => to refactor!
@@ -9,7 +9,7 @@ Tuple Group::getLocalNormal(const Tuple& point) const
 	return Tuple();
 }
 
-float Group::LocalIntersect(const Ray& ray,
+IntersectionParams Group::LocalIntersect(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
 	float minDistance = INFINITY;
@@ -25,5 +25,5 @@ float Group::LocalIntersect(const Ray& ray,
 			minDistance = intersection.getDistance();
 		}
 	}
-	return minDistance;
+	return IntersectionParams(minDistance);
 }

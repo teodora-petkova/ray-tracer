@@ -14,7 +14,7 @@ void Triangle::Initialize()
 	this->normal = AB.Cross(AC).Normalize();
 }
 
-Tuple Triangle::getLocalNormal(const Tuple& /*point*/)const
+Tuple Triangle::getLocalNormal(const Tuple& /*point*/, const IntersectionParams& /*intersection*/)const
 {
 	return this->normal;
 }
@@ -156,7 +156,7 @@ u = (1 / det) * [-D AO AC] = (1 / det) * AO.( D x AC)
 v = (1 / det) * [-D AB AO] = (1 / det) * D .(AO x AB)
 
 */
-float Triangle::LocalIntersect(const Ray& ray,
+IntersectionParams Triangle::LocalIntersect(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
 	// triple product = determinant!
@@ -184,5 +184,5 @@ float Triangle::LocalIntersect(const Ray& ray,
 	}
 
 	float t = f * this->AC.Dot(AOCrossAB);
-	return t;
+	return IntersectionParams(t, u, v);
 }

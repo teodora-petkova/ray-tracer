@@ -1,6 +1,4 @@
 #include "readfile.h"
-#include "scene.h"
-#include "matrix.h"
 
 namespace ReadScene
 {
@@ -232,6 +230,35 @@ namespace ReadScene
 						objects.push_back(plane);
 						currentTransformation = Matrix<4, 4>::IdentityMatrix();
 					}
+					else if (command == "group")
+					{
+						// TODO: to think of a better way to define the file path
+						// obj filename - the full path without commas?
+						std::string objFilepath;
+						s >> objFilepath;
+
+						std::ifstream ifs;
+						if (!objFilepath.empty())
+							ifs.open(objFilepath);
+
+						if (!ifs)
+						{
+							std::cerr << "Error opening file: " << objFilepath << '\n';
+						}
+
+						if (ifs.is_open())
+						{
+							std::istream& is = static_cast<std::istream&>(ifs);
+							ObjParser parser = ObjParser(is);
+
+							auto group = parser.getBaseGroup();
+							group->SetMaterial(currentMaterial);
+							group->SetTransformation(currentTransformation);
+							objects.push_back(group);
+							currentTransformation = Matrix<4, 4>::IdentityMatrix();
+						}
+					}
+
 					// transformations
 					else if (command == "rotatex")
 					{

@@ -12,6 +12,7 @@
 #include "tuple.h"
 #include "group.h"
 #include "triangle.h"
+#include "smoothtriangle.h"
 
 class RAYTRACER_EXPORT ObjParser
 {

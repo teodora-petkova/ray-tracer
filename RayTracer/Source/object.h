@@ -25,15 +25,14 @@ public:
 	Object(MaterialPtr material, Matrix<4, 4> matrix) :
 		material(material)
 	{
-		Matrix<4, 4> inverseTransformation = matrix.Inverse();
-		this->invTransformation = inverseTransformation;
-		this->transposedInvTransformation = inverseTransformation.Transpose();
+		this->SetTransformation(matrix);
 	}
 
 	IntersectionInfo Intersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const;
 
-	Tuple getNormal(Tuple intersectionPoint) const;
+	Tuple getNormal(Tuple intersectionPoint,
+		const IntersectionParams& intersection = IntersectionParams()) const;
 
 	Tuple TransformFromWorldToObjectSpace(Tuple point) const;
 	Tuple TransformFromObjectToWorldSpace(Tuple vector) const;
@@ -45,13 +44,25 @@ public:
 	void setParent(ObjectPtr parentGroup) { this->parent = parentGroup; }
 	ObjectConstPtr getParent() const { return this->parent; }
 
+	void SetMaterial(MaterialPtr material)
+	{
+		this->material = material;
+	}
+
+	void SetTransformation(Matrix<4, 4> matrix)
+	{
+		Matrix<4, 4> inverseTransformation = matrix.Inverse();
+		this->invTransformation = inverseTransformation;
+		this->transposedInvTransformation = inverseTransformation.Transpose();
+	}
+
 protected:
 	MaterialPtr material;
 	Matrix<4, 4> invTransformation;
 	Matrix<4, 4> transposedInvTransformation;
 	ObjectPtr parent = nullptr;
 
-	virtual float LocalIntersect(const Ray& ray,
+	virtual IntersectionParams LocalIntersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const = 0;
-	virtual Tuple getLocalNormal(const Tuple& point) const = 0;
+	virtual Tuple getLocalNormal(const Tuple& point, const IntersectionParams& /*intersection*/) const = 0;
 };

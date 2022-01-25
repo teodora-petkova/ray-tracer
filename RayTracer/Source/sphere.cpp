@@ -85,13 +85,13 @@ float Sphere::getIntersectionResult(const float& t1, const float& t2,
 	}
 }
 
-Tuple Sphere::getLocalNormal(const Tuple& intersectionPoint) const
+Tuple Sphere::getLocalNormal(const Tuple& intersectionPoint, const IntersectionParams& /*intersection*/) const
 {
 	return (intersectionPoint - this->getCenter());
 }
 
-float Sphere::LocalIntersect(const Ray& ray,
+IntersectionParams Sphere::LocalIntersect(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
-	return GeometricIntersect(ray, intersectionDistances);
+	return IntersectionParams(GeometricIntersect(ray, intersectionDistances));
 }
