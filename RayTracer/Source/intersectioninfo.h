@@ -36,7 +36,6 @@ private:
 	float distance;
 	float u;
 	float v;
-
 };
 
 struct IntersectionInfo
@@ -45,17 +44,24 @@ public:
 	IntersectionInfo() :
 		isObjectHit(false),
 		intersectionPoint(Tuple()),
+		object(nullptr),
 		distance(INFINITY),
+		u(INFINITY),
+		v(INFINITY),
 		normal(Tuple()),
 		overPoint(Tuple())
 	{}
 
 	IntersectionInfo(const Tuple& intersectionPoint,
-		float distance,
+		IntersectionParams intersection,
+		ObjectConstPtr obj,
 		const Tuple& normal) :
-		isObjectHit(distance != INFINITY && distance >= 0),
+		isObjectHit(intersection.getDistance() != INFINITY && intersection.getDistance() >= 0),
 		intersectionPoint(intersectionPoint),
-		distance(distance),
+		object(obj),
+		distance(intersection.getDistance()),
+		u(intersection.getU()),
+		v(intersection.getV()),
 		normal(normal),
 		overPoint(intersectionPoint + normal * EPSILON),
 		underPoint(intersectionPoint - normal * EPSILON)
@@ -63,16 +69,22 @@ public:
 
 	bool getIsHit() const { return isObjectHit; }
 	Tuple getIntersectionPoint() const { return intersectionPoint; }
+	ObjectConstPtr getObject() const { return object; }
 	Tuple getOverPoint() const { return overPoint; }
 	Tuple getUnderPoint() const { return underPoint; }
 	float getDistance() const { return distance; }
+	float getU() const { return u; }
+	float getV() const { return v; }
 	Tuple getNormal() const { return normal; }
 
 private:
 	bool isObjectHit;
 	Tuple intersectionPoint;
+	ObjectConstPtr object;
 	Tuple overPoint;
 	Tuple underPoint;
 	float distance;
+	float u;
+	float v;
 	Tuple normal;
 };

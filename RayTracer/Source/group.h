@@ -19,8 +19,9 @@ public:
 
 	void AddChild(ObjectPtr object)
 	{
-		children.push_back(object);
 		object->setParent(shared_from_this());
+		object->setMaterial(this->material);
+		children.push_back(object);
 	}
 
 	ObjectPtr getChild(int index) { return this->children[index]; }

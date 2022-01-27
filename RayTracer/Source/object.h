@@ -25,7 +25,9 @@ public:
 	Object(MaterialPtr material, Matrix<4, 4> matrix) :
 		material(material)
 	{
-		this->SetTransformation(matrix);
+		Matrix<4, 4> inverseTransformation = matrix.Inverse();
+		this->invTransformation = inverseTransformation;
+		this->transposedInvTransformation = inverseTransformation.Transpose();
 	}
 
 	IntersectionInfo Intersect(const Ray& ray,
@@ -44,17 +46,11 @@ public:
 	void setParent(ObjectPtr parentGroup) { this->parent = parentGroup; }
 	ObjectConstPtr getParent() const { return this->parent; }
 
-	void SetMaterial(MaterialPtr material)
+	void setMaterial(MaterialPtr material)
 	{
 		this->material = material;
 	}
 
-	void SetTransformation(Matrix<4, 4> matrix)
-	{
-		Matrix<4, 4> inverseTransformation = matrix.Inverse();
-		this->invTransformation = inverseTransformation;
-		this->transposedInvTransformation = inverseTransformation.Transpose();
-	}
 
 protected:
 	MaterialPtr material;

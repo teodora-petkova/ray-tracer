@@ -23,7 +23,7 @@ public:
 	Matrix<4, 4> getInverseTransformation() const { return invTransformation; }
 
 	virtual Color getColorAt(const Tuple& point) const = 0;
-	Color getColorAtObject(const ObjectPtr& object, const Tuple& point) const;
+	Color getColorAtObject(ObjectConstPtr object, const Tuple& point) const;
 
 protected:
 	Matrix<4, 4> invTransformation;

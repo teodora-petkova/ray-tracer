@@ -24,6 +24,15 @@ public:
 		parse(is);
 	}
 
+	ObjParser(std::istream& is,
+		MaterialPtr material,
+		Matrix<4, 4> transformation)
+	{
+		this->baseGroup = std::make_shared<Group>(material, transformation);
+
+		parse(is);
+	}
+
 	Tuple getVertex(int index) const { return vertices[index]; }
 	Tuple getNormal(int index) const { return normals[index]; }
 

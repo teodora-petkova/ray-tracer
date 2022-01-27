@@ -163,7 +163,7 @@ TEST_F(RaytracerTests, The_pure_reflected_color_for_a_reflected_material_of_a_pl
 
 	IntersectionInfo i = plane->Intersect(ray,
 		std::vector<std::pair<float, ObjectConstPtr>>());
-	Color color = customScene.ReflectRay(ray, plane, i);
+	Color color = customScene.ReflectRay(ray, i);
 
 	EXPECT_EQ(color, Color(0.19032f, 0.2379f, 0.14274f));
 }
@@ -237,7 +237,7 @@ TEST_F(RaytracerTests, The_reflected_color_at_the_maximum_recursive_depth)
 
 	IntersectionInfo i = plane->Intersect(ray,
 		std::vector<std::pair<float, ObjectConstPtr>>());
-	Color color = customScene.ReflectRay(ray, plane, i, 0);
+	Color color = customScene.ReflectRay(ray, i, 0);
 
 	EXPECT_EQ(color, Color(0.f, 0.f, 0.f));
 }
@@ -251,7 +251,7 @@ static Color getRefractedColorAtRayObjIntersection(const Scene& scene,
 
 	auto n1n2 = scene.getRefractiveIndices(intersection, intersections);
 
-	Color color = scene.RefractRay(ray, obj, intersection, n1n2.first, n1n2.second, remaining);
+	Color color = scene.RefractRay(ray, intersection, n1n2.first, n1n2.second, remaining);
 
 	return color;
 }

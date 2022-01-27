@@ -249,11 +249,11 @@ namespace ReadScene
 						if (ifs.is_open())
 						{
 							std::istream& is = static_cast<std::istream&>(ifs);
-							ObjParser parser = ObjParser(is);
-
+							ObjParser parser = ObjParser(is,
+								currentMaterial,
+								currentTransformation);
 							auto group = parser.getBaseGroup();
-							group->SetMaterial(currentMaterial);
-							group->SetTransformation(currentTransformation);
+
 							objects.push_back(group);
 							currentTransformation = Matrix<4, 4>::IdentityMatrix();
 						}

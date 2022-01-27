@@ -53,12 +53,11 @@ public:
 
 	Color TraceSingleRay(const Ray& ray, int remaining = 4) const;
 
-	Color ReflectRay(const Ray& ray, ObjectPtr object,
-		IntersectionInfo intersection, int remaining = 4) const;
+	Color ReflectRay(const Ray& ray, IntersectionInfo intersection,
+		int remaining = 4) const;
 
-	Color RefractRay(const Ray& ray, ObjectPtr object,
-		IntersectionInfo intersection, float n1, float n2,
-		int remaining) const;
+	Color RefractRay(const Ray& ray, IntersectionInfo intersection,
+		float n1, float n2, int remaining) const;
 
 	float Schlick(const Ray& ray, IntersectionInfo intersection, float n1, float n2) const;
 
@@ -75,6 +74,6 @@ private:
 	std::vector<ObjectPtr> objects;
 	std::vector<LightPtr> lights;
 
-	Color CalculateColor(IntersectionInfo intersection, const Ray& ray, ObjectPtr object,
+	Color CalculateColor(IntersectionInfo intersection, const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>> allIntersectionDistances, int remaining) const;
 };

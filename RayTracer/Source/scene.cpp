@@ -11,7 +11,6 @@ Color Scene::TraceSingleRay(const Ray& ray, int remaining) const
 {
 	Scene scene = *this;
 
-	ObjectPtr object = NULL;
 	IntersectionInfo intersection = IntersectionInfo();
 	std::vector<std::pair<float, ObjectConstPtr>> allIntersectionDistances;
 
@@ -24,7 +23,6 @@ Color Scene::TraceSingleRay(const Ray& ray, int remaining) const
 
 		if (IsHitCloser(testIntersection, minDistance))
 		{
-			object = testObject;
 			intersection = testIntersection;
 			minDistance = intersection.getDistance();
 		}
@@ -32,10 +30,10 @@ Color Scene::TraceSingleRay(const Ray& ray, int remaining) const
 
 	sort(allIntersectionDistances.begin(), allIntersectionDistances.end());
 
-	return CalculateColor(intersection, ray, object, allIntersectionDistances, remaining);
+	return CalculateColor(intersection, ray, allIntersectionDistances, remaining);
 }
 
-Color Scene::CalculateColor(IntersectionInfo intersection, const Ray& ray, ObjectPtr object,
+Color Scene::CalculateColor(IntersectionInfo intersection, const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>> allIntersectionDistances, int remaining) const
 {
 	Scene scene = *this;
@@ -47,19 +45,20 @@ Color Scene::CalculateColor(IntersectionInfo intersection, const Ray& ray, Objec
 		for (LightPtr light : scene.getLights())
 		{
 			color += light->CalculatePhongColor(intersection.getOverPoint(),
-				intersection.getNormal(), scene.getCamera().getOrigin(), object,
+				intersection.getNormal(), scene.getCamera().getOrigin(),
+				intersection.getObject(),
 				IsInShadow(intersection.getOverPoint(), light->getPosition()));
 		}
 
-		Color reflected = ReflectRay(ray, object, intersection, remaining);
+		Color reflected = ReflectRay(ray, intersection, remaining);
 
 		auto n1n2 = getRefractiveIndices(intersection, allIntersectionDistances);
 
-		Color refracted = RefractRay(ray, object, intersection,
+		Color refracted = RefractRay(ray, intersection,
 			n1n2.first, n1n2.second, remaining);
 
-		if (object->getMaterial()->getReflective() > 0 &&
-			object->getMaterial()->getTransparency() > 0)
+		if (intersection.getObject()->getMaterial()->getReflective() > 0 &&
+			intersection.getObject()->getMaterial()->getTransparency() > 0)
 		{
 			float reflectance = Schlick(ray, intersection, n1n2.first, n1n2.second);
 			color += reflected * reflectance + refracted * (1 - reflectance);
@@ -73,11 +72,11 @@ Color Scene::CalculateColor(IntersectionInfo intersection, const Ray& ray, Objec
 	return color;
 }
 
-Color Scene::ReflectRay(const Ray& ray, ObjectPtr object,
+Color Scene::ReflectRay(const Ray& ray,
 	IntersectionInfo intersection, int remaining) const
 {
 	if (remaining <= 0 ||
-		object->getMaterial()->getReflective() == 0.f)
+		intersection.getObject()->getMaterial()->getReflective() == 0.f)
 	{
 		return Color::Black();
 	}
@@ -87,7 +86,7 @@ Color Scene::ReflectRay(const Ray& ray, ObjectPtr object,
 
 		Ray reflectedRay = Ray(intersection.getOverPoint(), reflectedVector);
 		Color color = TraceSingleRay(reflectedRay, remaining - 1);
-		return color * object->getMaterial()->getReflective();
+		return color * intersection.getObject()->getMaterial()->getReflective();
 	}
 }
 
@@ -134,12 +133,12 @@ std::pair<float, float> Scene::getRefractiveIndices(IntersectionInfo intersectio
 	return std::make_pair(n1, n2);
 }
 
-Color Scene::RefractRay(const Ray& ray, ObjectPtr object,
+Color Scene::RefractRay(const Ray& ray,
 	IntersectionInfo intersection, float n1, float n2,
 	int remaining) const
 {
 	if (remaining == 0 ||
-		object->getMaterial()->getTransparency() == 0.f)
+		intersection.getObject()->getMaterial()->getTransparency() == 0.f)
 	{
 		return Color::Black();
 	}
@@ -169,7 +168,7 @@ Color Scene::RefractRay(const Ray& ray, ObjectPtr object,
 
 		// multiply by the transparency value to account for any opacity
 		Color color = TraceSingleRay(refractedRay, remaining - 1) *
-			object->getMaterial()->getTransparency();
+			intersection.getObject()->getMaterial()->getTransparency();
 
 		return color;
 	}

@@ -17,22 +17,36 @@ IntersectionInfo Object::Intersect(const Ray& ray,
 	// converts that point back to object space.
 	IntersectionParams intersection = LocalIntersect(transformedRay, intersectionDistances);
 
-	// To find the intersection point we use the initial untransformed ray in the world space
-	// to calculate locations in the world space using the calculated distance in the object space
-	Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * intersection.getDistance();
-
-	Tuple normal = this->getNormal(intersectionPoint, intersection);
-	// check whether the ray comes from inside
-	// the angle between the eye vector and the normal will be b/w 90 & 180
-	// so the cos(angle) will be negative
-	if (normal.Dot(-ray.getDirection()) < 0)
+	if (intersection.getDistance() > 0 && intersection.getDistance() != INFINITY)
 	{
-		normal = -normal;
-	}
+		// if there is at least one intersection, there should be at least one in the intersection distance array
+		sort(intersectionDistances.begin(), intersectionDistances.end());
+		// we take the object from here, as it can be the child of the child of ... current object (( : 
+		ObjectConstPtr intersectionObject = intersectionDistances.at(0).second;
 
-	return IntersectionInfo(intersectionPoint,
-		intersection.getDistance(),
-		normal);
+		// To find the intersection point we use the initial untransformed ray in the world space
+		// to calculate locations in the world space using the calculated distance in the object space
+		Tuple intersectionPoint = ray.getOrigin() + ray.getDirection() * intersection.getDistance();
+
+		Tuple normal = intersectionObject->getNormal(intersectionPoint, intersection);
+
+		// check whether the ray comes from inside
+		// the angle between the eye vector and the normal will be b/w 90 & 180
+		// so the cos(angle) will be negative
+		if (normal.Dot(-ray.getDirection()) < 0)
+		{
+			normal = -normal;
+		}
+
+		return IntersectionInfo(intersectionPoint,
+			intersection,
+			intersectionObject,
+			normal);
+	}
+	else
+	{
+		return IntersectionInfo();
+	}
 }
 
 Tuple Object::TransformFromWorldToObjectSpace(Tuple point) const

@@ -4,7 +4,7 @@
 Color Light::CalculatePhongColor(const Tuple& intersectionPoint,
 	const Tuple& unitNormal,
 	const Tuple& cameraPosition,
-	const ObjectPtr& object,
+	ObjectConstPtr object,
 	bool isInShadow) const
 {
 	Color phongIntensity = Color::Black();
