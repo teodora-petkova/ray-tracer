@@ -10,8 +10,8 @@ void Triangle::Initialize()
 	this->AC = C - A;
 	this->BC = C - B;
 
-	// right-handed coordinate system!!!
-	this->normal = AB.Cross(AC).Normalize();
+	// left-handed coordinate system => -z is toward us
+	this->normal = AC.Cross(AB).Normalize();
 }
 
 Tuple Triangle::getLocalNormal(const Tuple& /*point*/, const IntersectionParams& /*intersection*/)const
@@ -184,5 +184,7 @@ IntersectionParams Triangle::LocalIntersect(const Ray& ray,
 	}
 
 	float t = f * this->AC.Dot(AOCrossAB);
+	intersectionDistances.emplace_back(std::make_pair(t, shared_from_this()));
+
 	return IntersectionParams(t, u, v);
 }

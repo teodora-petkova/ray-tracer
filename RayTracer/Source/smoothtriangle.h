@@ -25,7 +25,7 @@ private:
 	Tuple normalB;
 	Tuple normalC;
 
-	Tuple getLocalNormal(const Tuple& /*point*/, const IntersectionParams& intersection)const
+	Tuple getLocalNormal(const Tuple& /*point*/, const IntersectionParams& intersection) const override
 	{
 		return  this->normalB * intersection.getU() +
 			this->normalC * intersection.getV() +

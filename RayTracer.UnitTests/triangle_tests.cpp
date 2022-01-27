@@ -22,7 +22,7 @@ protected:
 	}
 };
 
-TEST_F(TriangleTests, Constructing_a_triangle) {
+TEST_F(TriangleTests, Constructing_a_triangle_and_calculating_its_normal) {
 	Triangle t = Triangle(
 		Tuple::Point(0, 1, 0),  // A
 		Tuple::Point(-1, 0, 0), // B
@@ -32,9 +32,20 @@ TEST_F(TriangleTests, Constructing_a_triangle) {
 
 	EXPECT_EQ(t.getAB(), Tuple::Vector(-1, -1, 0));
 	EXPECT_EQ(t.getAC(), Tuple::Vector(1, -1, 0));
-	// TODO: to check for the triangle normal?
-	// right-handed coordinate system?
-	EXPECT_EQ(t.getTriangleNormal(), Tuple::Vector(0, 0, 1));
+	EXPECT_EQ(t.getTriangleNormal(), Tuple::Vector(0, 0, -1));
+}
+
+TEST_F(TriangleTests, Constructing_a_triangle_on_x_and_y_axis_and_calculating_its_normal) {
+	Triangle t = Triangle(
+		Tuple::Point(0, 0, 0),  // A
+		Tuple::Point(1, 0, 0),  // B
+		Tuple::Point(0, 1, 0),  // C
+		this->material,
+		this->transformation);
+
+	EXPECT_EQ(t.getAB(), Tuple::Vector(1, 0, 0));
+	EXPECT_EQ(t.getAC(), Tuple::Vector(0, 1, 0));
+	EXPECT_EQ(t.getTriangleNormal(), Tuple::Vector(0, 0, -1));
 }
 
 TEST_F(TriangleTests, The_ray_is_parallel_to_the_triangle) {
