@@ -33,6 +33,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="boundingbox_tests.cpp" />
     <ClCompile Include="cube_tests.cpp" />
     <ClCompile Include="customobject.h" />
     <ClCompile Include="group_tests.cpp" />

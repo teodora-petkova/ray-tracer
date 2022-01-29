@@ -7,6 +7,8 @@ public:
 		:Object()
 	{
 		this->transformedRay = Ray();
+		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
+
 	}
 
 	CustomObject(MaterialPtr material,
@@ -14,6 +16,8 @@ public:
 		: Object(material, transformation)
 	{
 		this->transformedRay = Ray();
+		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1))
+			.Transform(transformation);
 	}
 
 	Ray getTransformedRay() const

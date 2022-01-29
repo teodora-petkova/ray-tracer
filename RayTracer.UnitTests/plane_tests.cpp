@@ -67,3 +67,10 @@ TEST(PlaneTests, A_ray_intersecting_a_plane_from_below) {
 	EXPECT_EQ(info.getIntersectionPoint(), Tuple::Point(0, 0, 0));
 	EXPECT_EQ(info.getNormal(), Tuple::Vector(0, -1, 0));
 }
+
+TEST(PlaneTests, A_plane_has_a_bounding_box) {
+	ObjectPtr plane = std::make_shared<Plane>();
+
+	EXPECT_EQ(plane->getBounds().getMin(), Tuple::Vector(-INFINITY, 0, -INFINITY));
+	EXPECT_EQ(plane->getBounds().getMax(), Tuple::Vector(INFINITY, 0, INFINITY));
+}

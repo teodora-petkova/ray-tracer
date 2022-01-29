@@ -14,11 +14,16 @@ public:
 	// the cube is centered at (0, 0, 0) and its bounds for all x, y, z are [-1, 1]!
 
 	Cube() : Object()
-	{}
+	{
+		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
+	}
 
 	Cube(MaterialPtr material, Matrix<4, 4> transformation) :
 		Object(material, transformation)
-	{}
+	{
+		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1))
+			.Transform(this->transformation);
+	}
 
 private:
 

@@ -118,7 +118,6 @@ TEST_F(TriangleTests, The_ray_intersects_the_triangle) {
 
 TEST_F(TriangleTests, Preparing_the_normal_on_a_smooth_triangle)
 {
-Background:
 	ObjectPtr t = std::make_shared<SmoothTriangle>(
 		Tuple::Point(0, 1, 0),
 		Tuple::Point(-1, 0, 0),
@@ -135,4 +134,17 @@ Background:
 	EXPECT_EQ(intersection.getIntersectionPoint(), Tuple::Point(-0.2, 0.3, 0));
 	EXPECT_EQ(intersection.getDistance(), 2);
 	EXPECT_EQ(intersection.getNormal(), Tuple::Vector(-0.5547, 0.83205, 0));
+}
+
+TEST_F(TriangleTests, A_triangle_has_a_bounding_box)
+{
+	ObjectPtr triangle = std::make_shared<Triangle>(
+		Tuple::Point(-3, 7, 2),
+		Tuple::Point(6, 2, -4),
+		Tuple::Point(2, -1, -1),
+		this->material,
+		this->transformation);
+
+	EXPECT_EQ(triangle->getBounds().getMin(), Tuple::Point(-3, -1, -4));
+	EXPECT_EQ(triangle->getBounds().getMax(), Tuple::Point(6, 7, 2));
 }

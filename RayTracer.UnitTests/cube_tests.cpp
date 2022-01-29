@@ -109,3 +109,11 @@ INSTANTIATE_TEST_CASE_P(CubeTests, CubeNormalTests,
 		CubeNormalData{ Tuple::Point(0.4, 0.4, -1), Tuple::Vector(0, 0, -1) },
 		CubeNormalData{ Tuple::Point(1, 1, 1), Tuple::Vector(1, 0, 0) },
 		CubeNormalData{ Tuple::Point(-1, -1, -1), Tuple::Vector(-1, 0, 0) }));
+
+TEST(CubeTests, A_cube_has_a_bounding_box)
+{
+	ObjectPtr cube = std::make_shared<Cube>();
+
+	EXPECT_EQ(cube->getBounds().getMin(), Tuple::Point(-1, -1, -1));
+	EXPECT_EQ(cube->getBounds().getMax(), Tuple::Point(1, 1, 1));
+}

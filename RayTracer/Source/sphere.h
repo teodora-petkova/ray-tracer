@@ -14,14 +14,19 @@ public:
 	Sphere() : Object(),
 		center(Tuple::Point(0, 0, 0)),
 		radius(1)
-	{}
+	{
+		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
+	}
 
 	Sphere(const Tuple& center, float radius,
 		MaterialPtr material, Matrix<4, 4> transformation) :
 		Object(material, transformation),
 		center(center),
 		radius(radius)
-	{}
+	{
+		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1))
+			.Transform(this->transformation);
+	}
 
 	Tuple getCenter() const { return center; }
 	float getRadius() const { return radius; }

@@ -4,6 +4,7 @@
 
 #include "source\group.h"
 #include "source\sphere.h"
+#include "source\cube.h"
 #include "source\transformations.h"
 #include "customobject.h"
 
@@ -121,4 +122,27 @@ TEST(GroupTests, Finding_a_normal_on_a_child_object) {
 
 	Tuple normal = sphere->getNormal(Tuple::Point(1.7321, 1.1547, -5.5774));
 	EXPECT_EQ(normal, Tuple::Vector(0.2857, 0.4286, -0.8571));
+}
+
+TEST(GroupTests, A_group_has_a_bounding_box_containing_its_children)
+{
+	auto transform1 = Transformations::Translation(2, 5, -3) *
+		Transformations::Scaling(2, 2, 2);
+	ObjectPtr sphere = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(), transform1);
+
+	auto transform2 = Transformations::Scaling(1, 2, 1) *
+		Transformations::Translation(-4, -1, 4) *
+		Transformations::Scaling(0.5, 1, 0.5);
+	ObjectPtr cube = std::make_shared<Cube>(std::make_shared<Material>(), transform2);
+
+	GroupPtr group = std::make_shared<Group>(std::make_shared<Material>(),
+		Transformations::RotationY(90));
+
+	group->AddChild(sphere);
+	group->AddChild(cube);
+
+	// TODO: to check transformations and objects bounds afterwards again!
+	EXPECT_EQ(group->getBounds().getMin(), Tuple::Point(-4.5, -4, -5));
+	EXPECT_EQ(group->getBounds().getMax(), Tuple::Point(4, 7, 4.5));
 }

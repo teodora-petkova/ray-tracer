@@ -8,20 +8,25 @@ Tuple Group::getLocalNormal(const Tuple& point, const IntersectionParams& /*inte
 IntersectionParams Group::LocalIntersect(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
-	IntersectionParams minIntersection = IntersectionParams();
-	for (auto& child : this->children)
+	float tmin, tmax;
+	if (this->bounds.Intersects(ray, tmin, tmax))
 	{
-		auto intersection = child->Intersect(ray, intersectionDistances);
-
-		// TODO: to refactor? - duplicated checks as in scene.cpp : ((
-		if (intersection.getIsHit() &&
-			intersection.getDistance() >= EPSILON &&
-			intersection.getDistance() < minIntersection.getDistance())
+		IntersectionParams minIntersection = IntersectionParams();
+		for (auto& child : this->children)
 		{
-			minIntersection = IntersectionParams(intersection.getDistance(),
-				intersection.getU(),
-				intersection.getV());
+			auto intersection = child->Intersect(ray, intersectionDistances);
+
+			// TODO: to refactor? - duplicated checks as in scene.cpp : ((
+			if (intersection.getIsHit() &&
+				intersection.getDistance() >= EPSILON &&
+				intersection.getDistance() < minIntersection.getDistance())
+			{
+				minIntersection = IntersectionParams(intersection.getDistance(),
+					intersection.getU(),
+					intersection.getV());
+			}
 		}
+		return minIntersection;
 	}
-	return minIntersection;
+	return IntersectionParams();
 }

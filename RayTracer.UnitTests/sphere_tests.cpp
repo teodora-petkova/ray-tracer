@@ -284,3 +284,14 @@ TEST_F(SphereTests, The_normal_on_a_transformed_sphere) {
 	EXPECT_EQ(sphere.getNormal(Tuple::Point(0, sqrtf(2) / 2, -sqrtf(2) / 2)),
 		Tuple::Vector(0, 0.97014f, -0.24254f));
 }
+
+TEST_F(SphereTests, A_sphere_has_a_bounding_box) {
+
+	ObjectPtr sphere = std::make_shared<Sphere>(this->origin,
+		this->radius,
+		this->material,
+		this->transformation);
+
+	EXPECT_EQ(sphere->getBounds().getMin(), Tuple::Point(-1, -1, -1));
+	EXPECT_EQ(sphere->getBounds().getMax(), Tuple::Point(1, 1, 1));
+}

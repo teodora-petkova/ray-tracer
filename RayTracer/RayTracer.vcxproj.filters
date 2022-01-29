@@ -179,5 +179,11 @@
     <ClCompile Include="Source\objparser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\boundingbox.h">
+      <Filter>Header Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\boundingbox.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

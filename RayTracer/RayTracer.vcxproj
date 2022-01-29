@@ -46,6 +46,8 @@
     <ClInclude Include="Source\utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\boundingbox.cpp" />
+    <ClCompile Include="Source\boundingbox.h" />
     <ClCompile Include="Source\camera.cpp" />
     <ClCompile Include="Source\canvas.cpp" />
     <ClCompile Include="Source\cube.cpp" />

@@ -9,11 +9,20 @@ class RAYTRACER_EXPORT Plane : public virtual Object
 {
 public:
 	Plane() : Object()
-	{}
+	{
+		this->bounds = BoundingBox(
+			Tuple::Point(-INFINITY, 0, -INFINITY),
+			Tuple::Point(INFINITY, 0, INFINITY));
+	}
 
 	Plane(MaterialPtr material, Matrix<4, 4> transformation) :
 		Object(material, transformation)
-	{}
+	{
+		this->bounds = BoundingBox(
+			Tuple::Point(-INFINITY, 0, -INFINITY),
+			Tuple::Point(INFINITY, 0, INFINITY))
+			.Transform(this->transformation);
+	}
 
 private:
 	IntersectionParams LocalIntersect(const Ray& ray,

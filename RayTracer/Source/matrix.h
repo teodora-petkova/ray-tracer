@@ -67,7 +67,9 @@ public:
 				float sum = 0;
 				for (uint8_t k = 0; k < COLUMNS; k++)
 				{
-					sum += this->At(i, k) * m2.At(k, j);
+					// 0 * infinity is NaN by C++ standard
+					sum += (this->At(i, k) == 0 || m2.At(k, j) == 0) ?
+						0 : this->At(i, k) * m2.At(k, j);
 				}
 
 				m.At(i, j) = sum;

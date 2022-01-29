@@ -21,6 +21,7 @@ public:
 	{
 		object->setParent(shared_from_this());
 		object->setMaterial(this->material);
+		this->bounds.AddBound(object->getBounds());
 		children.push_back(object);
 	}
 

@@ -22,38 +22,12 @@ Tuple Cube::getLocalNormal(const Tuple& point, const IntersectionParams& /*inter
 	}
 }
 
-std::pair<float, float> getIntersectionDistancesAtAxis(float rayOrigin, float rayDirection)
-{
-	//float tmin = (-1 - rayOrigin) * INFINITY;
-	//float tmax = (1 - rayOrigin) * INFINITY;
-
-	//if (!isCloseToZero(rayDirection))
-	//{
-	float const oneOverDirection = 1.f / rayDirection;
-
-	float tmin = (1 - rayOrigin) * oneOverDirection;
-	float tmax = (-1 - rayOrigin) * oneOverDirection;
-	//}
-
-	if (tmin > tmax)
-	{
-		std::swap(tmin, tmax);
-	}
-
-	return std::make_pair(tmin, tmax);
-}
-
 IntersectionParams Cube::LocalIntersect(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
-	auto xt = getIntersectionDistancesAtAxis(ray.getOrigin().X(), ray.getDirection().X());
-	auto yt = getIntersectionDistancesAtAxis(ray.getOrigin().Y(), ray.getDirection().Y());
-	auto zt = getIntersectionDistancesAtAxis(ray.getOrigin().Z(), ray.getDirection().Z());
-
-	float tmin = std::max({ xt.first, yt.first, zt.first });
-	float tmax = std::min({ xt.second, yt.second, zt.second });
-
-	if (tmin < tmax)
+	float tmin;
+	float tmax;
+	if (getBounds().Intersects(ray, tmin, tmax))
 	{
 		intersectionDistances.emplace_back(std::make_pair(tmin, shared_from_this()));
 		intersectionDistances.emplace_back(std::make_pair(tmax, shared_from_this()));

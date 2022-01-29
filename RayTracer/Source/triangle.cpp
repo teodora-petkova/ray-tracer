@@ -12,6 +12,12 @@ void Triangle::Initialize()
 
 	// left-handed coordinate system => -z is toward us
 	this->normal = AC.Cross(AB).Normalize();
+
+	this->bounds = BoundingBox();
+	this->bounds.AddPoint(A);
+	this->bounds.AddPoint(B);
+	this->bounds.AddPoint(C);
+	this->bounds = this->bounds.Transform(this->transformation);
 }
 
 Tuple Triangle::getLocalNormal(const Tuple& /*point*/, const IntersectionParams& /*intersection*/)const
