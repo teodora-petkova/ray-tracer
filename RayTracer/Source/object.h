@@ -19,7 +19,6 @@ class RAYTRACER_EXPORT Object : public std::enable_shared_from_this<Object>
 public:
 	Object() :
 		material(std::make_shared<Material>()),
-		transformation(Matrix<4, 4>::IdentityMatrix()),
 		invTransformation(Matrix<4, 4>::IdentityMatrix()),
 		transposedInvTransformation(Matrix<4, 4>::IdentityMatrix())
 	{}
@@ -28,7 +27,6 @@ public:
 		material(material)
 	{
 		Matrix<4, 4> inverseTransformation = matrix.Inverse();
-		this->transformation = matrix;
 		this->invTransformation = inverseTransformation;
 		this->transposedInvTransformation = inverseTransformation.Transpose();
 	}
@@ -58,7 +56,6 @@ public:
 
 protected:
 	MaterialPtr material;
-	Matrix<4, 4> transformation;
 	Matrix<4, 4> invTransformation;
 	Matrix<4, 4> transposedInvTransformation;
 	ObjectPtr parent = nullptr;

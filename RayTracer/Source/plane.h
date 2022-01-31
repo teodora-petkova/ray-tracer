@@ -21,7 +21,7 @@ public:
 		this->bounds = BoundingBox(
 			Tuple::Point(-INFINITY, 0, -INFINITY),
 			Tuple::Point(INFINITY, 0, INFINITY))
-			.Transform(this->transformation);
+			.Transform(transformation);
 	}
 
 private:

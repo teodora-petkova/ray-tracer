@@ -25,7 +25,7 @@ public:
 		radius(radius)
 	{
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1))
-			.Transform(this->transformation);
+			.Transform(transformation);
 	}
 
 	Tuple getCenter() const { return center; }

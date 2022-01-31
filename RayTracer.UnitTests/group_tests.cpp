@@ -146,3 +146,34 @@ TEST(GroupTests, A_group_has_a_bounding_box_containing_its_children)
 	EXPECT_EQ(group->getBounds().getMin(), Tuple::Point(-4.5, -4, -5));
 	EXPECT_EQ(group->getBounds().getMax(), Tuple::Point(4, 7, 4.5));
 }
+
+TEST(GroupTests, Intersecting_a_group_does_not_test_children_if_the_bounding_box_is_missed)
+{
+	auto obj = std::make_shared<CustomObject>();
+	auto group = std::make_shared<Group>();
+	group->AddChild(obj);
+
+	auto ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 1, 0));
+
+	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>();
+	auto intersection = group->Intersect(ray, intersections);
+
+	EXPECT_EQ(intersection.getIsHit(), false);
+	// child.ray is unset
+	EXPECT_EQ(obj->getTransformedRay(), nullptr);
+}
+
+TEST(GroupTests, Intersecting_a_group_tests_children_if_the_bounding_box_is_hit)
+{
+	auto obj = std::make_shared<CustomObject>();
+	auto group = std::make_shared<Group>();
+	group->AddChild(obj);
+
+	auto ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
+
+	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>();
+	auto intersection = group->Intersect(ray, intersections);
+
+	// child.ray is set
+	EXPECT_NE(obj->getTransformedRay(), nullptr);
+}

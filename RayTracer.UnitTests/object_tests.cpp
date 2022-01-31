@@ -15,10 +15,10 @@ TEST(ObjectTests, Intersecting_a_scaled_shape_with_a_ray)
 
 	IntersectionInfo intersection = o->Intersect(ray, std::vector<std::pair<float, ObjectConstPtr>>());
 
-	Ray transformedRay = std::static_pointer_cast<CustomObject>(o)->getTransformedRay();
+	auto transformedRay = std::static_pointer_cast<CustomObject>(o)->getTransformedRay();
 
-	EXPECT_EQ(transformedRay.getOrigin(), Tuple::Point(0, 0, -2.5));
-	EXPECT_EQ(transformedRay.getDirection(), Tuple::Vector(0, 0, 0.5));
+	EXPECT_EQ(transformedRay->getOrigin(), Tuple::Point(0, 0, -2.5));
+	EXPECT_EQ(transformedRay->getDirection(), Tuple::Vector(0, 0, 0.5));
 }
 
 TEST(ObjectTests, Intersecting_a_translated_shape_with_a_ray)
@@ -31,10 +31,10 @@ TEST(ObjectTests, Intersecting_a_translated_shape_with_a_ray)
 	IntersectionInfo intersection = o->Intersect(ray,
 		std::vector<std::pair<float, ObjectConstPtr>>());
 
-	Ray transformedRay = std::static_pointer_cast<CustomObject>(o)->getTransformedRay();
+	auto transformedRay = std::static_pointer_cast<CustomObject>(o)->getTransformedRay();
 
-	EXPECT_EQ(transformedRay.getOrigin(), Tuple::Point(-5, 0, -5));
-	EXPECT_EQ(transformedRay.getDirection(), Tuple::Vector(0, 0, 1));
+	EXPECT_EQ(transformedRay->getOrigin(), Tuple::Point(-5, 0, -5));
+	EXPECT_EQ(transformedRay->getDirection(), Tuple::Vector(0, 0, 1));
 }
 
 TEST(ObjectTests, Computing_the_normal_on_a_translated_shape)

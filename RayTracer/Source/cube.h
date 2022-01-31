@@ -18,11 +18,11 @@ public:
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
 	}
 
-	Cube(MaterialPtr material, Matrix<4, 4> transformation) :
+	Cube(MaterialPtr material, Matrix<4, 4> transformation, bool showShadows = true) :
 		Object(material, transformation)
 	{
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1))
-			.Transform(this->transformation);
+			.Transform(transformation);
 	}
 
 private:

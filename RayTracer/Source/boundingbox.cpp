@@ -56,16 +56,23 @@ BoundingBox BoundingBox::Transform(const Matrix<4, 4>& matrix)
 
 std::pair<float, float> getIntersectionDistancesAtAxis(float rayOrigin, float rayDirection, float min, float max)
 {
-	//float tmin = (min - rayOrigin) * INFINITY;
-	//float tmax = (max - rayOrigin) * INFINITY;
+	float tmin = min - rayOrigin;
+	float tmax = max - rayOrigin;
 
-	//if (!isCloseToZero(rayDirection))
-	//{
 	float const oneOverDirection = 1.f / rayDirection;
 
-	float tmin = (max - rayOrigin) * oneOverDirection;
-	float tmax = (min - rayOrigin) * oneOverDirection;
-	//}
+	if (oneOverDirection == INFINITY)
+	{
+		// 0 * infinity is NaN by C++ standard
+		// here we want it to be -inf/inf respectively
+		tmin = tmin != 0 ? tmin * oneOverDirection : -INFINITY;
+		tmax = tmax != 0 ? tmax * oneOverDirection : INFINITY;
+	}
+	else
+	{
+		tmin = tmin * oneOverDirection;
+		tmax = tmax * oneOverDirection;
+	}
 
 	if (tmin > tmax)
 	{

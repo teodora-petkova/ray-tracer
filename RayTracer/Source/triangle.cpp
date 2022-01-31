@@ -17,7 +17,27 @@ void Triangle::Initialize()
 	this->bounds.AddPoint(A);
 	this->bounds.AddPoint(B);
 	this->bounds.AddPoint(C);
-	this->bounds = this->bounds.Transform(this->transformation);
+}
+
+Triangle::Triangle() :
+	Object(),
+	A(Tuple::Vector(-1.0, 0.0, 0.0)),
+	B(Tuple::Vector(1.0, 0.0, 0.0)),
+	C(Tuple::Vector(0.0, 1.0, 0.0))
+{
+	Initialize();
+}
+
+Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
+	MaterialPtr material, Matrix<4, 4> transformation) :
+	Object(material, transformation),
+	A(point1),
+	B(point2),
+	C(point3)
+{
+	Initialize();
+
+	this->bounds = this->bounds.Transform(transformation);
 }
 
 Tuple Triangle::getLocalNormal(const Tuple& /*point*/, const IntersectionParams& /*intersection*/)const
@@ -65,25 +85,6 @@ bool Triangle::IsPointInTriangleByHalfPlanes(const Tuple& P) const
 	{
 		return false;
 	}
-}
-
-Triangle::Triangle() :
-	Object(),
-	A(Tuple::Vector(-1.0, 0.0, 0.0)),
-	B(Tuple::Vector(1.0, 0.0, 0.0)),
-	C(Tuple::Vector(0.0, 1.0, 0.0))
-{
-	Initialize();
-}
-
-Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
-	MaterialPtr material, Matrix<4, 4> transformation) :
-	Object(material, transformation),
-	A(point1),
-	B(point2),
-	C(point3)
-{
-	Initialize();
 }
 
 float Triangle::LocalIntersect2(const Ray& ray,

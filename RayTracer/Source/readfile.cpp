@@ -226,8 +226,9 @@ namespace ReadScene
 					else if (command == "cube")
 					{
 						// no values
-						ObjectPtr plane = std::make_shared<Cube>(currentMaterial, currentTransformation);
-						objects.push_back(plane);
+						ObjectPtr cube = std::make_shared<Cube>(currentMaterial, currentTransformation);
+						objects.push_back(cube);
+
 						currentTransformation = Matrix<4, 4>::IdentityMatrix();
 					}
 					else if (command == "group")

@@ -69,9 +69,9 @@ INSTANTIATE_TEST_CASE_P(CubeTests, RayMissesCubeTests,
 		RayCubeIntersection{ Ray(Tuple::Point(-2, 0, 0), Tuple::Vector(0.2673, 0.5345, 0.8018)), 0, 0 },
 		RayCubeIntersection{ Ray(Tuple::Point(0, -2, 0), Tuple::Vector(0.8018, 0.2673, 0.5345)), 0, 0 },
 		RayCubeIntersection{ Ray(Tuple::Point(0, 0, -2), Tuple::Vector(0.5345, 0.8018, 0.2673)), 0, 0 },
-		RayCubeIntersection{ Ray(Tuple::Point(1, 0, 1), Tuple::Vector(0, 0, -1)), 0, 0 },
-		RayCubeIntersection{ Ray(Tuple::Point(0, 1, 1), Tuple::Vector(0, -1, 0)), 0, 0 },
-		RayCubeIntersection{ Ray(Tuple::Point(1, 1, 0), Tuple::Vector(-1, 0, 0)), 0, 0 }));
+		RayCubeIntersection{ Ray(Tuple::Point(1.01, 0, 1.01), Tuple::Vector(0, 0, -1)), 0, 0 },
+		RayCubeIntersection{ Ray(Tuple::Point(0, 1.01, 1.01), Tuple::Vector(0, -1, 0)), 0, 0 },
+		RayCubeIntersection{ Ray(Tuple::Point(1.01, 1.01, 0), Tuple::Vector(-1, 0, 0)), 0, 0 }));
 
 struct CubeNormalData
 {

@@ -6,7 +6,7 @@ public:
 	CustomObject()
 		:Object()
 	{
-		this->transformedRay = Ray();
+		this->transformedRay = nullptr;
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
 
 	}
@@ -15,12 +15,12 @@ public:
 		Matrix<4, 4> transformation)
 		: Object(material, transformation)
 	{
-		this->transformedRay = Ray();
+		this->transformedRay = nullptr;
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1))
 			.Transform(transformation);
 	}
 
-	Ray getTransformedRay() const
+	std::shared_ptr<Ray> getTransformedRay() const
 	{
 		return this->transformedRay;
 	}
@@ -28,7 +28,7 @@ private:
 	IntersectionParams LocalIntersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 	{
-		const_cast<CustomObject*>(this)->transformedRay = ray;
+		const_cast<CustomObject*>(this)->transformedRay = std::make_shared<Ray>(ray);
 		return IntersectionParams();
 	}
 
@@ -37,5 +37,5 @@ private:
 		return Tuple::Vector(point.X(), point.Y(), point.Z());
 	}
 
-	Ray transformedRay;
+	std::shared_ptr<Ray> transformedRay;
 };
