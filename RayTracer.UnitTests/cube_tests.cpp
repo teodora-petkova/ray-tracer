@@ -117,3 +117,34 @@ TEST(CubeTests, A_cube_has_a_bounding_box)
 	EXPECT_EQ(cube->getBounds().getMin(), Tuple::Point(-1, -1, -1));
 	EXPECT_EQ(cube->getBounds().getMax(), Tuple::Point(1, 1, 1));
 }
+
+TEST(CubeTests, A_cube_has_a_transformed_bounding_box)
+{
+	Matrix<4, 4> matrix = Transformations::Translation(1, 1, 1) *
+		Transformations::Scaling(2, 2, 2) *
+		Transformations::RotationX(45) *
+		Transformations::RotationY(45);
+
+	ObjectPtr cube = std::make_shared<Cube>(std::make_shared<Material>(), matrix);
+
+	auto bb = cube->getBoundsInParentSpace();
+
+	ASSERT_EQ(bb.getMin(), Tuple::Point(-1.82843, -2.41421, -2.41421));
+	ASSERT_EQ(bb.getMax(), Tuple::Point(3.82843, 4.41421, 4.41421));
+}
+
+TEST(CubeTests, A_ray_intersects_a_transformed_cube)
+{
+	Matrix<4, 4> matrix = Transformations::Translation(1, 0, 0);
+	ObjectPtr cube = std::make_shared<Cube>(std::make_shared<Material>(), matrix);
+
+	Ray ray = Ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
+	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>();
+	IntersectionInfo intersection = cube->Intersect(ray, intersections);
+
+	ASSERT_EQ(intersection.getIsHit(), true);
+	ASSERT_EQ(intersection.getDistance(), 4);
+	ASSERT_EQ(intersection.getNormal(), Tuple::Vector(-1, 0, 0));
+	ASSERT_EQ(intersections[0].first, 4);
+	ASSERT_EQ(intersections[1].first, 6);
+}

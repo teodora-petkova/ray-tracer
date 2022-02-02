@@ -28,7 +28,8 @@ public:
 		MaterialPtr material,
 		Matrix<4, 4> transformation)
 	{
-		this->baseGroup = std::make_shared<Group>(material, transformation);
+		this->baseGroup = std::make_shared<Group>(material, transformation,
+			"BaseObjGroup");
 
 		parse(is);
 	}

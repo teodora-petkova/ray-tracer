@@ -37,7 +37,7 @@ Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3
 {
 	Initialize();
 
-	this->bounds = this->bounds.Transform(transformation);
+	this->boundsInParentSpace = this->bounds.Transform(transformation);
 }
 
 Tuple Triangle::getLocalNormal(const Tuple& /*point*/, const IntersectionParams& /*intersection*/)const

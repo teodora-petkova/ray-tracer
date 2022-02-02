@@ -108,11 +108,14 @@ TEST(BoundingBoxesTests, Transforming_a_bounding_box)
 {
 	BoundingBox bb1 = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
 
-	Matrix<4, 4> matrix = Transformations::RotationX(45) * Transformations::RotationY(45);
+	Matrix<4, 4> matrix = Transformations::Translation(1, 1, 1) *
+		Transformations::Scaling(2, 2, 2) *
+		Transformations::RotationX(45) *
+		Transformations::RotationY(45);
 	BoundingBox bb2 = bb1.Transform(matrix);
 
-	ASSERT_EQ(bb2.getMin(), Tuple::Point(-1.4142, -1.7071, -1.7071));
-	ASSERT_EQ(bb2.getMax(), Tuple::Point(1.4142, 1.7071, 1.7071));
+	ASSERT_EQ(bb2.getMin(), Tuple::Point(-1.82843, -2.41421, -2.41421));
+	ASSERT_EQ(bb2.getMax(), Tuple::Point(3.82843, 4.41421, 4.41421));
 }
 
 struct RayBBoxIntersection

@@ -8,36 +8,21 @@ class RAYTRACER_EXPORT Group : public virtual Object
 {
 public:
 
-	Group(std::string name = "") : Object()
-	{
-		this->name = name;
-	}
+	Group(std::string name = "") :
+		Object(),
+		name(name)
+	{ }
 
-	Group(MaterialPtr material, Matrix<4, 4> transformation) :
-		Object(material, transformation)
-	{}
+	Group(MaterialPtr material, Matrix<4, 4> transformation, std::string name = "") :
+		Object(material, transformation),
+		name(name)
+	{ }
 
-	void AddChild(ObjectPtr object)
-	{
-		object->setParent(shared_from_this());
-		object->setMaterial(this->material);
-		this->bounds.AddBound(object->getBounds());
-		children.push_back(object);
-	}
+	void AddChild(ObjectPtr object);
 
 	ObjectPtr getChild(int index) { return this->children[index]; }
 
-	bool Includes(ObjectPtr object) const
-	{
-		for (auto& child : children)
-		{
-			if (child == object)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+	bool Includes(ObjectPtr object) const;
 
 private:
 	std::vector<std::shared_ptr<Object>> children;

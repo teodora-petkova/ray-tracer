@@ -24,8 +24,8 @@ public:
 		center(center),
 		radius(radius)
 	{
-		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1))
-			.Transform(transformation);
+		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
+		this->boundsInParentSpace = this->bounds.Transform(transformation);
 	}
 
 	Tuple getCenter() const { return center; }

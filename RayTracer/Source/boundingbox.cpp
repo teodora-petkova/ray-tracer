@@ -97,6 +97,11 @@ bool BoundingBox::Intersects(const Ray& ray, float& tmin, float& tmax) const
 	return (tmin < tmax);
 }
 
+bool BoundingBox::operator==(const BoundingBox& bb2) const
+{
+	return this->min == bb2.getMin() && this->max == bb2.getMax();
+}
+
 std::ostream& operator<<(std::ostream& os, BoundingBox const& bb)
 {
 	os << "[ min: " << bb.getMin() << ", max: " << bb.getMax() << "]";

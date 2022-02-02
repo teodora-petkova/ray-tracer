@@ -29,6 +29,8 @@ public:
 	Tuple getMin() const { return min; }
 	Tuple getMax() const { return max; }
 
+	bool operator==(const BoundingBox& bb2) const;
+
 	void AddPoint(Tuple p);
 	void AddBound(BoundingBox b);
 

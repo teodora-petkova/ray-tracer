@@ -18,15 +18,14 @@ public:
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
 	}
 
-	Cube(MaterialPtr material, Matrix<4, 4> transformation, bool showShadows = true) :
-		Object(material, transformation)
+	Cube(MaterialPtr material, Matrix<4, 4> transformation, bool showShadows = true)
+		: Object(material, transformation)
 	{
-		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1))
-			.Transform(transformation);
+		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
+		this->boundsInParentSpace = this->bounds.Transform(transformation);
 	}
 
 private:
-
 	IntersectionParams LocalIntersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const override;
 

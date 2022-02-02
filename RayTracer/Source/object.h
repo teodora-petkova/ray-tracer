@@ -19,14 +19,22 @@ class RAYTRACER_EXPORT Object : public std::enable_shared_from_this<Object>
 public:
 	Object() :
 		material(std::make_shared<Material>()),
+		transformation(Matrix<4, 4>::IdentityMatrix()),
 		invTransformation(Matrix<4, 4>::IdentityMatrix()),
-		transposedInvTransformation(Matrix<4, 4>::IdentityMatrix())
+		transposedInvTransformation(Matrix<4, 4>::IdentityMatrix()),
+		bounds(Tuple::Point(INFINITY, INFINITY, INFINITY),
+			Tuple::Point(-INFINITY, -INFINITY, -INFINITY)),
+		boundsInParentSpace(bounds)
 	{}
 
 	Object(MaterialPtr material, Matrix<4, 4> matrix) :
-		material(material)
+		material(material),
+		bounds(Tuple::Point(INFINITY, INFINITY, INFINITY),
+			Tuple::Point(-INFINITY, -INFINITY, -INFINITY)),
+		boundsInParentSpace(bounds)
 	{
 		Matrix<4, 4> inverseTransformation = matrix.Inverse();
+		this->transformation = matrix;
 		this->invTransformation = inverseTransformation;
 		this->transposedInvTransformation = inverseTransformation.Transpose();
 	}
@@ -53,13 +61,16 @@ public:
 	}
 
 	BoundingBox getBounds() const { return bounds; }
+	BoundingBox getBoundsInParentSpace() const { return boundsInParentSpace; }
 
 protected:
 	MaterialPtr material;
+	Matrix<4, 4> transformation;
 	Matrix<4, 4> invTransformation;
 	Matrix<4, 4> transposedInvTransformation;
 	ObjectPtr parent = nullptr;
 	BoundingBox bounds;
+	BoundingBox boundsInParentSpace;
 
 	virtual IntersectionParams LocalIntersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const = 0;

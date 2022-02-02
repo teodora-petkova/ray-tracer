@@ -48,7 +48,8 @@ void ObjParser::parse(std::istream& is)
 	int lineNumber = 0;
 
 	std::string line = "";
-	GroupPtr currentGroup = this->baseGroup;
+	GroupPtr currentGroup = nullptr;
+	std::vector<GroupPtr> groups;
 
 	while (std::getline(is, line))
 	{
@@ -100,6 +101,14 @@ void ObjParser::parse(std::istream& is)
 						this->normals[ni],
 						this->normals[ni1]);
 
+					if (currentGroup == nullptr)
+					{
+						currentGroup = std::make_shared<Group>(
+							this->baseGroup->getMaterial(),
+							Matrix<4, 4>::IdentityMatrix(), "InnerGroup");
+						groups.push_back(currentGroup);
+					}
+
 					currentGroup->AddChild(triangle);
 				}
 			}
@@ -120,6 +129,14 @@ void ObjParser::parse(std::istream& is)
 						std::make_shared<Material>(),
 						Matrix<4, 4>::IdentityMatrix());
 
+					if (currentGroup == nullptr)
+					{
+						currentGroup = std::make_shared<Group>(
+							this->baseGroup->getMaterial(),
+							Matrix<4, 4>::IdentityMatrix(), "InnerGroup");
+						groups.push_back(currentGroup);
+					}
+
 					currentGroup->AddChild(triangle);
 				}
 			}
@@ -128,11 +145,21 @@ void ObjParser::parse(std::istream& is)
 		{
 			std::string groupName;
 			ss >> groupName;
-			GroupPtr newGroup = std::make_shared<Group>(groupName);
-			this->baseGroup->AddChild(newGroup);
-			currentGroup = newGroup;
-		}
 
+			// the inner group is taking only the base material
+			// in order to pass it to the children
+			// for correct color calculations
+			currentGroup = std::make_shared<Group>(
+				this->baseGroup->getMaterial(),
+				Matrix<4, 4>::IdentityMatrix(), groupName);
+
+			groups.push_back(currentGroup);
+		}
 		lineNumber++;
+	}
+
+	for (GroupPtr gr : groups)
+	{
+		this->baseGroup->AddChild(gr);
 	}
 }

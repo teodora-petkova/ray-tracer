@@ -69,13 +69,14 @@ TEST(ObjectTests, The_custom_object_has_arbitrary_bounds)
 	EXPECT_EQ(o.getBounds().getMax(), Tuple::Point(1, 1, 1));
 }
 
-TEST(ObjectTests, Querying_an_objects_bounding_bx_in_its_parents_space)
+TEST(ObjectTests, Querying_an_objects_bounding_box_in_its_parents_space)
 {
 	auto transformation = Transformations::Translation(1, -3, 5) *
 		Transformations::Scaling(0.5, 2, 4);
 	ObjectPtr o = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
 		std::make_shared<Material>(), transformation);
 
-	EXPECT_EQ(o->getBounds().getMin(), Tuple::Point(0.5, -5, 1));
-	EXPECT_EQ(o->getBounds().getMax(), Tuple::Point(1.5, -1, 9));
+	auto bb = o->getBoundsInParentSpace();
+	EXPECT_EQ(bb.getMin(), Tuple::Point(0.5, -5, 1));
+	EXPECT_EQ(bb.getMax(), Tuple::Point(1.5, -1, 9));
 }

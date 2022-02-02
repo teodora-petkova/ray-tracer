@@ -8,7 +8,7 @@ public:
 	{
 		this->transformedRay = nullptr;
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
-
+		this->boundsInParentSpace = this->bounds.Transform(transformation);
 	}
 
 	CustomObject(MaterialPtr material,
@@ -16,8 +16,8 @@ public:
 		: Object(material, transformation)
 	{
 		this->transformedRay = nullptr;
-		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1))
-			.Transform(transformation);
+		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
+		this->boundsInParentSpace = this->bounds.Transform(transformation);
 	}
 
 	std::shared_ptr<Ray> getTransformedRay() const

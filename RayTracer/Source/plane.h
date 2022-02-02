@@ -20,8 +20,8 @@ public:
 	{
 		this->bounds = BoundingBox(
 			Tuple::Point(-INFINITY, 0, -INFINITY),
-			Tuple::Point(INFINITY, 0, INFINITY))
-			.Transform(transformation);
+			Tuple::Point(INFINITY, 0, INFINITY));
+		this->boundsInParentSpace = this->bounds.Transform(transformation);
 	}
 
 private:
