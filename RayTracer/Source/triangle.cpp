@@ -17,6 +17,8 @@ void Triangle::Initialize()
 	this->bounds.AddPoint(A);
 	this->bounds.AddPoint(B);
 	this->bounds.AddPoint(C);
+
+	this->boundsInParentSpace = this->bounds;
 }
 
 Triangle::Triangle() :

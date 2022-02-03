@@ -16,6 +16,7 @@ public:
 	Cube() : Object()
 	{
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
+		this->boundsInParentSpace = this->bounds;
 	}
 
 	Cube(MaterialPtr material, Matrix<4, 4> transformation, bool showShadows = true)

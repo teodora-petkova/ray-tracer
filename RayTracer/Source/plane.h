@@ -13,6 +13,7 @@ public:
 		this->bounds = BoundingBox(
 			Tuple::Point(-INFINITY, 0, -INFINITY),
 			Tuple::Point(INFINITY, 0, INFINITY));
+		this->boundsInParentSpace = this->bounds;
 	}
 
 	Plane(MaterialPtr material, Matrix<4, 4> transformation) :

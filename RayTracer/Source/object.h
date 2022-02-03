@@ -55,10 +55,7 @@ public:
 	void setParent(ObjectPtr parentGroup) { this->parent = parentGroup; }
 	ObjectConstPtr getParent() const { return this->parent; }
 
-	void setMaterial(MaterialPtr material)
-	{
-		this->material = material;
-	}
+	void setMaterial(MaterialPtr material) { this->material = material; }
 
 	BoundingBox getBounds() const { return bounds; }
 	BoundingBox getBoundsInParentSpace() const { return boundsInParentSpace; }
@@ -74,5 +71,6 @@ protected:
 
 	virtual IntersectionParams LocalIntersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const = 0;
+
 	virtual Tuple getLocalNormal(const Tuple& point, const IntersectionParams& /*intersection*/) const = 0;
 };

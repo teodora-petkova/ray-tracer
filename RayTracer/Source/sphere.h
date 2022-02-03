@@ -16,6 +16,7 @@ public:
 		radius(1)
 	{
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
+		this->boundsInParentSpace = this->bounds;
 	}
 
 	Sphere(const Tuple& center, float radius,
