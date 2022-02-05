@@ -12,9 +12,9 @@
 class RAYTRACER_EXPORT Triangle : public virtual Object
 {
 public:
-	Triangle();
+	Triangle(std::string name = "");
 	Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
-		MaterialPtr material, Matrix<4, 4> transformation);
+		MaterialPtr material, Matrix<4, 4> transformation, std::string name = "");
 
 	Tuple getA() const { return A; }
 	Tuple getB() const { return B; }
@@ -23,6 +23,10 @@ public:
 	Tuple getAB() const { return AB; }
 	Tuple getAC() const { return AC; }
 	Tuple getTriangleNormal() const { return normal; }
+
+	void Divide(int threshold) { }
+
+	bool operator==(const Object& other) const;
 
 private:
 	Tuple A;

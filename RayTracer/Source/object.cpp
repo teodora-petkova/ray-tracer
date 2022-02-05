@@ -95,3 +95,12 @@ Tuple Object::getNormal(Tuple intersectionPoint,
 
 	return worldNormal;
 }
+
+bool Object::operator==(const Object& other) const
+{
+	return  this->name == other.name
+		&& *this->material == *other.material
+		&& this->transformation == other.transformation
+		&& this->bounds == other.bounds
+		&& this->boundsInParentSpace == other.boundsInParentSpace;
+}

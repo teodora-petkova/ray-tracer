@@ -53,6 +53,18 @@ public:
 	float getTransparency() const { return transparency; }
 	float getRefractiveIndex() const { return refractiveIndex; }
 
+	bool operator==(const Material& other) const
+	{
+		return *this->pattern == *other.pattern
+			&& this->ambient == other.ambient
+			&& this->diffuse == other.diffuse
+			&& this->specular == other.specular
+			&& this->shininess == other.shininess
+			&& this->reflective == other.reflective
+			&& this->transparency == other.transparency
+			&& this->refractiveIndex == other.refractiveIndex;
+	}
+
 private:
 	PatternPtr pattern;
 	float ambient;

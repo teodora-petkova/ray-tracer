@@ -177,3 +177,109 @@ TEST(GroupTests, Intersecting_a_group_tests_children_if_the_bounding_box_is_hit)
 	// child.ray is set
 	EXPECT_NE(obj->getTransformedRay(), nullptr);
 }
+
+TEST(GroupTests, Partitioning_the_children_of_a_group)
+{
+	ObjectPtr sphere1 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(),
+		Transformations::Translation(-2, 0, 0), "Sphere1");
+	ObjectPtr sphere2 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(),
+		Transformations::Translation(2, 0, 0), "Sphere2");
+	ObjectPtr sphere3 = std::make_shared<Sphere>("Sphere3");
+
+	GroupPtr group = std::make_shared<Group>();
+	group->AddChild(sphere1);
+	group->AddChild(sphere2);
+	group->AddChild(sphere3);
+
+	GroupPtr left, right;
+	std::tie(left, right) = group->GetPartitionedChildren();
+
+	ASSERT_EQ(left->getChild(0), sphere1);
+	ASSERT_EQ(right->getChild(0), sphere2);
+	ASSERT_EQ(group->getChild(0), sphere3);
+}
+
+TEST(GroupTests, Creating_a_subgroup_from_a_list_of_children)
+{
+	ObjectPtr sphere1 = std::make_shared<Sphere>();
+	ObjectPtr sphere2 = std::make_shared<Sphere>();
+	GroupPtr group = std::make_shared<Group>();
+
+	group->AddSubGroup({ sphere1, sphere2 });
+
+	ASSERT_EQ(group->getChildrenCount(), 1);
+	auto subGroup = std::dynamic_pointer_cast<Group>(group->getChild(0));
+	ASSERT_EQ(subGroup->getChild(0), sphere1);
+	ASSERT_EQ(subGroup->getChild(1), sphere2);
+}
+
+TEST(GroupTests, Subdividing_a_group_partitions_its_children)
+{
+	ObjectPtr sphere1 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(),
+		Transformations::Translation(-2, -2, 0), "Sphere1");
+	ObjectPtr sphere2 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(),
+		Transformations::Translation(-2, 2, 0), "Sphere2");
+	ObjectPtr sphere3 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(),
+		Transformations::Scaling(4, 4, 4), "Sphere3");
+
+	GroupPtr group = std::make_shared<Group>();
+	group->AddChild(sphere1);
+	group->AddChild(sphere2);
+	group->AddChild(sphere3);
+
+	group->Divide(1);
+
+	ASSERT_EQ(group->getChildrenCount(), 2);
+	ASSERT_EQ(group->getChild(0), sphere3);
+
+	auto subGroup = std::dynamic_pointer_cast<Group>(group->getChild(1));
+	ASSERT_EQ(subGroup->getChildrenCount(), 2);
+	ASSERT_EQ(subGroup->getChild(0), sphere1);
+	ASSERT_EQ(subGroup->getChild(1), sphere2);
+}
+
+TEST(GroupTests, Subdividing_a_group_with_two_few_children)
+{
+	ObjectPtr sphere1 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(),
+		Transformations::Translation(-2, 0, 0), "Sphere1");
+	ObjectPtr sphere2 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(),
+		Transformations::Translation(2, 1, 0), "Sphere2");
+	ObjectPtr sphere3 = std::make_shared<Sphere>(Tuple::Point(0, 0, 0), 1,
+		std::make_shared<Material>(),
+		Transformations::Translation(2, -1, 0), "Sphere3");
+	ObjectPtr sphere4 = std::make_shared<Sphere>("Sphere4");
+
+	GroupPtr subGroup = std::make_shared<Group>();
+	subGroup->AddChild(sphere1);
+	subGroup->AddChild(sphere2);
+	subGroup->AddChild(sphere3);
+
+	GroupPtr group = std::make_shared<Group>();
+	group->AddChild(subGroup);
+	group->AddChild(sphere4);
+
+	group->Divide(3);
+
+	ASSERT_EQ(group->getChildrenCount(), 2);
+
+	auto outSubGroup = std::dynamic_pointer_cast<Group>(group->getChild(0));
+	ASSERT_EQ(outSubGroup->getChildrenCount(), 2);
+	auto gr1 = std::make_shared<Group>();
+	gr1->AddChild(sphere1);
+	auto gr2 = std::make_shared<Group>();
+	gr2->AddChild(sphere2);
+	gr2->AddChild(sphere3);
+	auto outgr1 = std::dynamic_pointer_cast<Group>(outSubGroup->getChild(0));
+	auto outgr2 = std::dynamic_pointer_cast<Group>(outSubGroup->getChild(1));
+	ASSERT_EQ(*outgr1, *gr1);
+	ASSERT_EQ(*outgr2, *gr2);
+
+	ASSERT_EQ(group->getChild(1), sphere4);
+}

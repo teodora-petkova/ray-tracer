@@ -31,6 +31,13 @@ public:
 	PatternPtr getPattern1() const { return pattern1; }
 	PatternPtr getPattern2() const { return pattern2; }
 
+	bool operator==(const BinaryPattern& other) const
+	{
+		return this->pattern1 == other.pattern1
+			&& this->pattern2 == other.pattern2
+			&& Pattern::operator==(other);
+	}
+
 protected:
 	PatternPtr pattern1;
 	PatternPtr pattern2;

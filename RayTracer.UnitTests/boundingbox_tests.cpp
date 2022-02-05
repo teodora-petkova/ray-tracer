@@ -193,3 +193,59 @@ INSTANTIATE_TEST_CASE_P(BoundingBoxesTests, RayIntersectsNonCubicBBoxTests,
 		RayBBoxIntersection{ Ray(Tuple::Point(4, 0, 9), Tuple::Vector(0, 0, -1)), false },
 		RayBBoxIntersection{ Ray(Tuple::Point(8, 6, -1), Tuple::Vector(0, -1, 0)), false },
 		RayBBoxIntersection{ Ray(Tuple::Point(12, 5, 4), Tuple::Vector(-1, 0, 0)), false }));
+
+TEST(BoundingBoxesTests, Splitting_a_perfect_cube)
+{
+	BoundingBox bb = BoundingBox(Tuple::Point(-1, -4, -5), Tuple::Point(9, 6, 5));
+
+	BoundingBox left, right;
+	std::tie(left, right) = bb.Split();
+
+	ASSERT_EQ(left.getMin(), Tuple::Point(-1, -4, -5));
+	ASSERT_EQ(left.getMax(), Tuple::Point(4, 6, 5));
+
+	ASSERT_EQ(right.getMin(), Tuple::Point(4, -4, -5));
+	ASSERT_EQ(right.getMax(), Tuple::Point(9, 6, 5));
+}
+
+TEST(BoundingBoxesTests, Splitting_a_x_wide_cube)
+{
+	BoundingBox bb = BoundingBox(Tuple::Point(-1, -2, -3), Tuple::Point(9, 5.5, 3));
+
+	BoundingBox left, right;
+	std::tie(left, right) = bb.Split();
+
+	ASSERT_EQ(left.getMin(), Tuple::Point(-1, -2, -3));
+	ASSERT_EQ(left.getMax(), Tuple::Point(4, 5.5, 3));
+
+	ASSERT_EQ(right.getMin(), Tuple::Point(4, -2, -3));
+	ASSERT_EQ(right.getMax(), Tuple::Point(9, 5.5, 3));
+}
+
+TEST(BoundingBoxesTests, Splitting_a_y_wide_cube)
+{
+	BoundingBox bb = BoundingBox(Tuple::Point(-1, -2, -3), Tuple::Point(5, 8, 3));
+
+	BoundingBox left, right;
+	std::tie(left, right) = bb.Split();
+
+	ASSERT_EQ(left.getMin(), Tuple::Point(-1, -2, -3));
+	ASSERT_EQ(left.getMax(), Tuple::Point(5, 3, 3));
+
+	ASSERT_EQ(right.getMin(), Tuple::Point(-1, 3, -3));
+	ASSERT_EQ(right.getMax(), Tuple::Point(5, 8, 3));
+}
+
+TEST(BoundingBoxesTests, Splitting_a_z_wide_cube)
+{
+	BoundingBox bb = BoundingBox(Tuple::Point(-1, -2, -3), Tuple::Point(5, 3, 7));
+
+	BoundingBox left, right;
+	std::tie(left, right) = bb.Split();
+
+	ASSERT_EQ(left.getMin(), Tuple::Point(-1, -2, -3));
+	ASSERT_EQ(left.getMax(), Tuple::Point(5, 3, 2));
+
+	ASSERT_EQ(right.getMin(), Tuple::Point(-1, -2, 2));
+	ASSERT_EQ(right.getMax(), Tuple::Point(5, 3, 7));
+}

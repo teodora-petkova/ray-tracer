@@ -95,3 +95,11 @@ IntersectionParams Sphere::LocalIntersect(const Ray& ray,
 {
 	return IntersectionParams(GeometricIntersect(ray, intersectionDistances));
 }
+
+bool Sphere::operator==(const Object& other) const
+{
+	auto otherSphere = dynamic_cast<Sphere const*>(&other);
+	return this->center == otherSphere->center
+		&& this->radius == otherSphere->radius
+		&& Object::operator==(other);
+}

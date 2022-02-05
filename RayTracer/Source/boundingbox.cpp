@@ -97,6 +97,38 @@ bool BoundingBox::Intersects(const Ray& ray, float& tmin, float& tmax) const
 	return (tmin < tmax);
 }
 
+std::pair<BoundingBox, BoundingBox> BoundingBox::Split() const
+{
+	float dx = abs(this->min.X()) + abs(this->max.X());
+	float dy = abs(this->min.Y()) + abs(this->max.Y());
+	float dz = abs(this->min.Z()) + abs(this->max.Z());
+
+	float maxrange = std::max({ dx, dy, dz });
+
+	BoundingBox left, right;
+
+	if (maxrange == dx)
+	{
+		float splitx = this->min.X() + (dx / 2);
+		left = BoundingBox(this->min, Tuple::Point(splitx, this->max.Y(), this->max.Z()));
+		right = BoundingBox(Tuple::Point(splitx, this->min.Y(), this->min.Z()), this->max);
+	}
+	else if (maxrange == dy)
+	{
+		float splity = this->min.Y() + (dy / 2);
+		left = BoundingBox(this->min, Tuple::Point(this->max.X(), splity, this->max.Z()));
+		right = BoundingBox(Tuple::Point(this->min.X(), splity, this->min.Z()), this->max);
+	}
+	else
+	{
+		float splitz = this->min.Z() + (dz / 2);
+		left = BoundingBox(this->min, Tuple::Point(this->max.X(), this->max.Y(), splitz));
+		right = BoundingBox(Tuple::Point(this->min.X(), this->min.Y(), splitz), this->max);
+	}
+
+	return std::make_pair(left, right);
+}
+
 bool BoundingBox::operator==(const BoundingBox& bb2) const
 {
 	return this->min == bb2.getMin() && this->max == bb2.getMax();

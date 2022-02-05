@@ -11,7 +11,7 @@
 class RAYTRACER_EXPORT Sphere : public virtual Object
 {
 public:
-	Sphere() : Object(),
+	Sphere(std::string name = "") : Object(name),
 		center(Tuple::Point(0, 0, 0)),
 		radius(1)
 	{
@@ -20,8 +20,8 @@ public:
 	}
 
 	Sphere(const Tuple& center, float radius,
-		MaterialPtr material, Matrix<4, 4> transformation) :
-		Object(material, transformation),
+		MaterialPtr material, Matrix<4, 4> transformation, std::string name = "") :
+		Object(material, transformation, name),
 		center(center),
 		radius(radius)
 	{
@@ -31,6 +31,10 @@ public:
 
 	Tuple getCenter() const { return center; }
 	float getRadius() const { return radius; }
+
+	void Divide(int threshold) { }
+
+	bool operator==(const Object& other) const override;
 
 private:
 	Tuple center;

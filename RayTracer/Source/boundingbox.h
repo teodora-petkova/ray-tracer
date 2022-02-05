@@ -41,6 +41,8 @@ public:
 
 	bool Intersects(const Ray& ray, float& tmin, float& tmax) const;
 
+	std::pair<BoundingBox, BoundingBox> Split() const;
+
 private:
 	Tuple min;
 	Tuple max;

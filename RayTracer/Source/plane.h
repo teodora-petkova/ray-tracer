@@ -8,7 +8,7 @@
 class RAYTRACER_EXPORT Plane : public virtual Object
 {
 public:
-	Plane() : Object()
+	Plane(std::string name = "") : Object(name)
 	{
 		this->bounds = BoundingBox(
 			Tuple::Point(-INFINITY, 0, -INFINITY),
@@ -16,14 +16,16 @@ public:
 		this->boundsInParentSpace = this->bounds;
 	}
 
-	Plane(MaterialPtr material, Matrix<4, 4> transformation) :
-		Object(material, transformation)
+	Plane(MaterialPtr material, Matrix<4, 4> transformation, std::string name = "") :
+		Object(material, transformation, name)
 	{
 		this->bounds = BoundingBox(
 			Tuple::Point(-INFINITY, 0, -INFINITY),
 			Tuple::Point(INFINITY, 0, INFINITY));
 		this->boundsInParentSpace = this->bounds.Transform(transformation);
 	}
+
+	void Divide(int threshold) { }
 
 private:
 	IntersectionParams LocalIntersect(const Ray& ray,

@@ -17,7 +17,8 @@
 class RAYTRACER_EXPORT Object : public std::enable_shared_from_this<Object>
 {
 public:
-	Object() :
+	Object(std::string name = "") :
+		name(name),
 		material(std::make_shared<Material>()),
 		transformation(Matrix<4, 4>::IdentityMatrix()),
 		invTransformation(Matrix<4, 4>::IdentityMatrix()),
@@ -27,7 +28,8 @@ public:
 		boundsInParentSpace(bounds)
 	{}
 
-	Object(MaterialPtr material, Matrix<4, 4> matrix) :
+	Object(MaterialPtr material, Matrix<4, 4> matrix, std::string name = "") :
+		name(name),
 		material(material),
 		bounds(Tuple::Point(INFINITY, INFINITY, INFINITY),
 			Tuple::Point(-INFINITY, -INFINITY, -INFINITY)),
@@ -55,12 +57,19 @@ public:
 	void setParent(ObjectPtr parentGroup) { this->parent = parentGroup; }
 	ObjectConstPtr getParent() const { return this->parent; }
 
+	std::string getName() const { return this->name; }
+
 	void setMaterial(MaterialPtr material) { this->material = material; }
+
+	virtual void Divide(int threshold) = 0;
 
 	BoundingBox getBounds() const { return bounds; }
 	BoundingBox getBoundsInParentSpace() const { return boundsInParentSpace; }
 
+	virtual bool operator==(const Object& other) const;
+
 protected:
+	std::string name = "";
 	MaterialPtr material;
 	Matrix<4, 4> transformation;
 	Matrix<4, 4> invTransformation;

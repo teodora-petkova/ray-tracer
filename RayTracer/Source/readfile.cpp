@@ -235,6 +235,9 @@ namespace ReadScene
 					{
 						// TODO: to think of a better way to define the file path
 						// obj filename - the full path without commas?
+						int threshold;
+						s >> threshold;
+
 						std::string objFilepath;
 						s >> objFilepath;
 
@@ -254,6 +257,7 @@ namespace ReadScene
 								currentMaterial,
 								currentTransformation);
 							auto group = parser.getBaseGroup();
+							group->Divide(threshold);
 
 							objects.push_back(group);
 							currentTransformation = Matrix<4, 4>::IdentityMatrix();

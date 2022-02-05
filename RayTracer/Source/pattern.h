@@ -25,6 +25,11 @@ public:
 	virtual Color getColorAt(const Tuple& point) const = 0;
 	Color getColorAtObject(ObjectConstPtr object, const Tuple& point) const;
 
+	virtual bool operator==(const Pattern& other) const
+	{
+		return this->invTransformation == other.invTransformation;
+	}
+
 protected:
 	Matrix<4, 4> invTransformation;
 };

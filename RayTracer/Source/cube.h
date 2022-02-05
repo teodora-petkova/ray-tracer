@@ -13,18 +13,20 @@ class RAYTRACER_EXPORT Cube : public virtual Object
 public:
 	// the cube is centered at (0, 0, 0) and its bounds for all x, y, z are [-1, 1]!
 
-	Cube() : Object()
+	Cube(std::string name = "") : Object(name)
 	{
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
 		this->boundsInParentSpace = this->bounds;
 	}
 
-	Cube(MaterialPtr material, Matrix<4, 4> transformation, bool showShadows = true)
+	Cube(MaterialPtr material, Matrix<4, 4> transformation, std::string name = "")
 		: Object(material, transformation)
 	{
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));
 		this->boundsInParentSpace = this->bounds.Transform(transformation);
 	}
+
+	void Divide(int threshold) { }
 
 private:
 	IntersectionParams LocalIntersect(const Ray& ray,

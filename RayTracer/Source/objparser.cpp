@@ -161,5 +161,7 @@ void ObjParser::parse(std::istream& is)
 	for (GroupPtr gr : groups)
 	{
 		this->baseGroup->AddChild(gr);
+		std::cout << gr->getName() << ": " << gr->getChildrenCount()
+			<< " triangles" << std::endl;
 	}
 }

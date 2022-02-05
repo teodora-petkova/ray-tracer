@@ -22,6 +22,13 @@ public:
 		return this->color;
 	}
 
+	bool operator==(const Pattern& other) const override
+	{
+		auto otherPattern = dynamic_cast<FlatColor const*>(&other);
+		return this->color == otherPattern->color
+			&& Pattern::operator==(other);
+	}
+
 private:
 	Color color;
 };

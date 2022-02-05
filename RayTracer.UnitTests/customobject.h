@@ -24,6 +24,8 @@ public:
 	{
 		return this->transformedRay;
 	}
+
+	void Divide(int threshold) {}
 private:
 	IntersectionParams LocalIntersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const

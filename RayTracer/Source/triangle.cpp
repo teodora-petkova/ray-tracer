@@ -21,8 +21,8 @@ void Triangle::Initialize()
 	this->boundsInParentSpace = this->bounds;
 }
 
-Triangle::Triangle() :
-	Object(),
+Triangle::Triangle(std::string name) :
+	Object(name),
 	A(Tuple::Vector(-1.0, 0.0, 0.0)),
 	B(Tuple::Vector(1.0, 0.0, 0.0)),
 	C(Tuple::Vector(0.0, 1.0, 0.0))
@@ -31,8 +31,8 @@ Triangle::Triangle() :
 }
 
 Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
-	MaterialPtr material, Matrix<4, 4> transformation) :
-	Object(material, transformation),
+	MaterialPtr material, Matrix<4, 4> transformation, std::string name) :
+	Object(material, transformation, name),
 	A(point1),
 	B(point2),
 	C(point3)
@@ -196,4 +196,14 @@ IntersectionParams Triangle::LocalIntersect(const Ray& ray,
 	intersectionDistances.emplace_back(std::make_pair(t, shared_from_this()));
 
 	return IntersectionParams(t, u, v);
+}
+
+bool Triangle::operator==(const Object& other) const
+{
+	auto otherTriangle = dynamic_cast<Triangle const*>(&other);
+	return this->A == otherTriangle->A
+		&& this->B == otherTriangle->B
+		&& this->C == otherTriangle->C
+		&& this->normal == otherTriangle->normal
+		&& Object::operator==(other);
 }
