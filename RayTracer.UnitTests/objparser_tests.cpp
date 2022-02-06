@@ -31,6 +31,28 @@ TEST(ObjParserTests, Parse_vertices) {
 	EXPECT_EQ(parser.getVertex(3), Tuple::Point(1, 1, 0));
 }
 
+TEST(ObjParserTests, Parse_missing_vertices) {
+	std::istringstream fileContent(R"~(
+		v -1 1 
+		v 1 1 0)~");
+
+	ObjParser parser = ObjParser(fileContent);
+
+	EXPECT_EQ(parser.getVerticesCount(), 1);
+	EXPECT_EQ(parser.getVertex(0), Tuple::Point(1, 1, 0));
+}
+
+TEST(ObjParserTests, Parse_wrong_vertices) {
+	std::istringstream fileContent(R"~(
+		v -1 a 1 
+		v 1 1 0)~");
+
+	ObjParser parser = ObjParser(fileContent);
+
+	EXPECT_EQ(parser.getVerticesCount(), 1);
+	EXPECT_EQ(parser.getVertex(0), Tuple::Point(1, 1, 0));
+}
+
 TEST(ObjParserTests, Parse_triangle_faces) {
 	std::istringstream fileContent(R"~(
 		v -1 1 0
