@@ -12,9 +12,11 @@
 class RAYTRACER_EXPORT Triangle : public virtual Object
 {
 public:
-	Triangle(std::string name = "");
+	Triangle(const std::string& name = "");
 	Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
-		MaterialPtr material, Matrix<4, 4> transformation, std::string name = "");
+		const MaterialPtr& material = std::make_shared<Material>(),
+		const Matrix<4, 4>& transformation = Matrix<4, 4>::IdentityMatrix(),
+		const std::string& name = "");
 
 	Tuple getA() const { return A; }
 	Tuple getB() const { return B; }

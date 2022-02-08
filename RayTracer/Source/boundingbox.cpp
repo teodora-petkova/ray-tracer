@@ -94,7 +94,7 @@ bool BoundingBox::Intersects(const Ray& ray, float& tmin, float& tmax) const
 	tmin = std::max({ xt.first, yt.first, zt.first });
 	tmax = std::min({ xt.second, yt.second, zt.second });
 
-	return (tmin < tmax);
+	return (tmin <= tmax);
 }
 
 std::pair<BoundingBox, BoundingBox> BoundingBox::Split() const

@@ -39,5 +39,6 @@ Color Light::CalculatePhongColor(const Tuple& intersectionPoint,
 		phongIntensity = ambientColor + diffuseColor + specularColor;
 	}
 
-	return object->getMaterial()->getPattern()->getColorAtObject(object, intersectionPoint) * phongIntensity;
+	Color c = object->getMaterial()->getPattern()->getColorAtObject(object, intersectionPoint);
+	return c * phongIntensity;
 }

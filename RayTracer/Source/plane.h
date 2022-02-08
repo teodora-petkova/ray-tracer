@@ -8,7 +8,7 @@
 class RAYTRACER_EXPORT Plane : public virtual Object
 {
 public:
-	Plane(std::string name = "") : Object(name)
+	Plane(const std::string& name = "") : Object(name)
 	{
 		this->bounds = BoundingBox(
 			Tuple::Point(-INFINITY, 0, -INFINITY),
@@ -16,7 +16,8 @@ public:
 		this->boundsInParentSpace = this->bounds;
 	}
 
-	Plane(MaterialPtr material, Matrix<4, 4> transformation, std::string name = "") :
+	Plane(const MaterialPtr& material, const Matrix<4, 4>& transformation,
+		const std::string& name = "") :
 		Object(material, transformation, name)
 	{
 		this->bounds = BoundingBox(

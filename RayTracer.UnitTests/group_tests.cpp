@@ -239,8 +239,13 @@ TEST(GroupTests, Subdividing_a_group_partitions_its_children)
 
 	auto subGroup = std::dynamic_pointer_cast<Group>(group->getChild(1));
 	ASSERT_EQ(subGroup->getChildrenCount(), 2);
-	ASSERT_EQ(subGroup->getChild(0), sphere1);
-	ASSERT_EQ(subGroup->getChild(1), sphere2);
+
+	auto subSubGroup1 = std::dynamic_pointer_cast<Group>(subGroup->getChild(0));
+	ASSERT_EQ(subSubGroup1->getChildrenCount(), 1);
+	ASSERT_EQ(subSubGroup1->getChild(0), sphere1);
+	auto subSubGroup2 = std::dynamic_pointer_cast<Group>(subGroup->getChild(1));
+	ASSERT_EQ(subSubGroup2->getChildrenCount(), 1);
+	ASSERT_EQ(subSubGroup2->getChild(0), sphere2);
 }
 
 TEST(GroupTests, Subdividing_a_group_with_two_few_children)

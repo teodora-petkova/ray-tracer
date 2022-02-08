@@ -16,11 +16,12 @@ public:
 		Object(name)
 	{ }
 
-	Group(MaterialPtr material, Matrix<4, 4> transformation, std::string name = "") :
+	Group(const MaterialPtr& material, const Matrix<4, 4>& transformation,
+		const std::string& name = "") :
 		Object(material, transformation, name)
 	{ }
 
-	void AddChild(ObjectPtr object);
+	void AddChild(const ObjectPtr& object);
 
 	void AddSubGroup(std::vector<ObjectPtr> objects);
 
@@ -28,7 +29,7 @@ public:
 
 	int getChildrenCount() const { return this->children.size(); }
 
-	bool Includes(ObjectPtr object) const;
+	bool Includes(const ObjectPtr& object) const;
 
 	std::pair<GroupPtr, GroupPtr> GetPartitionedChildren();
 

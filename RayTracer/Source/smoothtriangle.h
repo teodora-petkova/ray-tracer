@@ -7,10 +7,11 @@ class RAYTRACER_EXPORT SmoothTriangle : public virtual Triangle
 public:
 	SmoothTriangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
 		const Tuple& normalA, const Tuple& normalB, const Tuple& normalC,
+		const MaterialPtr& material = std::make_shared<Material>(),
+		const Matrix<4, 4>& transformation = Matrix<4, 4>::IdentityMatrix(),
 		std::string name = "")
 		:Triangle(point1, point2, point3,
-			std::make_shared<Material>(),
-			Matrix<4, 4>::IdentityMatrix(), name)
+			material, transformation, name)
 	{
 		this->normalA = normalA;
 		this->normalB = normalB;

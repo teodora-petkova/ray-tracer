@@ -19,7 +19,7 @@ public:
 		this->boundsInParentSpace = this->bounds;
 	}
 
-	Cube(MaterialPtr material, Matrix<4, 4> transformation, std::string name = "")
+	Cube(const MaterialPtr& material, const Matrix<4, 4>& transformation, const std::string& name = "")
 		: Object(material, transformation)
 	{
 		this->bounds = BoundingBox(Tuple::Point(-1, -1, -1), Tuple::Point(1, 1, 1));

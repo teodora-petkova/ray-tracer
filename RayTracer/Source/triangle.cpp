@@ -21,7 +21,7 @@ void Triangle::Initialize()
 	this->boundsInParentSpace = this->bounds;
 }
 
-Triangle::Triangle(std::string name) :
+Triangle::Triangle(const std::string& name) :
 	Object(name),
 	A(Tuple::Vector(-1.0, 0.0, 0.0)),
 	B(Tuple::Vector(1.0, 0.0, 0.0)),
@@ -31,7 +31,7 @@ Triangle::Triangle(std::string name) :
 }
 
 Triangle::Triangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
-	MaterialPtr material, Matrix<4, 4> transformation, std::string name) :
+	const MaterialPtr& material, const Matrix<4, 4>& transformation, const std::string& name) :
 	Object(material, transformation, name),
 	A(point1),
 	B(point2),

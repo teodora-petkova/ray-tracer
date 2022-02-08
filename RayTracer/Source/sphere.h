@@ -11,7 +11,7 @@
 class RAYTRACER_EXPORT Sphere : public virtual Object
 {
 public:
-	Sphere(std::string name = "") : Object(name),
+	Sphere(const std::string& name = "") : Object(name),
 		center(Tuple::Point(0, 0, 0)),
 		radius(1)
 	{
@@ -20,7 +20,8 @@ public:
 	}
 
 	Sphere(const Tuple& center, float radius,
-		MaterialPtr material, Matrix<4, 4> transformation, std::string name = "") :
+		const MaterialPtr& material, const Matrix<4, 4>& transformation,
+		const std::string& name = "") :
 		Object(material, transformation, name),
 		center(center),
 		radius(radius)

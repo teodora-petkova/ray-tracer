@@ -222,6 +222,9 @@ GroupPtr ObjParser::createGroup(int groupIndex, const std::string& groupName)
 		// for each index of a vertex in a defined face
 		for (int k = 1; k < this->verticesIndices[groupIndex][j].size() - 1; k++)
 		{
+			std::string name = std::to_string(groupIndex) + ":"
+				+ std::to_string(j) + ":" + std::to_string(k);
+
 			ObjectPtr triangle = nullptr;
 
 			if (hasNormals)
@@ -232,7 +235,9 @@ GroupPtr ObjParser::createGroup(int groupIndex, const std::string& groupName)
 					this->vertices[this->verticesIndices[groupIndex][j][k + 1]],
 					this->normals[n1],
 					this->normals[this->normalsIndices[groupIndex][j][k]],
-					this->normals[this->normalsIndices[groupIndex][j][k + 1]]);
+					this->normals[this->normalsIndices[groupIndex][j][k + 1]],
+					this->baseGroup->getMaterial(),
+					Matrix<4, 4>::IdentityMatrix(), name);
 			}
 			else
 			{
@@ -240,8 +245,8 @@ GroupPtr ObjParser::createGroup(int groupIndex, const std::string& groupName)
 					this->vertices[v1],
 					this->vertices[this->verticesIndices[groupIndex][j][k]],
 					this->vertices[this->verticesIndices[groupIndex][j][k + 1]],
-					std::make_shared<Material>(),
-					Matrix<4, 4>::IdentityMatrix());
+					this->baseGroup->getMaterial(),
+					Matrix<4, 4>::IdentityMatrix(), name);
 			}
 
 			group->AddChild(triangle);

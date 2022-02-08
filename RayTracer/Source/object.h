@@ -17,7 +17,7 @@
 class RAYTRACER_EXPORT Object : public std::enable_shared_from_this<Object>
 {
 public:
-	Object(std::string name = "") :
+	Object(const std::string& name = "") :
 		name(name),
 		material(std::make_shared<Material>()),
 		transformation(Matrix<4, 4>::IdentityMatrix()),
@@ -28,7 +28,7 @@ public:
 		boundsInParentSpace(bounds)
 	{}
 
-	Object(MaterialPtr material, Matrix<4, 4> matrix, std::string name = "") :
+	Object(const MaterialPtr& material, const Matrix<4, 4>& matrix, const std::string& name = "") :
 		name(name),
 		material(material),
 		bounds(Tuple::Point(INFINITY, INFINITY, INFINITY),
@@ -44,11 +44,11 @@ public:
 	IntersectionInfo Intersect(const Ray& ray,
 		std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const;
 
-	Tuple getNormal(Tuple intersectionPoint,
+	Tuple getNormal(const Tuple& intersectionPoint,
 		const IntersectionParams& intersection = IntersectionParams()) const;
 
-	Tuple TransformFromWorldToObjectSpace(Tuple point) const;
-	Tuple TransformFromObjectToWorldSpace(Tuple vector) const;
+	Tuple TransformFromWorldToObjectSpace(const Tuple& point) const;
+	Tuple TransformFromObjectToWorldSpace(const Tuple& vector) const;
 
 	Matrix<4, 4> getInverseTransformation() const { return invTransformation; }
 	Matrix<4, 4> getTransposedInverseTransformation() const { return transposedInvTransformation; }

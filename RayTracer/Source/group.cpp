@@ -1,6 +1,6 @@
 #include "group.h"
 
-void Group::AddChild(ObjectPtr object)
+void Group::AddChild(const ObjectPtr& object)
 {
 	object->setParent(shared_from_this());
 	object->setMaterial(this->material);
@@ -11,7 +11,7 @@ void Group::AddChild(ObjectPtr object)
 	children.push_back(object);
 }
 
-bool Group::Includes(ObjectPtr object) const
+bool Group::Includes(const ObjectPtr& object) const
 {
 	for (auto& child : children)
 	{
@@ -105,24 +105,45 @@ std::pair<GroupPtr, GroupPtr> Group::GetPartitionedChildren()
 
 void Group::Divide(int threshold)
 {
-	for (ObjectPtr child : this->children)
+	if (threshold <= 0)
 	{
-		child->Divide(threshold);
+		// no partition
+		return;
 	}
 
-	if (threshold <= this->getChildrenCount())
+	int currentChildrenCount = this->getChildrenCount();
+	if (threshold <= currentChildrenCount)
 	{
 		GroupPtr left, right;
 		std::tie(left, right) = this->GetPartitionedChildren();
+		if (currentChildrenCount == left->getChildrenCount()
+			&& right->getChildrenCount() == 0)
+		{
+			// no new partition is present
+			*this = *left;
+		}
+		else if (currentChildrenCount == right->getChildrenCount()
+			&& left->getChildrenCount() == 0)
+		{
+			// no new partition is present
+			*this = *right;
+		}
+		else
+		{
+			if (left->getChildrenCount() > 0)
+			{
+				this->AddChild(left);
+			}
+			if (right->getChildrenCount() > 0)
+			{
+				this->AddChild(right);
+			}
+		}
+	}
 
-		if (left->getChildrenCount() > 0)
-		{
-			this->AddChild(left);
-		}
-		if (right->getChildrenCount() > 0)
-		{
-			this->AddChild(right);
-		}
+	for (ObjectPtr child : this->children)
+	{
+		child->Divide(threshold);
 	}
 }
 

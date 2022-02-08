@@ -49,7 +49,7 @@ IntersectionInfo Object::Intersect(const Ray& ray,
 	}
 }
 
-Tuple Object::TransformFromWorldToObjectSpace(Tuple point) const
+Tuple Object::TransformFromWorldToObjectSpace(const Tuple& point) const
 {
 	// transform a point from the world space to the local object space 
 	// by the inverse transformation
@@ -64,7 +64,7 @@ Tuple Object::TransformFromWorldToObjectSpace(Tuple point) const
 	return this->getInverseTransformation() * objectPoint;
 }
 
-Tuple Object::TransformFromObjectToWorldSpace(Tuple vector) const
+Tuple Object::TransformFromObjectToWorldSpace(const Tuple& vector) const
 {
 	// transform a vector from the local object space to the world space
 	// by the transposed inverse transformation
@@ -84,7 +84,7 @@ Tuple Object::TransformFromObjectToWorldSpace(Tuple vector) const
 	return worldVector;
 }
 
-Tuple Object::getNormal(Tuple intersectionPoint,
+Tuple Object::getNormal(const Tuple& intersectionPoint,
 	const IntersectionParams& intersection) const
 {
 	Tuple objectPoint = TransformFromWorldToObjectSpace(intersectionPoint);
