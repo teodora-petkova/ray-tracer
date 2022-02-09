@@ -3,7 +3,6 @@
 void Group::AddChild(const ObjectPtr& object)
 {
 	object->setParent(shared_from_this());
-	object->setMaterial(this->material);
 
 	this->bounds.AddBound(object->getBoundsInParentSpace());
 	this->boundsInParentSpace = this->bounds.Transform(this->transformation);
@@ -120,13 +119,19 @@ void Group::Divide(int threshold)
 			&& right->getChildrenCount() == 0)
 		{
 			// no new partition is present
-			*this = *left;
+			for (int i = 0; i < left->getChildrenCount(); i++)
+			{
+				this->AddChild(left->getChild(i));
+			}
 		}
 		else if (currentChildrenCount == right->getChildrenCount()
 			&& left->getChildrenCount() == 0)
 		{
 			// no new partition is present
-			*this = *right;
+			for (int i = 0; i < right->getChildrenCount(); i++)
+			{
+				this->AddChild(right->getChild(i));
+			}
 		}
 		else
 		{

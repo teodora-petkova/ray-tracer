@@ -1,5 +1,26 @@
 #include "object.h"
 
+static ObjectConstPtr getIntersectionObject(
+	const std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances)
+{
+	// if there is at least one intersection, there should be 
+	// at least one in the intersection distance array
+	// we take the object from here, as 
+	// it can be the child of the child of ... current object (( : 
+	float minDistance = INFINITY;
+	ObjectConstPtr minObject = nullptr;
+	for (auto& distanceForObject : intersectionDistances)
+	{
+		float distance = distanceForObject.first;
+		if (distance > 0 && distance < minDistance)
+		{
+			minDistance = distance;
+			minObject = distanceForObject.second;
+		}
+	}
+	return minObject;
+}
+
 IntersectionInfo Object::Intersect(const Ray& ray,
 	std::vector<std::pair<float, ObjectConstPtr>>& intersectionDistances) const
 {
@@ -19,10 +40,9 @@ IntersectionInfo Object::Intersect(const Ray& ray,
 
 	if (intersection.getDistance() > 0 && intersection.getDistance() != INFINITY)
 	{
-		// if there is at least one intersection, there should be at least one in the intersection distance array
-		sort(intersectionDistances.begin(), intersectionDistances.end());
-		// we take the object from here, as it can be the child of the child of ... current object (( : 
-		ObjectConstPtr intersectionObject = intersectionDistances.at(0).second;
+		//sort(intersectionDistances.begin(), intersectionDistances.end());
+
+		ObjectConstPtr intersectionObject = getIntersectionObject(intersectionDistances);
 
 		// To find the intersection point we use the initial untransformed ray in the world space
 		// to calculate locations in the world space using the calculated distance in the object space

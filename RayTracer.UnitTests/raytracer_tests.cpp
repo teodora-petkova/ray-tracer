@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "source\raytracer.h"
+#include "source\objparser.h"
 
 class TestPattern :public Pattern
 {
@@ -484,3 +485,139 @@ TEST_F(RaytracerTests, The_accumulated_reflected_and_transparent_color)
 
 	EXPECT_EQ(color, Color(0.93391f, 0.69643f, 0.69243f));
 }
+
+
+struct BVHData
+{
+	int threshold;
+	bool withNormals;
+	const char* fileContent;
+
+	friend std::ostream& operator<<(std::ostream& os, const BVHData& bvh)
+	{
+		return os << "BVH threshold: " << bvh.threshold <<
+			(bvh.withNormals ?
+				" with defined normals" :
+				" without defined normals");
+	}
+};
+
+class GroupsDividedByBVHTests : public testing::TestWithParam<BVHData> {};
+/*
+static void printGroup(const GroupPtr& group)
+{
+	for (int i = 0; i < group->getChildrenCount(); i++)
+	{
+		auto& child = group->getChild(i);
+		std::cout << child->getName() << std::endl;
+		auto innerGroup = std::dynamic_pointer_cast<Group>(child);
+		if (innerGroup != nullptr)
+		{
+			printGroup(innerGroup);
+		}
+	}
+}*/
+
+TEST_P(GroupsDividedByBVHTests, Calculated_color_does_not_depends_on_dividing_by_BVH)
+{
+	auto& bvh = GetParam();
+	std::istringstream fileContent(bvh.fileContent);
+
+	MaterialPtr material = std::make_shared<Material>(
+		std::make_shared<FlatColor>(Color(0.6, 1, 0.3)),
+		0.1, 0.9, 0.9, 200, 0, 0, 0);
+	Matrix<4, 4> rotatey = Transformations::RotationY(45);
+
+	ObjParser parser = ObjParser(fileContent, material, rotatey);
+
+	auto group = parser.getBaseGroup();
+	group->Divide(bvh.threshold);
+
+	LightPtr light = std::make_shared<Light>(Tuple::Point(0, 10, -10),
+		Color::White(), 1, 1, 1, 1);
+
+	Camera camera = Camera(Tuple::Point(0, 0, -5),
+		Tuple::Point(0, 0, 1), Tuple::Point(0, 1, 0), 90, 11, 11);
+
+	std::vector<LightPtr> lights{ light };
+	std::vector<ObjectPtr> objects{ group };
+	Scene customScene = Scene(200, 200, camera, objects, lights);
+
+	Ray ray1 = Ray(Tuple::Point(0.001, 0, -5), Tuple::Vector(0, 0, 1));
+	Ray ray2 = Ray(Tuple::Point(-0.001, 0, -5), Tuple::Vector(0, 0, 1));
+
+	auto intersections = std::vector<std::pair<float, ObjectConstPtr>>();
+
+	Color color1 = customScene.TraceSingleRay(ray1);
+	Color color2 = customScene.TraceSingleRay(ray2);
+
+	EXPECT_EQ(color1, Color(0.3087, 0.5145, 0.1544)); // 0.001
+	EXPECT_EQ(color1, color2);
+}
+
+const char* cube = R"(
+v -1 -1  1
+v -1 -1 -1
+v -1  1 -1
+v -1  1  1
+v  1 -1  1
+v  1 -1 -1
+v  1  1 -1
+v  1  1  1
+
+f 4 3 2 1
+f 2 6 5 1
+f 3 7 6 2
+f 8 7 3 4
+f 5 8 4 1
+f 6 7 8 5)";
+
+const char* cubeWithNormals = R"(
+g cube
+ 
+v  -1 -1 -1
+v  -1 -1  1
+v  -1  1 -1
+v  -1  1  1
+v   1 -1 -1
+v   1 -1  1
+v   1  1 -1
+v   1  1  1
+
+vn  0  0  1
+vn  0  0 -1
+vn  0  1  0
+vn  0 -1  0
+vn  1  0  0
+vn -1  0  0
+ 
+f  1//2  7//2  5//2
+f  1//2  3//2  7//2 
+f  1//6  4//6  3//6 
+f  1//6  2//6  4//6 
+f  3//3  8//3  7//3 
+f  3//3  4//3  8//3 
+f  5//5  7//5  8//5 
+f  5//5  8//5  6//5 
+f  1//4  5//4  6//4 
+f  1//4  6//4  2//4 
+f  2//1  6//1  8//1 
+f  2//1  8//1  4//1 )";
+
+INSTANTIATE_TEST_CASE_P(RaytracerTests, GroupsDividedByBVHTests,
+	testing::Values(
+		BVHData{ 0, false, cube },
+		BVHData{ 1, false, cube },
+		BVHData{ 2, false, cube },
+		BVHData{ 3, false, cube },
+		BVHData{ 4, false, cube },
+		BVHData{ 5, false, cube },
+		BVHData{ 6, false, cube },
+
+		BVHData{ 0, true, cubeWithNormals },
+		BVHData{ 1, true, cubeWithNormals },
+		BVHData{ 2, true, cubeWithNormals },
+		BVHData{ 3, true, cubeWithNormals },
+		BVHData{ 4, true, cubeWithNormals },
+		BVHData{ 5, true, cubeWithNormals },
+		BVHData{ 6, true, cubeWithNormals }));

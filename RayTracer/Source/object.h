@@ -59,8 +59,6 @@ public:
 
 	std::string getName() const { return this->name; }
 
-	void setMaterial(MaterialPtr material) { this->material = material; }
-
 	virtual void Divide(int threshold) = 0;
 
 	BoundingBox getBounds() const { return bounds; }

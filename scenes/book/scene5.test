@@ -3,6 +3,8 @@
 size 400 400
 
 camera -4.5 0.85 -4 0 0.85 0 0 1 0 28.64
+# camera from above
+#camera 0 15 0 0 0.85 0 1 0 0 60
 
 point_light -4.9 4.9 1 1 1 1 1 1 1 1
 
@@ -19,14 +21,14 @@ rotatey 18
 plane
 
 # the ceiling
-scale 0.2 0.2 0.2
-color 0.85 0.85 0.85
-color 1.00 1.00 1.00
-checkerpattern
-material 0.5 0.9 0 200 0 0 1
-translate 0 5 0
-plane
-
+#scale 0.2 0.2 0.2
+#color 0.85 0.85 0.85
+#color 1.00 1.00 1.00
+#checkerpattern
+#material 0.5 0.9 0 200 0 0 1
+#translate 0 5 0
+#plane
+#
 # the west wall
 scale 0.5 0.5 0.5
 rotatey 90

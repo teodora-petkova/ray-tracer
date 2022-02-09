@@ -2,7 +2,7 @@
 
 #include "triangle.h"
 
-class RAYTRACER_EXPORT SmoothTriangle : public virtual Triangle
+class RAYTRACER_EXPORT SmoothTriangle : public Triangle
 {
 public:
 	SmoothTriangle(const Tuple& point1, const Tuple& point2, const Tuple& point3,
@@ -10,7 +10,8 @@ public:
 		const MaterialPtr& material = std::make_shared<Material>(),
 		const Matrix<4, 4>& transformation = Matrix<4, 4>::IdentityMatrix(),
 		std::string name = "")
-		:Triangle(point1, point2, point3,
+		:Object(material, transformation, name),
+		Triangle(point1, point2, point3,
 			material, transformation, name)
 	{
 		this->normalA = normalA;
